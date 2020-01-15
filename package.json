@@ -12,9 +12,7 @@
   "bin": {
     "watchful": "./watchful.js"
   },
-  "dependencies": {
-    "@babel/core": "^7.8.3"
-  },
+  "dependencies": {},
   "devDependencies": {},
   "scripts": {}
 }
