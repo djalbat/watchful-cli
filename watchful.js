@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
-const babel = require('@babel/core');
+const path = require('path');
+
+const babel = require(path.resolve('./node_modules/@babel/core'));
 
 const { transform } = babel;
 
