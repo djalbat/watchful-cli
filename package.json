@@ -13,6 +13,7 @@
     "watchful": "./watchful.js"
   },
   "dependencies": {
+    "necessary": "^3.6.2"
   },
   "devDependencies": {},
   "scripts": {}

@@ -1,11 +1,15 @@
 #!/usr/bin/env node
 
-const path = require('path');
+const path = require('path'),
+      necessary = require('necessary');
 
-const messages = require('./bin/messages')
+const messages = require('./bin/messages');
 
 const { exit } = process,
-      { BABEL_CORE_NOT_INSTALLED } = messages;
+      { pathUtilities, fileSystemUtilities } = necessary,
+      { BABEL_CORE_NOT_INSTALLED } = messages,
+      { pathWithoutBottommostNameFromPath } = pathUtilities,
+      { readFile, writeFile, createDirectory, checkDirectoryExists } = fileSystemUtilities;
 
 let babel;
 
@@ -19,15 +23,27 @@ try {
 
 const { transform } = babel;
 
-const source = `() => {
-
-        console.log('!');
-        
-      };`,
-      options = {};
+const sourceDirectoryPath = 'es6',
+      targetDirectoryPath = 'lib',
+      fileName = 'example.js',
+      absoluteFilePath = path.resolve(sourceDirectoryPath, fileName),
+      fileContent = readFile(absoluteFilePath),
+      source = fileContent, ///
+      sourceMaps = 'inline',
+      options = {
+        sourceMaps
+      };
 
 transform(source, options, (error, result) => {
-  const { code, map, ast } = result;
+  const { code } = result,
+        absoluteFilePath = path.resolve(targetDirectoryPath, fileName),
+        absoluteDirectoryPath = pathWithoutBottommostNameFromPath(absoluteFilePath),  ///
+        fileContent = code, ///
+        directoryExists = checkDirectoryExists(absoluteDirectoryPath);
 
-  console.log(code);
+  if (!directoryExists) {
+    createDirectory(absoluteDirectoryPath);
+  }
+
+  writeFile(absoluteFilePath, fileContent);
 });
