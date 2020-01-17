@@ -2,7 +2,20 @@
 
 const path = require('path');
 
-const babel = require(path.resolve('./node_modules/@babel/core'));
+const messages = require('./bin/messages')
+
+const { exit } = process,
+      { BABEL_CORE_NOT_INSTALLED } = messages;
+
+let babel;
+
+try {
+  babel = require(path.resolve('./node_modules/@babel/core'));
+} catch (error) {
+  console.log(BABEL_CORE_NOT_INSTALLED);
+
+  exit(1);
+}
 
 const { transform } = babel;
 
