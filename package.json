@@ -13,6 +13,7 @@
     "watchful": "./watchful.js"
   },
   "dependencies": {
+    "browserify": "^16.5.0",
     "necessary": "^3.6.2"
   },
   "devDependencies": {},

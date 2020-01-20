@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 
-const path = require('path'),
-      necessary = require('necessary');
+const fs = require('fs'),
+      path = require('path'),
+      necessary = require('necessary'),
+      browserify = require('browserify');
 
 const messages = require('./bin/messages');
 
-const { exit } = process,
+const { exit, stdout } = process,
+      { createWriteStream } = fs,
       { pathUtilities, fileSystemUtilities } = necessary,
       { BABEL_CORE_NOT_INSTALLED } = messages,
       { pathWithoutBottommostNameFromPath } = pathUtilities,
@@ -25,10 +28,11 @@ const { transform } = babel;
 
 const sourceDirectoryPath = 'es6',
       targetDirectoryPath = 'lib',
-      fileName = 'example.js',
-      absoluteFilePath = path.resolve(sourceDirectoryPath, fileName),
-      fileContent = readFile(absoluteFilePath),
-      source = fileContent, ///
+      bundleFilePath = 'public/bundle.js',
+      entryFileName = 'main.js',
+      entryFilePath = path.resolve(sourceDirectoryPath, entryFileName),
+      entryContent = readFile(entryFilePath),
+      source = entryContent, ///
       sourceMaps = 'inline',
       options = {
         sourceMaps
@@ -36,14 +40,29 @@ const sourceDirectoryPath = 'es6',
 
 transform(source, options, (error, result) => {
   const { code } = result,
-        absoluteFilePath = path.resolve(targetDirectoryPath, fileName),
-        absoluteDirectoryPath = pathWithoutBottommostNameFromPath(absoluteFilePath),  ///
-        fileContent = code, ///
-        directoryExists = checkDirectoryExists(absoluteDirectoryPath);
+        outputFileName = entryFileName, ///
+        outputFilePath = path.resolve(targetDirectoryPath, outputFileName),
+        outputContent = code; ///
+
+  writeFileAndDirectory(outputFilePath, outputContent);
+
+  const bundler = browserify(); ///
+
+  bundler.add(outputFilePath);
+
+  const bundleStream = createWriteStream(path.resolve(bundleFilePath));
+
+  bundler.bundle().pipe(bundleStream);
+});
+
+function writeFileAndDirectory(filePath, content) {
+  const filePathWithoutBottommostName = pathWithoutBottommostNameFromPath(filePath),
+        directoryPath = filePathWithoutBottommostName,  ///
+        directoryExists = checkDirectoryExists(directoryPath);
 
   if (!directoryExists) {
-    createDirectory(absoluteDirectoryPath);
+    createDirectory(directoryPath);
   }
 
-  writeFile(absoluteFilePath, fileContent);
-});
+  writeFile(filePath, content);
+}
