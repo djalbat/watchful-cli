@@ -7,7 +7,7 @@ const fs = require('fs'),
 
 const messages = require('./bin/messages');
 
-const { exit, stdout } = process,
+const { exit } = process,
       { createWriteStream } = fs,
       { pathUtilities, fileSystemUtilities } = necessary,
       { BABEL_CORE_NOT_INSTALLED } = messages,
@@ -44,25 +44,27 @@ transform(source, options, (error, result) => {
         outputFilePath = path.resolve(targetDirectoryPath, outputFileName),
         outputContent = code; ///
 
-  writeFileAndDirectory(outputFilePath, outputContent);
+  createParentDirectory(outputFilePath);
+
+  writeFile(outputFilePath, outputContent);
 
   const bundler = browserify(); ///
 
   bundler.add(outputFilePath);
+
+  createParentDirectory(bundleFilePath);
 
   const bundleStream = createWriteStream(path.resolve(bundleFilePath));
 
   bundler.bundle().pipe(bundleStream);
 });
 
-function writeFileAndDirectory(filePath, content) {
+function createParentDirectory(filePath) {
   const filePathWithoutBottommostName = pathWithoutBottommostNameFromPath(filePath),
-        directoryPath = filePathWithoutBottommostName,  ///
-        directoryExists = checkDirectoryExists(directoryPath);
+        parentDirectoryPath = filePathWithoutBottommostName,  ///
+        parentDirectoryExists = checkDirectoryExists(parentDirectoryPath);
 
-  if (!directoryExists) {
-    createDirectory(directoryPath);
+  if (!parentDirectoryExists) {
+    createDirectory(parentDirectoryPath);
   }
-
-  writeFile(filePath, content);
 }
