@@ -8,15 +8,26 @@ const action = require('../action'),
 const { BATCH_URI } = uris,
       { FAILED_BATCH_MESSAGE, SUCCESSFUL_BATCH_MESSAGE } = messages;
 
-function batch(argument) {
-  const releaseName = argument, ///
-        uri = BATCH_URI,
+function batch() {
+  const uri = BATCH_URI,
         callbacks = [
           babelCallback,
           browserifyCallback
         ],
+        sourceMaps = 'inline',
+        options = {
+          sourceMaps
+        },
+        entryFileName = 'main.js',
+        bundleFilePath = 'public/bundle.js',
+        sourceDirectoryPath = 'es6',
+        targetDirectoryPath = 'lib',
         context = {
-          releaseName
+          options,
+          entryFileName,
+          bundleFilePath,
+          sourceDirectoryPath,
+          targetDirectoryPath
         };
 
   action(callbacks, uri, (json, done) => {

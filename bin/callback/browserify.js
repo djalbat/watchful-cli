@@ -5,45 +5,40 @@ const path = require('path'),
 
 const messages = require('../messages');
 
-const { exit } = process,
-      { BABEL_CORE_NOT_INSTALLED } = messages,
+const { createWriteStream } = fa,
+      { BROWSERIFY_NOT_INSTALLED } = messages,
       { pathUtilities, fileSystemUtilities } = necessary,
       { pathWithoutBottommostNameFromPath } = pathUtilities,
-      { readFile, writeFile, createDirectory, checkDirectoryExists } = fileSystemUtilities;
+      { createDirectory, checkDirectoryExists } = fileSystemUtilities;
 
-let babel;
+function browserifyCallback(proceed, abort, context) {
+  let browserify;
 
-try {
-  babel = require(path.resolve('./node_modules/@babel/core'));
-} catch (error) {
-  console.log(BABEL_CORE_NOT_INSTALLED);
+  try {
+    browserify = require(path.resolve('./node_modules/browserify'));
+  } catch (error) {
+    console.log(BROWSERIFY_NOT_INSTALLED);
 
-  exit(1);
+    abort();
+  }
+
+  const bundler = browserify(), ///
+        { entryFileName, bundleFilePath, targetDirectoryPath } = context,
+        outputFileName = entryFileName, ///
+        outputFilePath = path.resolve(targetDirectoryPath, outputFileName);
+
+  bundler.add(outputFilePath);
+
+  createParentDirectory(bundleFilePath);
+
+  const bundleStream = createWriteStream(path.resolve(bundleFilePath));
+
+  bundler.bundle().pipe(bundleStream);
+
+  proceed();
 }
 
-const { transform } = babel;
-
-const sourceDirectoryPath = 'es6',
-      targetDirectoryPath = 'lib',
-      entryFileName = 'main.js',
-      entryFilePath = path.resolve(sourceDirectoryPath, entryFileName),
-      entryContent = readFile(entryFilePath),
-      source = entryContent, ///
-      sourceMaps = 'inline',
-      options = {
-        sourceMaps
-      };
-
-transform(source, options, (error, result) => {
-  const { code } = result,
-        outputFileName = entryFileName, ///
-        outputFilePath = path.resolve(targetDirectoryPath, outputFileName),
-        outputContent = code; ///
-
-  createParentDirectory(outputFilePath);
-
-  writeFile(outputFilePath, outputContent);
-});
+module.exports = browserifyCallback;
 
 function createParentDirectory(filePath) {
   const filePathWithoutBottommostName = pathWithoutBottommostNameFromPath(filePath),
