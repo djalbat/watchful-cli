@@ -3,11 +3,12 @@
 const path = require('path'),
       necessary = require('necessary');
 
-const messages = require('../messages');
+const messages = require('../messages'),
+      fileSystemUtilities = require('../utilities/fileSystem');
 
-const { pathUtilities, fileSystemUtilities } = necessary,
-      { pathWithoutBottommostNameFromPath } = pathUtilities,
+const { pathUtilities } = necessary,
       { BABEL_CORE_NOT_INSTALLED } = messages,
+      { pathWithoutBottommostNameFromPath } = pathUtilities,
       { readFile, writeFile, createDirectory, checkDirectoryExists } = fileSystemUtilities;
 
 function babelCallback(proceed, abort, context) {

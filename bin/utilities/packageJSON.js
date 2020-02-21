@@ -2,9 +2,10 @@
 
 const necessary = require('necessary');
 
-const constants = require('../constants');
+const constants = require('../constants'),
+      fileSystemUtilities = require('../utilities/fileSystem');
 
-const { arrayUtilities, fileSystemUtilities } = necessary,
+const { arrayUtilities } = necessary,
       { second } = arrayUtilities,
       { readFile } = fileSystemUtilities,
       { PACKAGE_JSON_FILE_NAME } = constants;

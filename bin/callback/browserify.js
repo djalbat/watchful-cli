@@ -1,15 +1,14 @@
 #!/usr/bin/env node
 
-const path = require('path'),
-      necessary = require('necessary');
+const fs = require('fs'),
+      path = require('path');
 
-const messages = require('../messages');
+const messages = require('../messages'),
+      fileSystemUtilities = require('../utilities/fileSystem');
 
-const { createWriteStream } = fa,
+const { createWriteStream } = fs,
       { BROWSERIFY_NOT_INSTALLED } = messages,
-      { pathUtilities, fileSystemUtilities } = necessary,
-      { pathWithoutBottommostNameFromPath } = pathUtilities,
-      { createDirectory, checkDirectoryExists } = fileSystemUtilities;
+      { createParentDirectory } = fileSystemUtilities;
 
 function browserifyCallback(proceed, abort, context) {
   let browserify;
@@ -40,12 +39,3 @@ function browserifyCallback(proceed, abort, context) {
 
 module.exports = browserifyCallback;
 
-function createParentDirectory(filePath) {
-  const filePathWithoutBottommostName = pathWithoutBottommostNameFromPath(filePath),
-        parentDirectoryPath = filePathWithoutBottommostName,  ///
-        parentDirectoryExists = checkDirectoryExists(parentDirectoryPath);
-
-  if (!parentDirectoryExists) {
-    createDirectory(parentDirectoryPath);
-  }
-}

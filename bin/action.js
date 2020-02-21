@@ -5,13 +5,15 @@ const callbackUtilities = require('./utilities/callback');
 const { exit } = process,
       { executeCallbacks } = callbackUtilities;
 
-function action(callbacks, uri, callback, context) {
+function action(callbacks, callback, context) {
   executeCallbacks(callbacks, (completed) => {
     if (!completed) {
-      exit();
+      exit(1);
     }
 
-    callback();
+    const success = completed;  ///
+
+    callback(success);
   }, context);
 }
 

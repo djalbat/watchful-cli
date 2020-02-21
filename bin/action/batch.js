@@ -5,12 +5,11 @@ const action = require('../action'),
       babelCallback = require('../callback/babel'),
       browserifyCallback = require('../callback/browserify');
 
-const { BATCH_URI } = uris,
+const { exit } = process,
       { FAILED_BATCH_MESSAGE, SUCCESSFUL_BATCH_MESSAGE } = messages;
 
 function batch() {
-  const uri = BATCH_URI,
-        callbacks = [
+  const callbacks = [
           babelCallback,
           browserifyCallback
         ],
@@ -30,14 +29,12 @@ function batch() {
           targetDirectoryPath
         };
 
-  action(callbacks, uri, (json, done) => {
-    const { success } = json;
-
+  action(callbacks, (success) => {
     success ?
       console.log(SUCCESSFUL_BATCH_MESSAGE) :
         console.log(FAILED_BATCH_MESSAGE);
 
-    done();
+    exit();
   }, context);
 }
 
