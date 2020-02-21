@@ -1,10 +1,8 @@
 'use strict';
 
-const fs = require('fs'),
-      necessary = require('necessary');
+const necessary = require('necessary');
 
-const { createWriteStream } = fs,
-      { pathUtilities, fileSystemUtilities } = necessary,
+const { pathUtilities, fileSystemUtilities } = necessary,
       { pathWithoutBottommostNameFromPath } = pathUtilities,
       { createDirectory, checkDirectoryExists } = fileSystemUtilities;
 
@@ -19,6 +17,5 @@ function createParentDirectory(filePath) {
 }
 
 module.exports = Object.assign(fileSystemUtilities, {
-  createWriteStream,
   createParentDirectory
 });

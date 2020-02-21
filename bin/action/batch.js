@@ -32,6 +32,8 @@ function batch() {
     success ?
       console.log(BATCH_SUCCESSFUL_MESSAGE) :
         console.log(BATCH_FAILED_MESSAGE);
+
+    process.exit();
   }, context);
 }
 

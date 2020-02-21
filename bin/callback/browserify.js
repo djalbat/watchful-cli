@@ -1,11 +1,13 @@
 'use strict';
 
-const path = require('path');
+const fs = require('fs'),
+      path = require('path');
 
 const messages = require('../messages'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
-const { createWriteStream, createParentDirectory } = fileSystemUtilities,
+const { openSync, writeSync } = fs,
+      { createParentDirectory } = fileSystemUtilities,
       { BROWSERIFY_NOT_INSTALLED, BROWSERIFY_FAILED_MESSAGE } = messages;
 
 function browserifyCallback(proceed, abort, context) {
@@ -29,13 +31,19 @@ function browserifyCallback(proceed, abort, context) {
 
     bundler.add(absoluteOutputFilePath);
 
-    createParentDirectory(absoluteBundleFilePath);
+    bundler.bundle((error, buffer) => {
+      if (error) {
+        throw(error);
+      }
 
-    const bundleWriteStream = createWriteStream(absoluteBundleFilePath);
+      createParentDirectory(absoluteBundleFilePath);
 
-    bundler.bundle().pipe(bundleWriteStream);
+      const bundleFile = openSync(absoluteBundleFilePath, 'w+');
 
-    proceed();
+      writeSync(bundleFile, buffer);
+
+      proceed();
+    });
   } catch (error) {
     console.log(BROWSERIFY_FAILED_MESSAGE);
 
