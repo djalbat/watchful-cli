@@ -5,24 +5,10 @@ const path = require('path');
 const messages = require('../messages'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
-const { readFile, writeFile, createParentDirectory } = fileSystemUtilities,
-      { BABEL_FAILED_MESSAGE, BABEL_CORE_NOT_INSTALLED } = messages;
+const { BABEL_FAILED_MESSAGE } = messages,
+      { readFile, writeFile, createParentDirectory } = fileSystemUtilities;
 
 function transformCallback(proceed, abort, context) {
-  try {
-    const babel = require(path.resolve('./node_modules/@babel/core'));
-
-    const { transform } = babel;
-
-    Object.assign(context, {
-      transform
-    });
-  } catch (error) {
-    console.log(BABEL_CORE_NOT_INSTALLED);
-
-    abort();
-  }
-
   try {
     const { transform, options, sourceDirectoryPath, entryFileName } = context,
           absoluteEntryFilePath = path.resolve(sourceDirectoryPath, entryFileName),
