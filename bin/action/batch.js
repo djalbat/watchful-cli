@@ -5,8 +5,7 @@ const action = require('../action'),
       babelCallback = require('../callback/babel'),
       browserifyCallback = require('../callback/browserify');
 
-const { exit } = process,
-      { FAILED_BATCH_MESSAGE, SUCCESSFUL_BATCH_MESSAGE } = messages;
+const { BATCH_FAILED_MESSAGE, BATCH_SUCCESSFUL_MESSAGE } = messages;
 
 function batch() {
   const callbacks = [
@@ -31,10 +30,8 @@ function batch() {
 
   action(callbacks, (success) => {
     success ?
-      console.log(SUCCESSFUL_BATCH_MESSAGE) :
-        console.log(FAILED_BATCH_MESSAGE);
-
-    exit();
+      console.log(BATCH_SUCCESSFUL_MESSAGE) :
+        console.log(BATCH_FAILED_MESSAGE);
   }, context);
 }
 

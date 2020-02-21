@@ -1,56 +1,52 @@
-#!/usr/bin/env node
+'use strict';
 
-const path = require('path'),
-      necessary = require('necessary');
+const path = require('path');
 
 const messages = require('../messages'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
-const { pathUtilities } = necessary,
-      { BABEL_CORE_NOT_INSTALLED } = messages,
-      { pathWithoutBottommostNameFromPath } = pathUtilities,
-      { readFile, writeFile, createDirectory, checkDirectoryExists } = fileSystemUtilities;
+const { readFile, writeFile, createParentDirectory } = fileSystemUtilities,
+      { BABEL_FAILED_MESSAGE, BABEL_CORE_NOT_INSTALLED } = messages;
 
 function babelCallback(proceed, abort, context) {
-  let babel;
+  let transform;
 
   try {
-    babel = require(path.resolve('./node_modules/@babel/core'));
+    const babel = require(path.resolve('./node_modules/@babel/core'));
+
+    ({transform} = babel);
   } catch (error) {
     console.log(BABEL_CORE_NOT_INSTALLED);
 
     abort();
   }
 
-  const { transform } = babel,
-        { options, sourceDirectoryPath, entryFileName } = context,
-        entryFilePath = path.resolve(sourceDirectoryPath, entryFileName),
-        entryContent = readFile(entryFilePath),
-        source = entryContent;  ///
+  try {
+    const { options, sourceDirectoryPath, entryFileName } = context,
+          absoluteEntryFilePath = path.resolve(sourceDirectoryPath, entryFileName),
+          entryContent = readFile(absoluteEntryFilePath),
+          source = entryContent;  ///
 
-  transform(source, options, (error, result) => {
-    const { code } = result,
-          { targetDirectoryPath } = context,
-          outputFileName = entryFileName, ///
-          outputFilePath = path.resolve(targetDirectoryPath, outputFileName),
-          outputContent = code; ///
+    transform(source, options, (error, result) => {
+      const { code } = result,
+            { targetDirectoryPath } = context,
+            outputFileName = entryFileName, ///
+            absoluteOutputFilePath = path.resolve(targetDirectoryPath, outputFileName),
+            outputContent = code; ///
 
-    createParentDirectory(outputFilePath);
+      createParentDirectory(absoluteOutputFilePath);
 
-    writeFile(outputFilePath, outputContent);
+      writeFile(absoluteOutputFilePath, outputContent);
 
-    proceed();
-  });
+      proceed();
+    });
+  } catch (error) {
+    console.log(BABEL_FAILED_MESSAGE);
+
+    console.log(error);
+
+    abort();
+  }
 }
 
 module.exports = babelCallback;
-
-function createParentDirectory(filePath) {
-  const filePathWithoutBottommostName = pathWithoutBottommostNameFromPath(filePath),
-        parentDirectoryPath = filePathWithoutBottommostName,  ///
-        parentDirectoryExists = checkDirectoryExists(parentDirectoryPath);
-
-  if (!parentDirectoryExists) {
-    createDirectory(parentDirectoryPath);
-  }
-}

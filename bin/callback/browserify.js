@@ -1,41 +1,48 @@
-#!/usr/bin/env node
+'use strict';
 
-const fs = require('fs'),
-      path = require('path');
+const path = require('path');
 
 const messages = require('../messages'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
-const { createWriteStream } = fs,
-      { BROWSERIFY_NOT_INSTALLED } = messages,
-      { createParentDirectory } = fileSystemUtilities;
+const { createWriteStream, createParentDirectory } = fileSystemUtilities,
+      { BROWSERIFY_NOT_INSTALLED, BROWSERIFY_FAILED_MESSAGE } = messages;
 
 function browserifyCallback(proceed, abort, context) {
-  let browserify;
+  let bundler;
 
   try {
-    browserify = require(path.resolve('./node_modules/browserify'));
+    const browserify = require(path.resolve('./node_modules/browserify'));
+
+    bundler = browserify(); ///
   } catch (error) {
     console.log(BROWSERIFY_NOT_INSTALLED);
 
     abort();
   }
 
-  const bundler = browserify(), ///
-        { entryFileName, bundleFilePath, targetDirectoryPath } = context,
-        outputFileName = entryFileName, ///
-        outputFilePath = path.resolve(targetDirectoryPath, outputFileName);
+  try {
+    const { entryFileName, bundleFilePath, targetDirectoryPath } = context,
+          outputFileName = entryFileName, ///
+          absoluteOutputFilePath = path.resolve(targetDirectoryPath, outputFileName),
+          absoluteBundleFilePath = path.resolve(bundleFilePath);
 
-  bundler.add(outputFilePath);
+    bundler.add(absoluteOutputFilePath);
 
-  createParentDirectory(bundleFilePath);
+    createParentDirectory(absoluteBundleFilePath);
 
-  const bundleStream = createWriteStream(path.resolve(bundleFilePath));
+    const bundleWriteStream = createWriteStream(absoluteBundleFilePath);
 
-  bundler.bundle().pipe(bundleStream);
+    bundler.bundle().pipe(bundleWriteStream);
 
-  proceed();
+    proceed();
+  } catch (error) {
+    console.log(BROWSERIFY_FAILED_MESSAGE);
+
+    console.log(error);
+
+    abort();
+  }
 }
 
 module.exports = browserifyCallback;
-
