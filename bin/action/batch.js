@@ -3,6 +3,8 @@
 const action = require('../action'),
       messages = require('../messages'),
       babelCallback = require('../callback/babel'),
+      bundleCallback = require('../callback/bundle'),
+      transformCallback = require('../callback/transform'),
       browserifyCallback = require('../callback/browserify');
 
 const { BATCH_FAILED_MESSAGE, BATCH_SUCCESSFUL_MESSAGE } = messages;
@@ -10,7 +12,9 @@ const { BATCH_FAILED_MESSAGE, BATCH_SUCCESSFUL_MESSAGE } = messages;
 function batch() {
   const callbacks = [
           babelCallback,
-          browserifyCallback
+          browserifyCallback,
+          transformCallback,
+          bundleCallback
         ],
         sourceMaps = 'inline',
         options = {

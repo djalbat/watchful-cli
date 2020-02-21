@@ -1,56 +1,27 @@
 'use strict';
 
-const fs = require('fs'),
-      path = require('path');
+const path = require('path');
 
-const messages = require('../messages'),
-      fileSystemUtilities = require('../utilities/fileSystem');
+const messages = require('../messages');
 
-const { openSync, writeSync } = fs,
-      { createParentDirectory } = fileSystemUtilities,
-      { BROWSERIFY_NOT_INSTALLED, BROWSERIFY_FAILED_MESSAGE } = messages;
+const { BROWSERIFY_NOT_INSTALLED } = messages;
 
 function browserifyCallback(proceed, abort, context) {
-  let bundler;
-
   try {
     const browserify = require(path.resolve('./node_modules/browserify'));
 
-    bundler = browserify(); ///
+    const bundler = browserify(); ///
+
+    Object.assign(context, {
+      bundler
+    });
   } catch (error) {
     console.log(BROWSERIFY_NOT_INSTALLED);
 
     abort();
   }
 
-  try {
-    const { entryFileName, bundleFilePath, targetDirectoryPath } = context,
-          outputFileName = entryFileName, ///
-          absoluteOutputFilePath = path.resolve(targetDirectoryPath, outputFileName),
-          absoluteBundleFilePath = path.resolve(bundleFilePath);
-
-    bundler.add(absoluteOutputFilePath);
-
-    bundler.bundle((error, buffer) => {
-      if (error) {
-        throw(error);
-      }
-
-      createParentDirectory(absoluteBundleFilePath);
-
-      const bundleFile = openSync(absoluteBundleFilePath, 'w+');
-
-      writeSync(bundleFile, buffer);
-
-      proceed();
-    });
-  } catch (error) {
-    console.log(BROWSERIFY_FAILED_MESSAGE);
-
-    console.log(error);
-
-    abort();
-  }
+  proceed();
 }
 
 module.exports = browserifyCallback;
