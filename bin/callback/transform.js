@@ -1,6 +1,6 @@
 'use strict';
 
-const path = require('path');
+const path = require('path')
 
 const messages = require('../messages'),
       fileSystemUtilities = require('../utilities/fileSystem');
@@ -9,22 +9,31 @@ const { BABEL_FAILED_MESSAGE } = messages,
       { readFile, writeFile, createParentDirectory } = fileSystemUtilities;
 
 function transformCallback(proceed, abort, context) {
+  const { entryFileName } = context,
+        fileName = entryFileName; ///
+
+  transformFile(fileName, proceed, abort, context);
+}
+
+module.exports = transformCallback;
+
+function transformFile(fileName, proceed, abort, context) {
   try {
-    const { transform, options, sourceDirectoryPath, entryFileName } = context,
-          absoluteEntryFilePath = path.resolve(sourceDirectoryPath, entryFileName),
-          entryContent = readFile(absoluteEntryFilePath),
-          source = entryContent;  ///
+    const { sourceDirectoryPath, targetDirectoryPath, transform, options } = context,
+          sourceFilePath = fileName,  ///
+          absoluteSourceFilePath = path.resolve(sourceDirectoryPath, sourceFilePath),
+          sourceFileContent = readFile(absoluteSourceFilePath),
+          source = sourceFileContent;  ///
 
     transform(source, options, (error, result) => {
       const { code } = result,
-            { targetDirectoryPath } = context,
-            outputFileName = entryFileName, ///
-            absoluteOutputFilePath = path.resolve(targetDirectoryPath, outputFileName),
-            outputContent = code; ///
+            targetFilPath = fileName, ///
+            absoluteTargetFilePath = path.resolve(targetDirectoryPath, targetFilPath),
+            targetFileContent = code; ///
 
-      createParentDirectory(absoluteOutputFilePath);
+      createParentDirectory(absoluteTargetFilePath);
 
-      writeFile(absoluteOutputFilePath, outputContent);
+      writeFile(absoluteTargetFilePath, targetFileContent);
 
       proceed();
     });
@@ -36,5 +45,3 @@ function transformCallback(proceed, abort, context) {
     abort();
   }
 }
-
-module.exports = transformCallback;
