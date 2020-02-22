@@ -12,12 +12,11 @@ const { openSync, writeSync } = fs,
 
 function bundleCallback(proceed, abort, context) {
   try {
-    const { bundler, entryFileName, bundleFilePath, targetDirectoryPath } = context,
-          outputFileName = entryFileName, ///
-          absoluteOutputFilePath = path.resolve(targetDirectoryPath, outputFileName),
+    const { bundler, entryFilePath, bundleFilePath, targetDirectoryPath } = context,
+          absoluteEntryFilePath = path.resolve(targetDirectoryPath, entryFilePath),
           absoluteBundleFilePath = path.resolve(bundleFilePath);
 
-    bundler.add(absoluteOutputFilePath);
+    bundler.add(absoluteEntryFilePath);
 
     bundler.bundle((error, buffer) => {
       if (error) {

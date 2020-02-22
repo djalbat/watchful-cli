@@ -20,13 +20,13 @@ function batch() {
         options = {
           sourceMaps
         },
-        entryFileName = 'main.js',
+        entryFilePath = 'main.js',
         bundleFilePath = 'public/bundle.js',
         sourceDirectoryPath = 'es6',
         targetDirectoryPath = 'lib',
         context = {
           options,
-          entryFileName,
+          entryFilePath,
           bundleFilePath,
           sourceDirectoryPath,
           targetDirectoryPath
