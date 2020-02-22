@@ -39,10 +39,15 @@ function executeCallback(next, done, context, index) {
     return;
   }
 
-  const callback = callbacks[index],
-        proceed = next; ///
+  const callback = callbacks[index];
 
-  callback(proceed, () => {
+  callback(proceed, abort, context);
+
+  function proceed() {
+    next();
+  }
+
+  function abort() {
     const completed = false;
 
     Object.assign(context, {
@@ -50,5 +55,5 @@ function executeCallback(next, done, context, index) {
     });
 
     done();
-  }, context);
+  }
 }

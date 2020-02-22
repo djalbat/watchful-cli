@@ -1,47 +1,71 @@
 'use strict';
 
-const path = require('path')
+const path = require('path'),
+      necessary = require('necessary');
 
 const messages = require('../messages'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
-const { BABEL_FAILED_MESSAGE } = messages,
+const { asynchronousUtilities } = necessary,
+      { BABEL_FAILED_MESSAGE } = messages,
+      { repeatedly } = asynchronousUtilities,
       { readFile, writeFile, createParentDirectory } = fileSystemUtilities;
 
 function transformCallback(proceed, abort, context) {
   const { entryFileName } = context,
-        fileName = entryFileName; ///
+        filePath = entryFileName, ///
+        filePaths = [
+          filePath
+        ];
 
-  transformFile(fileName, proceed, abort, context);
+  transformFiles(filePaths, proceed, abort, context);
 }
 
 module.exports = transformCallback;
 
-function transformFile(fileName, proceed, abort, context) {
-  try {
-    const { sourceDirectoryPath, targetDirectoryPath, transform, options } = context,
-          sourceFilePath = fileName,  ///
-          absoluteSourceFilePath = path.resolve(sourceDirectoryPath, sourceFilePath),
-          sourceFileContent = readFile(absoluteSourceFilePath),
-          source = sourceFileContent;  ///
+function transformFiles(filePaths, proceed, abort, context) {
+  const filePathsLength = filePaths.length,
+        length = filePathsLength; ///
 
-    transform(source, options, (error, result) => {
-      const { code } = result,
-            targetFilPath = fileName, ///
-            absoluteTargetFilePath = path.resolve(targetDirectoryPath, targetFilPath),
-            targetFileContent = code; ///
+  let count = 0;
 
-      createParentDirectory(absoluteTargetFilePath);
+  repeatedly(transformFileCallback, length, () => {
+    const success = (count === length);
 
-      writeFile(absoluteTargetFilePath, targetFileContent);
+    success ?
+      proceed() :
+        abort();
+  }, context);
 
-      proceed();
-    });
-  } catch (error) {
-    console.log(BABEL_FAILED_MESSAGE);
+  function transformFileCallback(next, done, context, index) {
+    try {
+      const { sourceDirectoryPath, targetDirectoryPath, transform, options } = context,
+            filePath = filePaths[index],
+            sourceFilePath = filePath,  ///
+            absoluteSourceFilePath = path.resolve(sourceDirectoryPath, sourceFilePath),
+            sourceFileContent = readFile(absoluteSourceFilePath),
+            source = sourceFileContent;  ///
 
-    console.log(error);
+      transform(source, options, (error, result) => {
+        const { code } = result,
+              targetFilPath = filePath, ///
+              absoluteTargetFilePath = path.resolve(targetDirectoryPath, targetFilPath),
+              targetFileContent = code; ///
 
-    abort();
+        createParentDirectory(absoluteTargetFilePath);
+
+        writeFile(absoluteTargetFilePath, targetFileContent);
+
+        count++;
+
+        next();
+      });
+    } catch (error) {
+      console.log(BABEL_FAILED_MESSAGE);
+
+      console.log(error);
+
+      next();
+    }
   }
 }
