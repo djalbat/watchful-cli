@@ -4,8 +4,9 @@ const action = require('../action'),
       messages = require('../messages'),
       babelCallback = require('../callback/babel'),
       bundleCallback = require('../callback/bundle'),
-      transformCallback = require('../callback/transform'),
-      browserifyCallback = require('../callback/browserify');
+      browserifyCallback = require('../callback/browserify'),
+      transformFilesCallback = require('../callback/transformFiles'),
+      retrieveFilePathsCallback = require('../callback/retrieveFilePaths');
 
 const { BATCH_FAILED_MESSAGE, BATCH_SUCCESSFUL_MESSAGE } = messages;
 
@@ -13,17 +14,18 @@ function batch() {
   const callbacks = [
           babelCallback,
           browserifyCallback,
-          transformCallback,
+          retrieveFilePathsCallback,
+          transformFilesCallback,
           bundleCallback
         ],
         sourceMaps = 'inline',
         options = {
           sourceMaps
         },
-        entryFilePath = 'main.js',
-        bundleFilePath = 'public/bundle.js',
-        sourceDirectoryPath = 'es6',
-        targetDirectoryPath = 'lib',
+        entryFilePath = './main.js',
+        bundleFilePath = './public/bundle.js',
+        sourceDirectoryPath = './es6',
+        targetDirectoryPath = './lib',
         context = {
           options,
           entryFilePath,

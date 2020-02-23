@@ -7,31 +7,17 @@ const messages = require('../messages'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
 const { asynchronousUtilities } = necessary,
-      { ENTRY_FILE_NOT_INCLUDED, BABEL_FAILED_MESSAGE } = messages,
       { repeatedly } = asynchronousUtilities,
+      { BABEL_FAILED_MESSAGE } = messages,
       { readFile, writeFile, createParentDirectory } = fileSystemUtilities;
 
-function transformCallback(proceed, abort, context) {
-  const { entryFilePath } = context,
-        filePaths = [
-          'file1.js',
-          'file2.js',
-          'file3.js',
-        ],
-        filePathsIncludesEntryFilePath = filePaths.includes(entryFilePath);
-
-  if (!filePathsIncludesEntryFilePath) {
-    console.log(ENTRY_FILE_NOT_INCLUDED);
-
-    abort();
-
-    return;
-  }
+function transformFilesCallback(proceed, abort, context) {
+  const { filePaths } = context;
 
   transformFiles(filePaths, proceed, abort, context);
 }
 
-module.exports = transformCallback;
+module.exports = transformFilesCallback;
 
 function transformFiles(filePaths, proceed, abort, context) {
   const filePathsLength = filePaths.length,
@@ -68,8 +54,6 @@ function transformFiles(filePaths, proceed, abort, context) {
 
         count++;
 
-        console.log(count);
-
         next();
       });
     } catch (error) {
@@ -81,3 +65,4 @@ function transformFiles(filePaths, proceed, abort, context) {
     }
   }
 }
+
