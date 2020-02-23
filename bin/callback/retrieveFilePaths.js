@@ -1,11 +1,12 @@
 'use strict';
 
-const path = require('path');
+const necessary = require('necessary');
 
 const messages = require('../messages'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
-const { resolve } = path,
+const { pathUtilities } = necessary,
+      { combinePaths } = pathUtilities,
       { ENTRY_FILE_NOT_INCLUDED } = messages,
       { readDirectory, isEntryDirectory } = fileSystemUtilities;
 
@@ -31,20 +32,20 @@ function retrieveFilePathsCallback(proceed, abort, context) {
 
 module.exports = retrieveFilePathsCallback;
 
-function retrieveFilePaths(sourceDirectoryPath, directoryPath = '.', filePaths = []) {
-  const absoluteDirectoryPath = resolve(sourceDirectoryPath, directoryPath),
-        entryPaths = readDirectory(absoluteDirectoryPath);
+function retrieveFilePaths(sourceDirectoryPath, subDirectoryPath = '.', filePaths = []) {
+  const sourceSubDirectoryPath = combinePaths(sourceDirectoryPath, subDirectoryPath),
+        entryPaths = readDirectory(sourceSubDirectoryPath);
 
   entryPaths.forEach((entryPath) => {
-    entryPath = `${directoryPath}/${entryPath}`;  ///
+    entryPath = combinePaths(subDirectoryPath, entryPath); ///
 
-    const absoluteEntryPath = resolve(sourceDirectoryPath, entryPath),
-          entryDirectory = isEntryDirectory(absoluteEntryPath);
+    const sourceEntryPath = combinePaths(sourceDirectoryPath, entryPath),
+          entryDirectory = isEntryDirectory(sourceEntryPath);
 
     if (entryDirectory) {
-      const directoryPath = entryPath;  ///
+      const subDirectoryPath = entryPath;  ///
 
-      retrieveFilePaths(sourceDirectoryPath, directoryPath, filePaths);
+      retrieveFilePaths(sourceDirectoryPath, subDirectoryPath, filePaths);
     } else {
       const filePath = entryPath; ///
 

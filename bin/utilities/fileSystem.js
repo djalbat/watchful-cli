@@ -31,12 +31,15 @@ function cleanDirectory(directoryPath) {
 }
 
 function createParentDirectory(filePath) {
-  const filePathWithoutBottommostName = pathWithoutBottommostNameFromPath(filePath),
-        parentDirectoryPath = filePathWithoutBottommostName,  ///
-        parentDirectoryExists = checkDirectoryExists(parentDirectoryPath);
+  const filePathWithoutBottommostName = pathWithoutBottommostNameFromPath(filePath);
 
-  if (!parentDirectoryExists) {
-    createDirectory(parentDirectoryPath);
+  if ((filePathWithoutBottommostName !== '.') && (filePathWithoutBottommostName !== null)) {
+    const parentDirectoryPath = filePathWithoutBottommostName,  ///
+          parentDirectoryExists = checkDirectoryExists(parentDirectoryPath);
+
+    if (!parentDirectoryExists) {
+      createDirectory(parentDirectoryPath);
+    }
   }
 }
 

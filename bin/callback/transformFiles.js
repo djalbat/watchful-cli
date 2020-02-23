@@ -1,13 +1,12 @@
 'use strict';
 
-const path = require('path'),
-      necessary = require('necessary');
+const necessary = require('necessary');
 
 const messages = require('../messages'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
-const { resolve } = path,
-      { asynchronousUtilities } = necessary,
+const { pathUtilities, asynchronousUtilities } = necessary,
+      { combinePaths } = pathUtilities,
       { repeatedly } = asynchronousUtilities,
       { BABEL_FAILED_MESSAGE } = messages,
       { readFile, writeFile, createParentDirectory } = fileSystemUtilities;
@@ -38,20 +37,18 @@ function transformFiles(filePaths, proceed, abort, context) {
     try {
       const { sourceDirectoryPath, targetDirectoryPath, transform, options } = context,
             filePath = filePaths[index],
-            sourceFilePath = filePath,  ///
-            absoluteSourceFilePath = resolve(sourceDirectoryPath, sourceFilePath),
-            sourceFileContent = readFile(absoluteSourceFilePath),
+            sourceFilePath = combinePaths(sourceDirectoryPath, filePath),  ///
+            sourceFileContent = readFile(sourceFilePath),
             source = sourceFileContent;  ///
 
       transform(source, options, (error, result) => {
         const { code } = result,
-              targetFilPath = filePath, ///
-              absoluteTargetFilePath = resolve(targetDirectoryPath, targetFilPath),
+              targetFilPath = combinePaths(targetDirectoryPath, filePath), ///
               targetFileContent = code; ///
 
-        createParentDirectory(absoluteTargetFilePath);
+        createParentDirectory(targetFilPath);
 
-        writeFile(absoluteTargetFilePath, targetFileContent);
+        writeFile(targetFilPath, targetFileContent);
 
         count++;
 
