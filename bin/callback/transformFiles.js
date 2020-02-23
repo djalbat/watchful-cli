@@ -6,7 +6,8 @@ const path = require('path'),
 const messages = require('../messages'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
-const { asynchronousUtilities } = necessary,
+const { resolve } = path,
+      { asynchronousUtilities } = necessary,
       { repeatedly } = asynchronousUtilities,
       { BABEL_FAILED_MESSAGE } = messages,
       { readFile, writeFile, createParentDirectory } = fileSystemUtilities;
@@ -38,14 +39,14 @@ function transformFiles(filePaths, proceed, abort, context) {
       const { sourceDirectoryPath, targetDirectoryPath, transform, options } = context,
             filePath = filePaths[index],
             sourceFilePath = filePath,  ///
-            absoluteSourceFilePath = path.resolve(sourceDirectoryPath, sourceFilePath),
+            absoluteSourceFilePath = resolve(sourceDirectoryPath, sourceFilePath),
             sourceFileContent = readFile(absoluteSourceFilePath),
             source = sourceFileContent;  ///
 
       transform(source, options, (error, result) => {
         const { code } = result,
               targetFilPath = filePath, ///
-              absoluteTargetFilePath = path.resolve(targetDirectoryPath, targetFilPath),
+              absoluteTargetFilePath = resolve(targetDirectoryPath, targetFilPath),
               targetFileContent = code; ///
 
         createParentDirectory(absoluteTargetFilePath);

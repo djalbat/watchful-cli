@@ -6,7 +6,8 @@ const action = require('../action'),
       bundleCallback = require('../callback/bundle'),
       browserifyCallback = require('../callback/browserify'),
       transformFilesCallback = require('../callback/transformFiles'),
-      retrieveFilePathsCallback = require('../callback/retrieveFilePaths');
+      retrieveFilePathsCallback = require('../callback/retrieveFilePaths'),
+      cleanTargetDirectoryCallback = require('../callback/cleanTargetDirectory');
 
 const { BATCH_FAILED_MESSAGE, BATCH_SUCCESSFUL_MESSAGE } = messages;
 
@@ -15,6 +16,7 @@ function batch() {
           babelCallback,
           browserifyCallback,
           retrieveFilePathsCallback,
+          cleanTargetDirectoryCallback,
           transformFilesCallback,
           bundleCallback
         ],

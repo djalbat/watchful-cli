@@ -5,7 +5,8 @@ const path = require('path');
 const messages = require('../messages'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
-const { ENTRY_FILE_NOT_INCLUDED } = messages,
+const { resolve } = path,
+      { ENTRY_FILE_NOT_INCLUDED } = messages,
       { readDirectory, isEntryDirectory } = fileSystemUtilities;
 
 function retrieveFilePathsCallback(proceed, abort, context) {
@@ -31,13 +32,13 @@ function retrieveFilePathsCallback(proceed, abort, context) {
 module.exports = retrieveFilePathsCallback;
 
 function retrieveFilePaths(sourceDirectoryPath, directoryPath = '.', filePaths = []) {
-  const absoluteDirectoryPath = path.resolve(sourceDirectoryPath, directoryPath),
+  const absoluteDirectoryPath = resolve(sourceDirectoryPath, directoryPath),
         entryPaths = readDirectory(absoluteDirectoryPath);
 
   entryPaths.forEach((entryPath) => {
     entryPath = `${directoryPath}/${entryPath}`;  ///
 
-    const absoluteEntryPath = path.resolve(sourceDirectoryPath, entryPath),
+    const absoluteEntryPath = resolve(sourceDirectoryPath, entryPath),
           entryDirectory = isEntryDirectory(absoluteEntryPath);
 
     if (entryDirectory) {

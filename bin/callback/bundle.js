@@ -6,15 +6,16 @@ const fs = require('fs'),
 const messages = require('../messages'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
-const { openSync, writeSync } = fs,
+const { resolve } = path,
+      { openSync, writeSync } = fs,
       { createParentDirectory } = fileSystemUtilities,
       { BROWSERIFY_FAILED_MESSAGE } = messages;
 
 function bundleCallback(proceed, abort, context) {
   try {
     const { bundler, entryFilePath, bundleFilePath, targetDirectoryPath } = context,
-          absoluteEntryFilePath = path.resolve(targetDirectoryPath, entryFilePath),
-          absoluteBundleFilePath = path.resolve(bundleFilePath);
+          absoluteEntryFilePath = resolve(targetDirectoryPath, entryFilePath),
+          absoluteBundleFilePath = resolve(bundleFilePath);
 
     bundler.add(absoluteEntryFilePath);
 

@@ -2,13 +2,16 @@
 
 const path = require('path');
 
-const messages = require('../messages');
+const messages = require('../messages'),
+      constants = require('../constants');
 
-const { BROWSERIFY_NOT_INSTALLED } = messages;
+const { resolve } = path,
+      { BROWSERIFY_PATH } = constants,
+      { BROWSERIFY_NOT_INSTALLED } = messages;
 
 function browserifyCallback(proceed, abort, context) {
   try {
-    const browserify = require(path.resolve('./node_modules/browserify'));
+    const browserify = require(resolve(BROWSERIFY_PATH));
 
     const bundler = browserify(); ///
 

@@ -2,13 +2,16 @@
 
 const path = require('path');
 
-const messages = require('../messages');
+const messages = require('../messages'),
+      constants = require('../constants');
 
-const { BABEL_CORE_NOT_INSTALLED } = messages;
+const { resolve } = path,
+      { BABEL_CORE_PATH } = constants,
+      { BABEL_CORE_NOT_INSTALLED } = messages;
 
 function babelCallback(proceed, abort, context) {
   try {
-    const babel = require(path.resolve('./node_modules/@babel/core'));
+    const babel = require(resolve(BABEL_CORE_PATH));
 
     const { transform } = babel;
 
