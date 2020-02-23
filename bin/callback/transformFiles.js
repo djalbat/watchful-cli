@@ -7,7 +7,7 @@ const messages = require('../messages'),
 
 const { pathUtilities, asynchronousUtilities } = necessary,
       { combinePaths } = pathUtilities,
-      { repeatedly } = asynchronousUtilities,
+      { forEach } = asynchronousUtilities,
       { BABEL_FAILED_MESSAGE } = messages,
       { readFile, writeFile, createParentDirectory } = fileSystemUtilities;
 
@@ -25,7 +25,7 @@ function transformFiles(filePaths, proceed, abort, context) {
 
   let count = 0;
 
-  repeatedly(transformFileCallback, length, () => {
+  forEach(filePaths, transformFileCallback, () => {
     const success = (count === length);
 
     success ?
@@ -33,10 +33,9 @@ function transformFiles(filePaths, proceed, abort, context) {
         abort();
   }, context);
 
-  function transformFileCallback(next, done, context, index) {
+  function transformFileCallback(filePath, next, done, context) {
     try {
       const { sourceDirectoryPath, targetDirectoryPath, transform, options } = context,
-            filePath = filePaths[index],
             sourceFilePath = combinePaths(sourceDirectoryPath, filePath),  ///
             sourceFileContent = readFile(sourceFilePath),
             source = sourceFileContent;  ///
@@ -59,8 +58,7 @@ function transformFiles(filePaths, proceed, abort, context) {
 
       console.log(error);
 
-      next();
+      done();
     }
   }
 }
-

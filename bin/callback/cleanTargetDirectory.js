@@ -2,12 +2,15 @@
 
 const fileSystemUtilities = require('../utilities/fileSystem');
 
-const { cleanDirectory } = fileSystemUtilities;
+const { cleanDirectory, checkDirectoryExists } = fileSystemUtilities;
 
 function cleanTargetDirectoryCallback(proceed, abort, context) {
-  const { targetDirectoryPath } = context;
+  const { targetDirectoryPath } = context,
+        targetDirectoryExists = checkDirectoryExists(targetDirectoryPath);
 
-  cleanDirectory(targetDirectoryPath);
+  if (targetDirectoryExists) {
+    cleanDirectory(targetDirectoryPath);
+  }
 
   proceed();
 }

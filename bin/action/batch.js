@@ -25,9 +25,9 @@ function batch() {
           sourceMaps
         },
         entryFilePath = './main.js',
-        bundleFilePath = './public/bundle.js',
+        bundleFilePath = './public/lib/client.js',
         sourceDirectoryPath = './es6',
-        targetDirectoryPath = './lib',
+        targetDirectoryPath = './tmp',
         context = {
           options,
           entryFilePath,
