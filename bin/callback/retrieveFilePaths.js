@@ -41,7 +41,7 @@ function retrieveFilePaths(sourceDirectoryPath, directoryPath = '.', filePaths =
           entryDirectory = isEntryDirectory(absoluteEntryPath);
 
     if (entryDirectory) {
-      directoryPath = entryPath;  ///
+      const directoryPath = entryPath;  ///
 
       retrieveFilePaths(sourceDirectoryPath, directoryPath, filePaths);
     } else {
