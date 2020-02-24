@@ -3,11 +3,15 @@
 function help() {
   console.log(`Usage: 
   
-  watchful [help]                                Show this help
-  
+  watchful [<command>] [<options>]
+
 Commands:
 
-  ...
+  help                                           Show this help
+  
+  batch                                          Batch build
+
+  [incremental]                                  Watch and build incrementally
   
 Options:
 
