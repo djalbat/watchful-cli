@@ -6,7 +6,7 @@ const messages = require('../messages'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
 const { pathUtilities, asynchronousUtilities } = necessary,
-      { combinePaths } = pathUtilities,
+      { combinePaths, bottommostNameFromPath } = pathUtilities,
       { forEach } = asynchronousUtilities,
       { BABEL_FAILED_MESSAGE } = messages,
       { readFile, writeFile, createParentDirectory } = fileSystemUtilities;
@@ -35,9 +35,14 @@ function transformFiles(filePaths, proceed, abort, context) {
 
   function transformFileCallback(filePath, next, done, context) {
     try {
-      const { sourceDirectoryPath, targetDirectoryPath, transform, options } = context,
+      const { transform, babelOptions, sourceDirectoryPath, targetDirectoryPath } = context,
             sourceFilePath = combinePaths(sourceDirectoryPath, filePath),  ///
             sourceFileContent = readFile(sourceFilePath),
+            fileName = fileNameFromFilePath(filePath),
+            sourceFileName = fileName,  ///
+            options = Object.assign( babelOptions, {
+              sourceFileName
+            }),
             source = sourceFileContent;  ///
 
       transform(source, options, (error, result) => {
@@ -61,4 +66,11 @@ function transformFiles(filePaths, proceed, abort, context) {
       done();
     }
   }
+}
+
+function fileNameFromFilePath(filePath) {
+  const bottommostFileName = bottommostNameFromPath(filePath),
+        fileName = bottommostFileName;  ///
+
+  return fileName;
 }

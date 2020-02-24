@@ -10,10 +10,13 @@ const { resolve } = path,
       { BROWSERIFY_NOT_INSTALLED } = messages;
 
 function browserifyCallback(proceed, abort, context) {
+  const { browserifyOptions } = context,
+        options = browserifyOptions;  ///
+
   try {
     const browserify = require(resolve(BROWSERIFY_PATH));
 
-    const bundler = browserify(); ///
+    const bundler = browserify(options); ///
 
     Object.assign(context, {
       bundler

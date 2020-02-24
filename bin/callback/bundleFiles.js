@@ -12,7 +12,7 @@ const { pathUtilities } = necessary,
       { createParentDirectory } = fileSystemUtilities,
       { BROWSERIFY_FAILED_MESSAGE } = messages;
 
-function bundleCallback(proceed, abort, context) {
+function bundleFilesCallback(proceed, abort, context) {
   try {
     const { bundler, entryFilePath, bundleFilePath, targetDirectoryPath } = context,
           targetEntryFilePath = combinePaths(targetDirectoryPath, entryFilePath);
@@ -41,4 +41,4 @@ function bundleCallback(proceed, abort, context) {
   }
 }
 
-module.exports = bundleCallback;
+module.exports = bundleFilesCallback;

@@ -3,8 +3,8 @@
 const action = require('../action'),
       messages = require('../messages'),
       babelCallback = require('../callback/babel'),
-      bundleCallback = require('../callback/bundle'),
       browserifyCallback = require('../callback/browserify'),
+      bundleFilesCallback = require('../callback/bundleFiles'),
       transformFilesCallback = require('../callback/transformFiles'),
       retrieveFilePathsCallback = require('../callback/retrieveFilePaths');
 
@@ -16,20 +16,25 @@ function batch() {
           browserifyCallback,
           retrieveFilePathsCallback,
           transformFilesCallback,
-          bundleCallback
+          bundleFilesCallback
         ],
+        debug = true,
         sourceMaps = 'inline',
-        options = {
+        babelOptions = {
           sourceMaps
+        },
+        browserifyOptions = {
+          debug,
         },
         entryFilePath = './main.js',
         bundleFilePath = './public/lib/client.js',
         sourceDirectoryPath = './es6',
         targetDirectoryPath = './tmp',
         context = {
-          options,
+          babelOptions,
           entryFilePath,
           bundleFilePath,
+          browserifyOptions,
           sourceDirectoryPath,
           targetDirectoryPath
         };
