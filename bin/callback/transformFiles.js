@@ -40,10 +40,10 @@ function transformFiles(filePaths, proceed, abort, context) {
             sourceFileContent = readFile(sourceFilePath),
             fileName = fileNameFromFilePath(filePath),
             sourceFileName = fileName,  ///
+            source = sourceFileContent,  ///
             options = Object.assign( babelOptions, {
               sourceFileName
-            }),
-            source = sourceFileContent;  ///
+            });
 
       transform(source, options, (error, result) => {
         const { code } = result,
