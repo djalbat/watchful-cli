@@ -11,7 +11,11 @@ const { pathUtilities } = necessary,
       { readDirectory, isEntryDirectory } = fileSystemUtilities;
 
 function retrieveFilePathsCallback(proceed, abort, context) {
-  const { sourceDirectoryPath, entryFilePath } = context,
+  let { entryFilePath } = context;
+
+  entryFilePath = guaranteeDelimitedPath(entryFilePath);
+
+  const { sourceDirectoryPath } = context,
         filePaths = retrieveFilePaths(sourceDirectoryPath),
         filePathsIncludesEntryFilePath = filePaths.includes(entryFilePath);
 
@@ -54,4 +58,14 @@ function retrieveFilePaths(sourceDirectoryPath, subDirectoryPath = '.', filePath
   });
 
   return filePaths;
+}
+
+function guaranteeDelimitedPath(path) {
+  const pathDelimited = /^(?:\/|.\/|..\/).*/.test();
+
+  path = pathDelimited ?
+           path :
+            `./${path}`;
+
+  return path;
 }

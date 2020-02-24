@@ -6,9 +6,9 @@ const messages = require('../messages'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
 const { pathUtilities, asynchronousUtilities } = necessary,
-      { combinePaths, bottommostNameFromPath } = pathUtilities,
       { forEach } = asynchronousUtilities,
       { BABEL_FAILED_MESSAGE } = messages,
+      { combinePaths, bottommostNameFromPath } = pathUtilities,
       { readFile, writeFile, createParentDirectory } = fileSystemUtilities;
 
 function transformFilesCallback(proceed, abort, context) {

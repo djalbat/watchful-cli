@@ -26,10 +26,10 @@ function batch() {
         browserifyOptions = {
           debug,
         },
-        entryFilePath = './main.js',
-        bundleFilePath = './public/lib/client.js',
-        sourceDirectoryPath = './es6',
-        targetDirectoryPath = './tmp',
+        entryFilePath = 'main.js',
+        bundleFilePath = 'public/lib/client.js',
+        sourceDirectoryPath = 'es6',
+        targetDirectoryPath = 'tmp',
         context = {
           babelOptions,
           entryFilePath,
