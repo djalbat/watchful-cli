@@ -6,7 +6,7 @@ const fs = require('fs'),
 const { unlinkSync, rmdirSync } = fs,
       { pathUtilities, fileSystemUtilities } = necessary,
       { pathWithoutBottommostNameFromPath } = pathUtilities,
-      { readDirectory, createDirectory, isEntryDirectory, checkDirectoryExists } = fileSystemUtilities;
+      { readDirectory, isEntryDirectory, createDirectory, checkDirectoryExists } = fileSystemUtilities;
 
 function cleanDirectory(directoryPath) {
   const entryPaths = readDirectory(directoryPath);
