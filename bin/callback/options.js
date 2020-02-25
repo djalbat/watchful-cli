@@ -2,7 +2,7 @@
 
 function optionsCallback(proceed, abort, context) {
   const { options } = context,
-        { debug, bundleFile, inputDirectory, outputDirectory } = options,
+        { debug, entryFile, bundleFile, inputDirectory, outputDirectory } = options,
         sourceMaps = debug ?
                       'inline' :
                          null,
@@ -12,7 +12,7 @@ function optionsCallback(proceed, abort, context) {
         browserifyOptions = {
           debug,
         },
-        entryFilePath = 'main.js',
+        entryFilePath = entryFile,  ///,
         bundleFilePath = bundleFile,  ///
         inputDirectoryPath = inputDirectory,  ///,
         outputDirectoryPath = outputDirectory;  ///
