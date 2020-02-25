@@ -21,11 +21,13 @@ Options:
   
   --debug|-d                                     Debug, that is enable source maps
   
+  --entry-file|-b                                Entry file path
+  
+  --bundle-file|-b                               Bundle file path
+  
   --input-directory|-i                           Input directory path
   
   --output-directory|-o                          Output directory path
-  
-  --bundle-file|-b                               Bundle file path
   
 Further information:
 
