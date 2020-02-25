@@ -19,9 +19,12 @@ Options:
 
   --help|-h                                      Show this help
   
-  --debug|d                                      Debug, that is enable source maps
+  --debug|-d                                     Debug, that is enable source maps
   
-
+  --input-directory|-i                           Input directory
+  
+  --output-directory|-o                          Output directory
+  
 Further information:
 
 Please see the readme file on GitHub:

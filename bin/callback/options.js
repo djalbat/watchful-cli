@@ -2,7 +2,7 @@
 
 function optionsCallback(proceed, abort, context) {
   const { options } = context,
-        { debug } = options,
+        { debug, inputDirectory } = options,
         sourceMaps = debug ?
                       'inline' :
                         null,
@@ -14,7 +14,7 @@ function optionsCallback(proceed, abort, context) {
         },
         entryFilePath = 'main.js',
         bundleFilePath = 'public/lib/client.js',
-        sourceDirectoryPath = 'es6',
+        inputDirectoryPath = inputDirectory,  ///,
         targetDirectoryPath = 'tmp';
 
   Object.assign(context, {
@@ -22,7 +22,7 @@ function optionsCallback(proceed, abort, context) {
     entryFilePath,
     bundleFilePath,
     browserifyOptions,
-    sourceDirectoryPath,
+    inputDirectoryPath,
     targetDirectoryPath
   });
 
