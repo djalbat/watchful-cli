@@ -19,6 +19,8 @@ Options:
 
   --help|-h                                      Show this help
   
+  --debug|d                                      Debug, that is enable source maps
+  
 
 Further information:
 

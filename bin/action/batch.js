@@ -3,10 +3,10 @@
 const action = require('../action'),
       messages = require('../messages'),
       babelCallback = require('../callback/babel'),
+      optionsCallback = require('../callback/options'),
       browserifyCallback = require('../callback/browserify'),
       bundleFilesCallback = require('../callback/bundleFiles'),
       transformFilesCallback = require('../callback/transformFiles'),
-      optionsCallback = require('../callback/options'),
       retrieveFilePathsCallback = require('../callback/retrieveFilePaths');
 
 const { BATCH_FAILED_MESSAGE, BATCH_SUCCESSFUL_MESSAGE } = messages;

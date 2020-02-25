@@ -1,8 +1,11 @@
 'use strict';
 
 function optionsCallback(proceed, abort, context) {
-  const debug = true,
-        sourceMaps = 'inline',
+  const { options } = context,
+        { debug } = options,
+        sourceMaps = debug ?
+                      'inline' :
+                        null,
         babelOptions = {
           sourceMaps
         },
