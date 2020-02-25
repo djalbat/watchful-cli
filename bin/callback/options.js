@@ -2,10 +2,10 @@
 
 function optionsCallback(proceed, abort, context) {
   const { options } = context,
-        { debug, inputDirectory, outputDirectory } = options,
+        { debug, bundleFile, inputDirectory, outputDirectory } = options,
         sourceMaps = debug ?
                       'inline' :
-                        null,
+                         null,
         babelOptions = {
           sourceMaps
         },
@@ -13,7 +13,7 @@ function optionsCallback(proceed, abort, context) {
           debug,
         },
         entryFilePath = 'main.js',
-        bundleFilePath = 'public/lib/client.js',
+        bundleFilePath = bundleFile,  ///
         inputDirectoryPath = inputDirectory,  ///,
         outputDirectoryPath = outputDirectory;  ///
 
