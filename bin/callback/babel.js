@@ -11,9 +11,9 @@ const { resolve } = path,
 
 function babelCallback(proceed, abort, context) {
   try {
-    const babel = require(resolve(BABEL_CORE_PATH));
-
-    const { transform } = babel;
+    const babelCorePath = resolve(BABEL_CORE_PATH),
+          babel = require(babelCorePath),
+          { transform } = babel;
 
     Object.assign(context, {
       transform

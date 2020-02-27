@@ -14,9 +14,9 @@ function browserifyCallback(proceed, abort, context) {
         options = browserifyOptions;  ///
 
   try {
-    const browserify = require(resolve(BROWSERIFY_PATH));
-
-    const bundler = browserify(options); ///
+    const browserifyPath = resolve(BROWSERIFY_PATH),
+          browserify = require(browserifyPath),
+          bundler = browserify(options); ///
 
     Object.assign(context, {
       bundler

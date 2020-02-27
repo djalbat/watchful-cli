@@ -78,22 +78,29 @@ function optionsCallback(proceed, abort, context) {
 module.exports = optionsCallback;
 
 function babelOptionsFromOptions(options) {
-  const { debug } = options,
-        sourceMaps = debug ?
-                      'inline' :
-                         null,
-        babelOptions = {
-          sourceMaps
-        };
+  const babelOptions = {},
+        { debug } = options;
+
+  if (debug) {
+    const sourceMaps = 'inline';
+
+    Object.assign(babelOptions, {
+      sourceMaps
+    });
+  }
 
   return babelOptions;
 }
 
 function browserifyOptionsFromOptions(options) {
-  const {debug} = options,
-        browserifyOptions = {
-          debug
-        };
+  const browserifyOptions = {},
+        { debug } = options;
+
+  if (debug) {
+    Object.assign(browserifyOptions, {
+      debug
+    });
+  }
 
   return browserifyOptions;
 }
