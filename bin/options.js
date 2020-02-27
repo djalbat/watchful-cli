@@ -5,8 +5,9 @@ const HELP_OPTION = 'help',
       VERSION_OPTION = 'version',
       ENTRY_FILE_OPTION = 'entry-file',
       BUNDLE_FILE_OPTION = 'bundle-file',
-      SOURCE_DIRECTORY_OPTION = 'source-directory',
-      OUTPUT_DIRECTORY_OPTION = 'output-directory';
+      LIB_DIRECTORY_OPTION = 'lib-directory',
+      TEMP_DIRECTORY_OPTION = 'temp-directory',
+      SOURCE_DIRECTORY_OPTION = 'source-directory';
 
 module.exports = {
   HELP_OPTION,
@@ -14,6 +15,7 @@ module.exports = {
   VERSION_OPTION,
   ENTRY_FILE_OPTION,
   BUNDLE_FILE_OPTION,
-  SOURCE_DIRECTORY_OPTION,
-  OUTPUT_DIRECTORY_OPTION
+  LIB_DIRECTORY_OPTION,
+  TEMP_DIRECTORY_OPTION,
+  SOURCE_DIRECTORY_OPTION
 };

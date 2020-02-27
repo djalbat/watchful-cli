@@ -7,16 +7,18 @@ const { HELP_OPTION,
         VERSION_OPTION,
         ENTRY_FILE_OPTION,
         BUNDLE_FILE_OPTION,
-        SOURCE_DIRECTORY_OPTION,
-        OUTPUT_DIRECTORY_OPTION } = options;
+        LIB_DIRECTORY_OPTION,
+        TEMP_DIRECTORY_OPTION,
+        SOURCE_DIRECTORY_OPTION } = options;
 
 const h = HELP_OPTION,
       d = DEBUG_OPTION,
       v = VERSION_OPTION,
       e = ENTRY_FILE_OPTION,
       b = BUNDLE_FILE_OPTION,
-      s = SOURCE_DIRECTORY_OPTION,
-      o = OUTPUT_DIRECTORY_OPTION;
+      l = LIB_DIRECTORY_OPTION,
+      t = TEMP_DIRECTORY_OPTION,
+      s = SOURCE_DIRECTORY_OPTION;
 
 module.exports = {
   h,
@@ -24,6 +26,7 @@ module.exports = {
   v,
   e,
   b,
-  s,
-  o
+  l,
+  t,
+  s
 };

@@ -25,9 +25,11 @@ Options:
   
   --bundle-file|-b                               Bundle file path
   
+  --lib-directory|-l                             Lib directory path
+
+  --temp-directory|-t                            Temp directory path
+
   --source-directory|-s                          Source directory path
-  
-  --output-directory|-o                          Output directory path
   
 Further information:
 

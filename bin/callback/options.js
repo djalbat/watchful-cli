@@ -3,12 +3,14 @@
 const messages = require('../messages');
 
 const { NO_ENTRY_FILE_MESSAGE,
-        NO_BUNDLE_FILE_MESSAGE,
-        NO_SOURCE_DIRECTORY_MESSAGE } = messages;
+        NO_TEMP_DIRECTORY_MESSAGE,
+        NO_SOURCE_DIRECTORY_MESSAGE,
+        NO_LIB_OR_TEMP_DIRECTORY_MESSAGE,
+        BOTH_LIB_AND_TEMP_DIRECTORIES_MESSAGE } = messages;
 
 function optionsCallback(proceed, abort, context) {
   const { options } = context,
-        { entryFile, bundleFile, sourceDirectory, outputDirectory } = options;
+        { entryFile, bundleFile, libDirectory, tempDirectory, sourceDirectory } = options;
 
   if (!sourceDirectory) {
     console.log(NO_SOURCE_DIRECTORY_MESSAGE);
@@ -18,7 +20,23 @@ function optionsCallback(proceed, abort, context) {
     return;
   }
 
-  if (bundleFile) {
+  if (!libDirectory && !tempDirectory) {
+    console.log(NO_LIB_OR_TEMP_DIRECTORY_MESSAGE);
+
+    abort();
+
+    return;
+  }
+
+  if (libDirectory && tempDirectory) {
+    console.log(BOTH_LIB_AND_TEMP_DIRECTORIES_MESSAGE);
+
+    abort();
+
+    return;
+  }
+
+  if (tempDirectory) {
     if (!entryFile) {
       console.log(NO_ENTRY_FILE_MESSAGE);
 
@@ -29,8 +47,8 @@ function optionsCallback(proceed, abort, context) {
   }
 
   if (entryFile) {
-    if (!bundleFile) {
-      console.log(NO_BUNDLE_FILE_MESSAGE);
+    if (!tempDirectory) {
+      console.log(NO_TEMP_DIRECTORY_MESSAGE);
 
       abort();
 
@@ -43,7 +61,7 @@ function optionsCallback(proceed, abort, context) {
         entryFilePath = entryFile,  ///,
         bundleFilePath = bundleFile,  ///
         sourceDirectoryPath = sourceDirectory,  ///,
-        outputDirectoryPath = outputDirectory;  ///
+        outputDirectoryPath = libDirectory || tempDirectory;  ///
 
   Object.assign(context, {
     babelOptions,
