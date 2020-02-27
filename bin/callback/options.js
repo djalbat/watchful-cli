@@ -8,7 +8,7 @@ const { NO_ENTRY_FILE_MESSAGE,
 
 function optionsCallback(proceed, abort, context) {
   const { options } = context,
-        { debug, entryFile, bundleFile, inputDirectory, outputDirectory } = options;
+        { entryFile, bundleFile, inputDirectory, outputDirectory } = options;
 
   if (!outputDirectory) {
     console.log(NO_OUTPUT_DIRECTORY_MESSAGE);
@@ -38,15 +38,8 @@ function optionsCallback(proceed, abort, context) {
     }
   }
 
-  const sourceMaps = debug ?
-                      'inline' :
-                         null,
-        babelOptions = {
-          sourceMaps
-        },
-        browserifyOptions = {
-          debug,
-        },
+  const babelOptions = babelOptionsFromOptions(options),
+        browserifyOptions = browserifyOptionsFromOptions(options),
         entryFilePath = entryFile,  ///,
         bundleFilePath = bundleFile,  ///
         inputDirectoryPath = inputDirectory,  ///,
@@ -65,3 +58,24 @@ function optionsCallback(proceed, abort, context) {
 }
 
 module.exports = optionsCallback;
+
+function babelOptionsFromOptions(options) {
+  const { debug } = options,
+        sourceMaps = debug ?
+                      'inline' :
+                         null,
+        babelOptions = {
+          sourceMaps
+        };
+
+  return babelOptions;
+}
+
+function browserifyOptionsFromOptions(options) {
+  const {debug} = options,
+        browserifyOptions = {
+          debug
+        };
+
+  return browserifyOptions;
+}
