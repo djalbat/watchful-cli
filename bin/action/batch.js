@@ -9,7 +9,8 @@ const action = require('../action'),
       transformFilesCallback = require('../callback/transformFiles'),
       retrieveFilePathsCallback = require('../callback/retrieveFilePaths');
 
-const { BATCH_FAILED_MESSAGE, BATCH_SUCCESSFUL_MESSAGE } = messages;
+const { exit } = process,
+      { BATCH_FAILED_MESSAGE, BATCH_SUCCESSFUL_MESSAGE } = messages;
 
 function batch(options) {
   const callbacks = [
@@ -25,11 +26,15 @@ function batch(options) {
         };
 
   action(callbacks, (success) => {
-    success ?
-      console.log(BATCH_SUCCESSFUL_MESSAGE) :
-        console.log(BATCH_FAILED_MESSAGE);
+    if (success) {
+      console.log(BATCH_SUCCESSFUL_MESSAGE);
 
-    process.exit();
+      exit(0);
+    }
+
+    console.log(BATCH_FAILED_MESSAGE);
+
+    exit(1);
   }, context);
 }
 
