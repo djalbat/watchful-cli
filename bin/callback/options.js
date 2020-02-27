@@ -4,14 +4,14 @@ const messages = require('../messages');
 
 const { NO_ENTRY_FILE_MESSAGE,
         NO_BUNDLE_FILE_MESSAGE,
-        NO_OUTPUT_DIRECTORY_MESSAGE } = messages;
+        NO_SOURCE_DIRECTORY_MESSAGE } = messages;
 
 function optionsCallback(proceed, abort, context) {
   const { options } = context,
-        { entryFile, bundleFile, inputDirectory, outputDirectory } = options;
+        { entryFile, bundleFile, sourceDirectory, outputDirectory } = options;
 
-  if (!outputDirectory) {
-    console.log(NO_OUTPUT_DIRECTORY_MESSAGE);
+  if (!sourceDirectory) {
+    console.log(NO_SOURCE_DIRECTORY_MESSAGE);
 
     abort();
 
@@ -42,7 +42,7 @@ function optionsCallback(proceed, abort, context) {
         browserifyOptions = browserifyOptionsFromOptions(options),
         entryFilePath = entryFile,  ///,
         bundleFilePath = bundleFile,  ///
-        inputDirectoryPath = inputDirectory,  ///,
+        sourceDirectoryPath = sourceDirectory,  ///,
         outputDirectoryPath = outputDirectory;  ///
 
   Object.assign(context, {
@@ -50,7 +50,7 @@ function optionsCallback(proceed, abort, context) {
     entryFilePath,
     bundleFilePath,
     browserifyOptions,
-    inputDirectoryPath,
+    sourceDirectoryPath,
     outputDirectoryPath
   });
 

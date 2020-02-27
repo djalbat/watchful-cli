@@ -7,7 +7,7 @@ const { HELP_OPTION,
         VERSION_OPTION,
         ENTRY_FILE_OPTION,
         BUNDLE_FILE_OPTION,
-        INPUT_DIRECTORY_OPTION,
+        SOURCE_DIRECTORY_OPTION,
         OUTPUT_DIRECTORY_OPTION } = options;
 
 const h = HELP_OPTION,
@@ -15,7 +15,7 @@ const h = HELP_OPTION,
       v = VERSION_OPTION,
       e = ENTRY_FILE_OPTION,
       b = BUNDLE_FILE_OPTION,
-      i = INPUT_DIRECTORY_OPTION,
+      s = SOURCE_DIRECTORY_OPTION,
       o = OUTPUT_DIRECTORY_OPTION;
 
 module.exports = {
@@ -24,6 +24,6 @@ module.exports = {
   v,
   e,
   b,
-  i,
+  s,
   o
 };

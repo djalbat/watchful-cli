@@ -9,7 +9,7 @@ const BATCH_FAILED_MESSAGE = 'The build failed.',
       BROWSERIFY_NOT_INSTALLED = 'Browserify is not installed.',
       BABEL_CORE_NOT_INSTALLED = 'The \'@babel/core\' package is not installed.',
       BROWSERIFY_FAILED_MESSAGE = 'Browserify failed:',
-      NO_OUTPUT_DIRECTORY_MESSAGE = 'No output directory has been specified.';
+      NO_SOURCE_DIRECTORY_MESSAGE = 'The source directory has not been specified.';
 
 module.exports = {
   BATCH_FAILED_MESSAGE,
@@ -21,5 +21,5 @@ module.exports = {
   BROWSERIFY_NOT_INSTALLED,
   BABEL_CORE_NOT_INSTALLED,
   BROWSERIFY_FAILED_MESSAGE,
-  NO_OUTPUT_DIRECTORY_MESSAGE
+  NO_SOURCE_DIRECTORY_MESSAGE
 };

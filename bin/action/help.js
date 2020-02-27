@@ -25,7 +25,7 @@ Options:
   
   --bundle-file|-b                               Bundle file path
   
-  --input-directory|-i                           Input directory path
+  --source-directory|-s                          Source directory path
   
   --output-directory|-o                          Output directory path
   

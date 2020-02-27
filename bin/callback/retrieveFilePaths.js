@@ -15,8 +15,8 @@ function retrieveFilePathsCallback(proceed, abort, context) {
 
   entryFilePath = guaranteeDelimitedPath(entryFilePath);
 
-  const { inputDirectoryPath } = context,
-        filePaths = retrieveFilePaths(inputDirectoryPath),
+  const { sourceDirectoryPath } = context,
+        filePaths = retrieveFilePaths(sourceDirectoryPath),
         filePathsIncludesEntryFilePath = filePaths.includes(entryFilePath);
 
   if (!filePathsIncludesEntryFilePath) {
@@ -36,20 +36,20 @@ function retrieveFilePathsCallback(proceed, abort, context) {
 
 module.exports = retrieveFilePathsCallback;
 
-function retrieveFilePaths(inputDirectoryPath, subDirectoryPath = '.', filePaths = []) {
-  const inputSubDirectoryPath = combinePaths(inputDirectoryPath, subDirectoryPath),
-        entryPaths = readDirectory(inputSubDirectoryPath);
+function retrieveFilePaths(sourceDirectoryPath, subDirectoryPath = '.', filePaths = []) {
+  const sourceSubDirectoryPath = combinePaths(sourceDirectoryPath, subDirectoryPath),
+        entryPaths = readDirectory(sourceSubDirectoryPath);
 
   entryPaths.forEach((entryPath) => {
     entryPath = combinePaths(subDirectoryPath, entryPath); ///
 
-    const inputEntryPath = combinePaths(inputDirectoryPath, entryPath),
-          entryDirectory = isEntryDirectory(inputEntryPath);
+    const sourceEntryPath = combinePaths(sourceDirectoryPath, entryPath),
+          entryDirectory = isEntryDirectory(sourceEntryPath);
 
     if (entryDirectory) {
       const subDirectoryPath = entryPath;  ///
 
-      retrieveFilePaths(inputDirectoryPath, subDirectoryPath, filePaths);
+      retrieveFilePaths(sourceDirectoryPath, subDirectoryPath, filePaths);
     } else {
       const filePath = entryPath; ///
 
