@@ -61,7 +61,7 @@ function optionsCallback(proceed, abort, context) {
         entryFilePath = entryFile,  ///,
         bundleFilePath = bundleFile,  ///
         sourceDirectoryPath = sourceDirectory,  ///,
-        outputDirectoryPath = libDirectory || tempDirectory;  ///
+        targetDirectoryPath = libDirectory || tempDirectory;  ///
 
   Object.assign(context, {
     babelOptions,
@@ -69,7 +69,7 @@ function optionsCallback(proceed, abort, context) {
     bundleFilePath,
     browserifyOptions,
     sourceDirectoryPath,
-    outputDirectoryPath
+    targetDirectoryPath
   });
 
   proceed();

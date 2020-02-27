@@ -14,10 +14,10 @@ const { pathUtilities } = necessary,
 
 function bundleFilesCallback(proceed, abort, context) {
   try {
-    const { bundler, entryFilePath, bundleFilePath, outputDirectoryPath } = context,
-          outputEntryFilePath = combinePaths(outputDirectoryPath, entryFilePath);
+    const { bundler, entryFilePath, bundleFilePath, targetDirectoryPath } = context,
+          targetEntryFilePath = combinePaths(targetDirectoryPath, entryFilePath);
 
-    bundler.add(outputEntryFilePath);
+    bundler.add(targetEntryFilePath);
 
     bundler.bundle((error, buffer) => {
       if (error) {

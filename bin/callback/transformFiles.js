@@ -35,24 +35,24 @@ function transformFiles(filePaths, proceed, abort, context) {
 
   function transformFileCallback(filePath, next, done, context) {
     try {
-      const { transform, babelOptions, sourceDirectoryPath, outputDirectoryPath } = context,
+      const { transform, babelOptions, sourceDirectoryPath, targetDirectoryPath } = context,
             sourceFilePath = combinePaths(sourceDirectoryPath, filePath),  ///
             sourceFileContent = readFile(sourceFilePath),
             fileName = fileNameFromFilePath(filePath),
             sourceFileName = fileName,  ///
             source = sourceFileContent,  ///
-            options = Object.assign( babelOptions, {
+            options = Object.assign(babelOptions, {
               sourceFileName
             });
 
       transform(source, options, (error, result) => {
         const { code } = result,
-              outputFilPath = combinePaths(outputDirectoryPath, filePath), ///
-              outputFileContent = code; ///
+              targetFilPath = combinePaths(targetDirectoryPath, filePath), ///
+              targetFileContent = code; ///
 
-        createParentDirectory(outputFilPath);
+        createParentDirectory(targetFilPath);
 
-        writeFile(outputFilPath, outputFileContent);
+        writeFile(targetFilPath, targetFileContent);
 
         count++;
 

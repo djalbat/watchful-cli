@@ -11,20 +11,23 @@ const { pathUtilities } = necessary,
       { readDirectory, isEntryDirectory } = fileSystemUtilities;
 
 function retrieveFilePathsCallback(proceed, abort, context) {
+  const { sourceDirectoryPath } = context,
+        filePaths = retrieveFilePaths(sourceDirectoryPath);
+
   let { entryFilePath } = context;
 
-  entryFilePath = guaranteeDelimitedPath(entryFilePath);
+  if (entryFilePath) {
+    entryFilePath = guaranteeDelimitedPath(entryFilePath);
 
-  const { sourceDirectoryPath } = context,
-        filePaths = retrieveFilePaths(sourceDirectoryPath),
-        filePathsIncludesEntryFilePath = filePaths.includes(entryFilePath);
+    const filePathsIncludesEntryFilePath = filePaths.includes(entryFilePath);
 
-  if (!filePathsIncludesEntryFilePath) {
-    console.log(ENTRY_FILE_NOT_INCLUDED);
+    if (!filePathsIncludesEntryFilePath) {
+      console.log(ENTRY_FILE_NOT_INCLUDED);
 
-    abort();
+      abort();
 
-    return;
+      return;
+    }
   }
 
   Object.assign(context, {
