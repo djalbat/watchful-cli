@@ -6,15 +6,24 @@ const fs = require('fs'),
 const messages = require('../messages'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
-const { pathUtilities } = necessary,
+const { stdout } = process,
+      { pathUtilities } = necessary,
       { combinePaths } = pathUtilities,
       { openSync, writeSync } = fs,
       { createParentDirectory } = fileSystemUtilities,
       { BROWSERIFY_FAILED_MESSAGE } = messages;
 
 function bundleFilesCallback(proceed, abort, context) {
+  const { entryFilePath } = context;
+
+  if (!entryFilePath) {
+    proceed();
+
+    return;
+  }
+
   try {
-    const { bundler, entryFilePath, bundleFilePath, targetDirectoryPath } = context,
+    const { bundler, targetDirectoryPath } = context,
           targetEntryFilePath = combinePaths(targetDirectoryPath, entryFilePath);
 
     bundler.add(targetEntryFilePath);
@@ -24,11 +33,17 @@ function bundleFilesCallback(proceed, abort, context) {
         throw(error);
       }
 
-      createParentDirectory(bundleFilePath);
+      const { bundleFilePath } = context;
 
-      const bundleFile = openSync(bundleFilePath, 'w+');
+      if (bundleFilePath) {
+        createParentDirectory(bundleFilePath);
 
-      writeSync(bundleFile, buffer);
+        const bundleFile = openSync(bundleFilePath, 'w+');
+
+        writeSync(bundleFile, buffer);
+      } else {
+        stdout.write(buffer);
+      }
 
       proceed();
     });
