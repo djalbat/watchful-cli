@@ -35,14 +35,14 @@ function bundleFilesCallback(proceed, abort, context) {
 
       const { bundleFilePath } = context;
 
-      if (bundleFilePath) {
+      if (!bundleFilePath) {
+        stdout.write(buffer);
+      } else {
         createParentDirectory(bundleFilePath);
 
         const bundleFile = openSync(bundleFilePath, 'w+');
 
         writeSync(bundleFile, buffer);
-      } else {
-        stdout.write(buffer);
       }
 
       proceed();

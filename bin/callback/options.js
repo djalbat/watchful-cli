@@ -61,7 +61,7 @@ function optionsCallback(proceed, abort, context) {
         entryFilePath = entryFile,  ///,
         bundleFilePath = bundleFile,  ///
         sourceDirectoryPath = sourceDirectory,  ///,
-        targetDirectoryPath = libDirectory || tempDirectory;  ///
+        targetDirectoryPath = libDirectory || tempDirectory;
 
   Object.assign(context, {
     babelOptions,
