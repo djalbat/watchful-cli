@@ -45,6 +45,10 @@ function transformFilesCallback(proceed, abort, context) {
             });
 
       transform(source, options, (error, result) => {
+        if (error) {
+          throw(error);
+        }
+
         const { code } = result,
               targetFilPath = combinePaths(targetDirectoryPath, filePath), ///
               targetFileContent = code; ///
