@@ -7,7 +7,7 @@ const { stdout } = process,
       { combinePaths } = pathUtilities,
       { writeFileEx, createParentDirectory } = fileSystemUtilities;
 
-function bundleFiles(entryFilePath, done, context) {
+function bundleFiles(entryFilePath, context, done) {
   const { bundler, targetDirectoryPath } = context,
         targetEntryFilePath = combinePaths(targetDirectoryPath, entryFilePath);
 

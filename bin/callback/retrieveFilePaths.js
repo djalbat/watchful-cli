@@ -2,9 +2,11 @@
 
 const chokidar = require('chokidar');
 
-const messages = require('../messages');
+const messages = require('../messages'),
+      pathUtilities = require('../utilities/path');
 
-const { ENTRY_FILE_NOT_INCLUDED_IN_BUNDLED_FILES } = messages;
+const { ENTRY_FILE_NOT_INCLUDED_IN_BUNDLED_FILES } = messages,
+      { pathWithoutDirectoryPathFromPathAndDirectoryPath } = pathUtilities;
 
 function retrieveFilePathsCallback(proceed, abort, context) {
   const { sourceDirectoryPath } = context,
@@ -13,7 +15,8 @@ function retrieveFilePathsCallback(proceed, abort, context) {
         watcher = chokidar.watch(globPattern);
 
   watcher.on('add', (path) => {
-    const filePath = filePathFromPathAndSourceDirectoryPath(path, sourceDirectoryPath);
+    const sourceFilePath = path,  ///
+          filePath = pathWithoutDirectoryPathFromPathAndDirectoryPath(sourceFilePath, sourceDirectoryPath); ///
 
     filePaths.push(filePath);
   });
@@ -44,11 +47,3 @@ function retrieveFilePathsCallback(proceed, abort, context) {
 }
 
 module.exports = retrieveFilePathsCallback;
-
-function filePathFromPathAndSourceDirectoryPath(path, sourceDirectoryPath) {
-  const delimiterLength = '/'.length,
-        sourceDirectoryPathLength = sourceDirectoryPath.length,
-        filePath = path.substring(sourceDirectoryPathLength + delimiterLength);
-
-  return filePath;
-}

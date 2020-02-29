@@ -38,7 +38,7 @@ module.exports = transformFilesCallback;
 
 function transformFileCallback(filePath, next, done, context) {
   try {
-    transformFile(filePath, () => {
+    transformFile(filePath, context, () => {
       let { count } = context;
 
       count++;
@@ -48,7 +48,7 @@ function transformFileCallback(filePath, next, done, context) {
       });
 
       next();
-    }, context);
+    });
   } catch (error) {
     console.log(BABEL_FAILED_MESSAGE);
 

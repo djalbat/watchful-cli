@@ -16,17 +16,15 @@ function bundleFilesCallback(proceed, abort, context) {
   }
 
   try {
-    bundleFiles(entryFilePath, done, context);
+    bundleFiles(entryFilePath, context, () => {
+      proceed();
+    });
   } catch (error) {
     console.log(BROWSERIFY_FAILED_MESSAGE);
 
     console.log(error);
 
     abort();
-  }
-
-  function done() {
-    proceed();
   }
 }
 

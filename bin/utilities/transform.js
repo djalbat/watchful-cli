@@ -6,7 +6,7 @@ const pathUtilities = require('../utilities/path'),
 const { combinePaths, fileNameFromFilePath } = pathUtilities,
       { readFile, writeFile, createParentDirectory } = fileSystemUtilities;
 
-function transformFile(filePath, done, context) {
+function transformFile(filePath, context, done) {
   const { transform, babelOptions, sourceDirectoryPath, targetDirectoryPath } = context,
         sourceFilePath = combinePaths(sourceDirectoryPath, filePath),  ///
         sourceFileContent = readFile(sourceFilePath),

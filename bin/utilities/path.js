@@ -2,7 +2,10 @@
 
 const necessary = require('necessary');
 
-const { pathUtilities } = necessary,
+const constants = require('../constants');
+
+const { DELIMITER } = constants,
+      { pathUtilities } = necessary,
       { isPathName, bottommostNameFromPath } = pathUtilities;
 
 function guaranteePath(path) {
@@ -41,7 +44,16 @@ function fileNameFromFilePath(filePath) {
   return fileName;
 }
 
+function pathWithoutDirectoryPathFromPathAndDirectoryPath(path, directoryPath) {
+  const delimiterLength = DELIMITER.length,
+        directoryPathLength = directoryPath.length,
+        pathWithoutDirectoryPath = path.substring(directoryPathLength + delimiterLength);
+
+  return pathWithoutDirectoryPath;
+}
+
 module.exports = Object.assign(pathUtilities, {
   guaranteePath,
-  fileNameFromFilePath
+  fileNameFromFilePath,
+  pathWithoutDirectoryPathFromPathAndDirectoryPath
 });

@@ -27,9 +27,7 @@ function incremental(options) {
       exit(1);
     }
 
-    watch(context, () => {
-      exit(0);
-    });
+    watch(context);
   }, context);
 }
 
