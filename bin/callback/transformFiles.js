@@ -8,25 +8,24 @@ const messages = require('../messages'),
 const { pathUtilities, asynchronousUtilities } = necessary,
       { forEach } = asynchronousUtilities,
       { BABEL_FAILED_MESSAGE } = messages,
-      { combinePaths, bottommostNameFromPath } = pathUtilities,
-      { readFile, writeFile, createParentDirectory } = fileSystemUtilities;
+      { readFile, writeFile, createParentDirectory } = fileSystemUtilities,
+      { isPathName, combinePaths, bottommostNameFromPath } = pathUtilities;
 
 function transformFilesCallback(proceed, abort, context) {
-  const { filePaths } = context;
+  const { filePaths } = context,
+        filePathsLength = filePaths.length,
+        length = filePathsLength, ///
+        count = 0;
 
-  transformFiles(filePaths, proceed, abort, context);
-}
-
-module.exports = transformFilesCallback;
-
-function transformFiles(filePaths, proceed, abort, context) {
-  const filePathsLength = filePaths.length,
-        length = filePathsLength; ///
-
-  let count = 0;
+  Object.assign(context, {
+    count
+  });
 
   forEach(filePaths, transformFileCallback, () => {
-    const success = (count === length);
+    const { count } = context,
+          success = (count === length);
+
+    delete context.count;
 
     success ?
       proceed() :
@@ -54,7 +53,13 @@ function transformFiles(filePaths, proceed, abort, context) {
 
         writeFile(targetFilPath, targetFileContent);
 
+        let { count } = context;
+
         count++;
+
+        Object.assign(context, {
+          count
+        });
 
         next();
       });
@@ -68,9 +73,20 @@ function transformFiles(filePaths, proceed, abort, context) {
   }
 }
 
+module.exports = transformFilesCallback;
+
 function fileNameFromFilePath(filePath) {
-  const bottommostFileName = bottommostNameFromPath(filePath),
-        fileName = bottommostFileName;  ///
+  let fileName;
+
+  const filePathFileName = isPathName(filePath);
+
+  if (filePathFileName) {
+    fileName = filePath;  ///
+  } else {
+    const bottommostFileName = bottommostNameFromPath(filePath);
+
+    fileName = bottommostFileName;  ///
+  }
 
   return fileName;
 }
