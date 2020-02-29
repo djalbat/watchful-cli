@@ -7,6 +7,7 @@ const Queue = require('./queue'),
       constants = require('./constants'),
       pathUtilities = require('./utilities/path'),
       DeleteFileTask = require('./task/deleteFile'),
+      BundleFilesTask = require('./task/bundleFiles'),
       TransformFileTask = require('./task/transformFile'),
       DeleteDirectoryTask = require('./task/deleteDirectory');
 
@@ -41,9 +42,35 @@ function addOrChangeEventHandler(path, queue, context) {
   const transformFileTask = TransformFileTask.fromPathAndContext(path, context);
 
   if (transformFileTask !== null) {
-    ///
+    const lastTask = queue.getLastTask();
 
-    queue.addTask(transformFileTask);
+    if (lastTask === null) {
+      const tasks = [
+              transformFileTask
+            ],
+            bundleFilesTask = BundleFilesTask.fromContext(context);
+
+      if (bundleFilesTask !== null) {
+        tasks.push(bundleFilesTask);
+      }
+
+      queue.addTasks(tasks);
+    } else {
+      if (lastTask instanceof BundleFilesTask) {
+        queue.addTaskBeforeLastTask(transformFileTask);
+      } else {
+        const tasks = [
+                transformFileTask
+              ],
+              bundleFilesTask = BundleFilesTask.fromContext(context);
+
+        if (bundleFilesTask !== null) {
+          tasks.push(bundleFilesTask);
+        }
+
+        queue.addTasks(tasks);
+      }
+    }
   }
 }
 

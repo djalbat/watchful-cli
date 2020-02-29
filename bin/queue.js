@@ -3,21 +3,51 @@
 const necessary = require('necessary');
 
 const { arrayUtilities } = necessary,
-      { first } = arrayUtilities;
+      { first, last, push } = arrayUtilities;
 
 class Queue {
   constructor(tasks) {
     this.tasks = tasks;
   }
 
+  getLastTask() {
+    let lastTask = null;
+
+    const empty = this.isEmpty();
+
+    if (!empty) {
+      lastTask = last(this.tasks);
+    }
+
+    return lastTask;
+  }
+
   addTask(task) {
+    const empty = this.isEmpty();
+
     this.tasks.push(task);
     
-    const tasksLength = this.getTasksLength();
-    
-    if (tasksLength === 1) {
+    if (empty) {
       this.executeNextTask();
     }
+  }
+
+  addTasks(tasks) {
+    const empty = this.isEmpty();
+
+    push(this.tasks, tasks);
+
+    if (empty) {
+      this.executeNextTask();
+    }
+  }
+
+  addTaskBeforeLastTask(task) {
+    const lastTask = this.tasks.pop();
+
+    this.tasks.push(task);
+
+    this.tasks.push(lastTask);
   }
 
   executeNextTask() {
@@ -43,14 +73,8 @@ class Queue {
     }
   }
   
-  getTasksLength() {
-    const tasksLength = this.tasks.length;
-    
-    return tasksLength;
-  }
-
   isEmpty() {
-    const tasksLength = this.getTasksLength(),
+    const tasksLength = this.tasks.length,
           empty = (tasksLength === 0);
 
     return empty;

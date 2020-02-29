@@ -8,8 +8,10 @@ const { stdout } = process,
       { writeFileEx, createParentDirectory } = fileSystemUtilities;
 
 function bundleFiles(entryFilePath, context, done) {
-  const { bundler, targetDirectoryPath } = context,
-        targetEntryFilePath = combinePaths(targetDirectoryPath, entryFilePath);
+  const { browserify, browserifyOptions, targetDirectoryPath } = context,
+        targetEntryFilePath = combinePaths(targetDirectoryPath, entryFilePath),
+        options = browserifyOptions,  ///
+        bundler = browserify(options); ///
 
   bundler.add(targetEntryFilePath);
 

@@ -10,16 +10,12 @@ const { resolve } = path,
       { BROWSERIFY_NOT_INSTALLED } = messages;
 
 function browserifyCallback(proceed, abort, context) {
-  const { browserifyOptions } = context,
-        options = browserifyOptions;  ///
-
   try {
     const browserifyPath = resolve(BROWSERIFY_PATH),
-          browserify = require(browserifyPath),
-          bundler = browserify(options); ///
+          browserify = require(browserifyPath);
 
     Object.assign(context, {
-      bundler
+      browserify
     });
   } catch (error) {
     console.log(BROWSERIFY_NOT_INSTALLED);
