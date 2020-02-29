@@ -7,7 +7,7 @@ const messages = require('../messages'),
 
 const { resolve } = path,
       { BABEL_CORE_PATH } = constants,
-      { BABEL_CORE_NOT_INSTALLED } = messages;
+      { BABEL_NOT_INSTALLED } = messages;
 
 function babelCallback(proceed, abort, context) {
   try {
@@ -19,7 +19,7 @@ function babelCallback(proceed, abort, context) {
       transform
     });
   } catch (error) {
-    console.log(BABEL_CORE_NOT_INSTALLED);
+    console.log(BABEL_NOT_INSTALLED);
 
     abort();
   }
