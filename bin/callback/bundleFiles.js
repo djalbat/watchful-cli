@@ -1,13 +1,12 @@
 'use strict';
 
-const fs = require('fs'),
-      necessary = require('necessary');
+const fs = require('fs');
 
 const messages = require('../messages'),
+      pathUtilities = require('../utilities/path'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
 const { stdout } = process,
-      { pathUtilities } = necessary,
       { combinePaths } = pathUtilities,
       { openSync, writeSync } = fs,
       { createParentDirectory } = fileSystemUtilities,

@@ -3,13 +3,12 @@
 const necessary = require('necessary');
 
 const messages = require('../messages'),
-      fileSystemUtilities = require('../utilities/fileSystem');
+      transformUtilities = require('../utilities/transform');
 
-const { pathUtilities, asynchronousUtilities } = necessary,
+const { asynchronousUtilities } = necessary,
       { forEach } = asynchronousUtilities,
-      { BABEL_FAILED_MESSAGE } = messages,
-      { readFile, writeFile, createParentDirectory } = fileSystemUtilities,
-      { isPathName, combinePaths, bottommostNameFromPath } = pathUtilities;
+      { transformFile } = transformUtilities,
+      { BABEL_FAILED_MESSAGE } = messages;
 
 function transformFilesCallback(proceed, abort, context) {
   const { filePaths } = context,
@@ -32,65 +31,29 @@ function transformFilesCallback(proceed, abort, context) {
         abort();
   }, context);
 
-  function transformFileCallback(filePath, next, done, context) {
-    try {
-      const { transform, babelOptions, sourceDirectoryPath, targetDirectoryPath } = context,
-            sourceFilePath = combinePaths(sourceDirectoryPath, filePath),  ///
-            sourceFileContent = readFile(sourceFilePath),
-            fileName = fileNameFromFilePath(filePath),
-            sourceFileName = fileName,  ///
-            source = sourceFileContent,  ///
-            options = Object.assign(babelOptions, {
-              sourceFileName
-            });
-
-      transform(source, options, (error, result) => {
-        if (error) {
-          throw(error);
-        }
-
-        const { code } = result,
-              targetFilPath = combinePaths(targetDirectoryPath, filePath), ///
-              targetFileContent = code; ///
-
-        createParentDirectory(targetFilPath);
-
-        writeFile(targetFilPath, targetFileContent);
-
-        let { count } = context;
-
-        count++;
-
-        Object.assign(context, {
-          count
-        });
-
-        next();
-      });
-    } catch (error) {
-      console.log(BABEL_FAILED_MESSAGE);
-
-      console.log(error);
-
-      done();
-    }
-  }
 }
 
 module.exports = transformFilesCallback;
 
-function fileNameFromFilePath(filePath) {
-  let fileName;
+function transformFileCallback(filePath, next, done, context) {
+  try {
+    transformFile(filePath, () => {
+      let { count } = context;
 
-  const filePathFileName = isPathName(filePath);
+      count++;
 
-  if (filePathFileName) {
-    fileName = filePath;  ///
-  } else {
-    const bottommostFileName = bottommostNameFromPath(filePath);
+      Object.assign(context, {
+        count
+      });
 
-    fileName = bottommostFileName;  ///
+      next();
+    }, context);
+  } catch (error) {
+    console.log(BABEL_FAILED_MESSAGE);
+
+    console.log(error);
+
+    done();
   }
-
-  return fileName;
 }
+

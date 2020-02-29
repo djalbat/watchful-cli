@@ -3,8 +3,10 @@
 const fs = require('fs'),
       necessary = require('necessary');
 
+const pathUtilities = require('../utilities/path');
+
 const { unlinkSync, rmdirSync } = fs,
-      { pathUtilities, fileSystemUtilities } = necessary,
+      { fileSystemUtilities } = necessary,
       { pathWithoutBottommostNameFromPath } = pathUtilities,
       { readDirectory, isEntryDirectory, createDirectory, checkDirectoryExists } = fileSystemUtilities;
 

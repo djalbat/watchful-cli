@@ -1,5 +1,10 @@
 'use strict';
 
+const necessary = require('necessary');
+
+const { pathUtilities } = necessary,
+      { isPathName, bottommostNameFromPath } = pathUtilities;
+
 function guaranteePath(path) {
   const pathAbsolutePath = /^\/.*/.test(path),
         pathAllowedRelativePath = /^\.\/.*/.test(path),
@@ -20,6 +25,23 @@ function guaranteePath(path) {
   return path;
 }
 
-module.exports = {
-  guaranteePath
-};
+function fileNameFromFilePath(filePath) {
+  let fileName;
+
+  const filePathFileName = isPathName(filePath);
+
+  if (filePathFileName) {
+    fileName = filePath;  ///
+  } else {
+    const bottommostFileName = bottommostNameFromPath(filePath);
+
+    fileName = bottommostFileName;  ///
+  }
+
+  return fileName;
+}
+
+module.exports = Object.assign(pathUtilities, {
+  guaranteePath,
+  fileNameFromFilePath
+});
