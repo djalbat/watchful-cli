@@ -1,74 +1,54 @@
 'use strict';
 
-const necessary = require('necessary');
+const chokidar = require('chokidar');
 
-const messages = require('../messages'),
-      fileSystemUtilities = require('../utilities/fileSystem');
+const messages = require('../messages');
 
-const { pathUtilities } = necessary,
-      { combinePaths } = pathUtilities,
-      { ENTRY_FILE_NOT_INCLUDED } = messages,
-      { readDirectory, isEntryDirectory } = fileSystemUtilities;
+const { ENTRY_FILE_NOT_INCLUDED_IN_BUNDLED_FILES } = messages;
 
 function retrieveFilePathsCallback(proceed, abort, context) {
   const { sourceDirectoryPath } = context,
-        filePaths = retrieveFilePaths(sourceDirectoryPath);
+        globPattern = `${sourceDirectoryPath}/**/*.js`,
+        filePaths = [],
+        watcher = chokidar.watch(globPattern);
 
-  let { entryFilePath } = context;
+  watcher.on('add', (path) => {
+    const filePath = filePathFromPathAndSourceDirectoryPath(path, sourceDirectoryPath);
 
-  if (entryFilePath) {
-    entryFilePath = guaranteeDelimitedPath(entryFilePath);
-
-    const filePathsIncludesEntryFilePath = filePaths.includes(entryFilePath);
-
-    if (!filePathsIncludesEntryFilePath) {
-      console.log(ENTRY_FILE_NOT_INCLUDED);
-
-      abort();
-
-      return;
-    }
-  }
-
-  Object.assign(context, {
-    filePaths
+    filePaths.push(filePath);
   });
 
-  proceed();
+  watcher.on('ready', () => {
+    watcher.close().then(() => {
+      const { entryFilePath } = context;
+
+      if (entryFilePath) {
+        const filePathsIncludesEntryFilePath = filePaths.includes(entryFilePath);
+
+        if (!filePathsIncludesEntryFilePath) {
+          console.log(ENTRY_FILE_NOT_INCLUDED_IN_BUNDLED_FILES);
+
+          abort();
+
+          return;
+        }
+      }
+
+      Object.assign(context, {
+        filePaths
+      });
+
+      proceed();
+    });
+  });
 }
 
 module.exports = retrieveFilePathsCallback;
 
-function retrieveFilePaths(sourceDirectoryPath, subDirectoryPath = '.', filePaths = []) {
-  const sourceSubDirectoryPath = combinePaths(sourceDirectoryPath, subDirectoryPath),
-        entryPaths = readDirectory(sourceSubDirectoryPath);
+function filePathFromPathAndSourceDirectoryPath(path, sourceDirectoryPath) {
+  const delimiterLength = '/'.length,
+        sourceDirectoryPathLength = sourceDirectoryPath.length,
+        filePath = path.substring(sourceDirectoryPathLength + delimiterLength);
 
-  entryPaths.forEach((entryPath) => {
-    entryPath = combinePaths(subDirectoryPath, entryPath); ///
-
-    const sourceEntryPath = combinePaths(sourceDirectoryPath, entryPath),
-          entryDirectory = isEntryDirectory(sourceEntryPath);
-
-    if (entryDirectory) {
-      const subDirectoryPath = entryPath;  ///
-
-      retrieveFilePaths(sourceDirectoryPath, subDirectoryPath, filePaths);
-    } else {
-      const filePath = entryPath; ///
-
-      filePaths.push(filePath);
-    }
-  });
-
-  return filePaths;
-}
-
-function guaranteeDelimitedPath(path) {
-  const pathDelimited = /^(?:\/|.\/|..\/).*/.test();
-
-  path = pathDelimited ?
-           path :
-            `./${path}`;
-
-  return path;
+  return filePath;
 }
