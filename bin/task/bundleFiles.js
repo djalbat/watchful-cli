@@ -15,6 +15,8 @@ class BundleFilesTask extends Task {
       bundleFilesTask = new BundleFilesTask(bundleFiles, entryFilePath, context, () => {
         console.log('Bundled files!');
       });
+
+      console.log('Bundling files...');
     }
 
     return bundleFilesTask;

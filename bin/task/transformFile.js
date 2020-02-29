@@ -19,6 +19,8 @@ class TransformFileTask extends Task {
       console.log(`Transformed '${sourceFilePath}'.`);
     });
 
+    console.log(`Transforming '${sourceFilePath}'...`);
+
     return transformFileTask;
   }
 }
