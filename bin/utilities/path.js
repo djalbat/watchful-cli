@@ -4,25 +4,31 @@ const necessary = require('necessary');
 
 const constants = require('../constants');
 
-const { DELIMITER } = constants,
+const { cwd } = process,
+      { DELIMITER } = constants,
       { pathUtilities } = necessary,
       { isPathName, bottommostNameFromPath } = pathUtilities;
 
-function guaranteePath(path) {
-  const pathAbsolutePath = /^\/.*/.test(path),
-        pathAllowedRelativePath = /^\.\/.*/.test(path),
-        pathForbiddenRelativePath = /^\.\.\/.*/.test(path);
+const currentWorkingDirectoryPath = cwd(),
+      currentWorkingDirectoryPathLength = currentWorkingDirectoryPath.length;
+
+function pathFromOption(option) {
+  let path = null;
+
+  const optionAbsolutePath = /^\/.*/.test(option),
+        optionAllowedRelativePath = /^\.\/.*/.test(option),
+        optionForbiddenRelativePath = /^\.\.\/.*/.test(option);
 
   if (false) {
     ///
-  } else if (pathAbsolutePath) {
-    path = null;
-  } else if (pathAllowedRelativePath) {
-    path = path.replace(/^\.\//, '').replace(/\/$/, '');
-  } else if (pathForbiddenRelativePath) {
+  } else if (optionAbsolutePath) {
+    ///
+  } else if (optionAllowedRelativePath) {
+    path = option.replace(/^\.\//, '').replace(/\/$/, '');
+  } else if (optionForbiddenRelativePath) {
     path = null;
   } else {
-    ///
+    path = option;  ///
   }
 
   return path;
@@ -44,6 +50,19 @@ function fileNameFromFilePath(filePath) {
   return fileName;
 }
 
+function isPathFullQualifiedPath(path) {
+  const pathStartsWithCurrentWorkingDirectoryPath = path.startsWith(currentWorkingDirectoryPath),
+        pathFullyQualifiedPath = pathStartsWithCurrentWorkingDirectoryPath; ///
+
+  return pathFullyQualifiedPath;
+}
+
+function pathFromFullyQualifiedPath(fullyQualifiedPath) {
+  const path = fullyQualifiedPath.substring(currentWorkingDirectoryPathLength);
+
+  return path;
+}
+
 function pathWithoutDirectoryPathFromPathAndDirectoryPath(path, directoryPath) {
   const delimiterLength = DELIMITER.length,
         directoryPathLength = directoryPath.length,
@@ -53,7 +72,9 @@ function pathWithoutDirectoryPathFromPathAndDirectoryPath(path, directoryPath) {
 }
 
 module.exports = Object.assign(pathUtilities, {
-  guaranteePath,
+  pathFromOption,
   fileNameFromFilePath,
+  isPathFullQualifiedPath,
+  pathFromFullyQualifiedPath,
   pathWithoutDirectoryPathFromPathAndDirectoryPath
 });

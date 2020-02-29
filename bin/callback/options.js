@@ -3,7 +3,7 @@
 const messages = require('../messages'),
       pathUtilities = require('../utilities/path');
 
-const { guaranteePath } = pathUtilities,
+const { pathFromOption } = pathUtilities,
       { NO_ENTRY_FILE_SPECIFIED_MESSAGE,
         NO_TEMP_DIRECTORY_SPECIFIED_MESSAGE,
         NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE,
@@ -64,7 +64,8 @@ function optionsCallback(proceed, abort, context) {
   }
 
   if (entryFile) {
-    const entryFilePath = guaranteePath(entryFile);
+    const entryFileOption = entryFile,  ///
+          entryFilePath = pathFromOption(entryFileOption);
 
     if (!entryFilePath) {
       console.log(ENTRY_FILE_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE);
@@ -80,7 +81,8 @@ function optionsCallback(proceed, abort, context) {
   }
 
   if (bundleFile) {
-    const bundleFilePath = guaranteePath(bundleFile);
+    const bundleFileOption = bundleFile,  ///
+          bundleFilePath = pathFromOption(bundleFile, bundleFileOption);
 
     if (!bundleFilePath) {
       console.log(BUNDLE_FILE_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE);
@@ -96,7 +98,8 @@ function optionsCallback(proceed, abort, context) {
   }
 
   if (libDirectory) {
-    const libDirectoryPath = guaranteePath(libDirectory);
+    const libDirectoryOption = libDirectory,  ///
+          libDirectoryPath = pathFromOption(libDirectory, libDirectoryOption);
 
     if (!libDirectoryPath) {
       console.log(LIB_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE);
@@ -114,7 +117,8 @@ function optionsCallback(proceed, abort, context) {
   }
 
   if (tempDirectory) {
-    const tempDirectoryPath = guaranteePath(tempDirectory);
+    const tempDirectoryOption = tempDirectory,  ///
+          tempDirectoryPath = pathFromOption(tempDirectory, tempDirectoryOption);
 
     if (!tempDirectoryPath) {
       console.log(TEMP_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE);
@@ -132,7 +136,8 @@ function optionsCallback(proceed, abort, context) {
   }
 
   if (sourceDirectory) {
-    const sourceDirectoryPath = guaranteePath(sourceDirectory);
+    const sourceDirectoryOption = sourceDirectory,  ///
+          sourceDirectoryPath = pathFromOption(sourceDirectory, sourceDirectoryOption);
 
     if (!sourceDirectoryPath) {
       console.log(SOURCE_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE);

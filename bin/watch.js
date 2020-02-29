@@ -2,75 +2,66 @@
 
 const chokidar = require('chokidar');
 
-const Task = require('./task'),
-      Queue = require('./queue'),
+const Queue = require('./queue'),
       events = require('./events'),
+      constants = require('./constants'),
       pathUtilities = require('./utilities/path'),
-      bundleUtilities = require('./utilities/bundle'),
-      transformUtilities = require('./utilities/transform'),
-      fileSystemUtilities = require('./utilities/fileSystem');
+      DeleteFileTask = require('./task/deleteFile'),
+      TransformFileTask = require('./task/transformFile'),
+      DeleteDirectoryTask = require('./task/deleteDirectory');
 
-const { cwd } = process,
-      { bundleFiles } = bundleUtilities,
-      { transformFile } = transformUtilities,
-      { ADD_EVENT, CHANGE_EVENT, UNLINK_EVENT, UNLINK_DIR_EVENT } = events,
-      { combinePaths, pathWithoutDirectoryPathFromPathAndDirectoryPath } = pathUtilities,
-      { deleteFile, deleteDirectory, checkFileExists, checkDirectoryExists } = fileSystemUtilities;
+const { DEFAULT_GLOB_PATTERN } = constants,
+      { isPathFullQualifiedPath, pathFromFullyQualifiedPath } = pathUtilities,
+      { ADD_EVENT, CHANGE_EVENT, UNLINK_EVENT, UNLINK_DIR_EVENT } = events;
 
 function watch(context) {
   const { sourceDirectoryPath } = context,
-        pattern = `${sourceDirectoryPath}/**/*.js`,
+        pattern = `${sourceDirectoryPath}${DEFAULT_GLOB_PATTERN}`,
         watcher = chokidar.watch(pattern),
         queue = Queue.fromNothing();
 
   watcher.on('ready', () => {
-    watcher.on('all', (event, path) => eventHandler(event, path, queue, context));
+    watcher.on('all', (event, path) => {
+      const pathFullyQualifiedPath = isPathFullQualifiedPath(path);
+
+      if (pathFullyQualifiedPath) {
+        const fullyQualifiedPath = path;  ///
+
+        path = pathFromFullyQualifiedPath(fullyQualifiedPath);
+      }
+
+      eventHandler(event, path, queue, context);
+    });
   });
 }
 
 module.exports = watch;
 
 function addOrChangeEventHandler(path, queue, context) {
-  const { sourceDirectoryPath } = context,
-        sourceFilePath = path,  ///
-        filePath = pathWithoutDirectoryPathFromPathAndDirectoryPath(sourceFilePath, sourceDirectoryPath),  ///
-        task = new Task(transformFile, filePath, context, () => {
-          console.log(`Transformed '${sourceFilePath}'.`);
-        });
+  const transformFileTask = TransformFileTask.fromPathAndContext(path, context);
 
-  queue.addTask(task);
+  if (transformFileTask !== null) {
+    ///
+
+    queue.addTask(transformFileTask);
+  }
 }
 
 function unlinkDirEventHandler(path, queue, context) {
-  const { sourceDirectoryPath, targetDirectoryPath } = context,
-        currentWorkingDirectoryPath = cwd(),
-        deletedSourceDirectoryPath = pathWithoutDirectoryPathFromPathAndDirectoryPath(path, currentWorkingDirectoryPath),  ///
-        deletedDirectoryPath = pathWithoutDirectoryPathFromPathAndDirectoryPath(deletedSourceDirectoryPath, sourceDirectoryPath),
-        deletedTargetDirectoryPath = combinePaths(targetDirectoryPath, deletedDirectoryPath),
-        deletedTargetDirectoryExists = checkDirectoryExists(deletedTargetDirectoryPath);
+  const deleteDirectoryTask = DeleteDirectoryTask.fromPathAndContext(path, context);
 
-  if (deletedTargetDirectoryExists) {
-    const task = new Task(deleteDirectory, deletedTargetDirectoryPath, () => {
-      console.log(`Deleted '${deletedTargetDirectoryPath}'.`);
-    });
+  if (deleteDirectoryTask !== null) {
+    ///
 
-    queue.addTask(task);
+    queue.addTask(deleteDirectoryTask);
   }
 }
 
 function unlinkEventHandler(path, queue, context) {
-  const { sourceDirectoryPath, targetDirectoryPath } = context,
-        sourceFilePath = path,  ///
-        filePath = pathWithoutDirectoryPathFromPathAndDirectoryPath(sourceFilePath, sourceDirectoryPath),  ///
-        deletedTargetFilePath = combinePaths(targetDirectoryPath, filePath),
-        deletedTargetFileExists = checkFileExists(deletedTargetFilePath);
+  const deleteFileTask = DeleteFileTask.fromPathAndContext(path, context);
 
-  if (deletedTargetFileExists) {
-    const task = new Task(deleteFile, deletedTargetFilePath, () => {
-      console.log(`Deleted '${deletedTargetFilePath}'.`);
-    });
-
-    queue.addTask(task);
+  if (deleteFileTask !== null) {
+    queue.addTask(deleteFileTask);
   }
 }
 
