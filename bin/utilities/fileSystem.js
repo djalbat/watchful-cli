@@ -5,10 +5,16 @@ const fs = require('fs'),
 
 const pathUtilities = require('../utilities/path');
 
-const { unlinkSync, rmdirSync } = fs,
-      { fileSystemUtilities } = necessary,
+const { fileSystemUtilities } = necessary,
       { pathWithoutBottommostNameFromPath } = pathUtilities,
+      { openSync, writeSync, rmdirSync, unlinkSync } = fs,
       { readDirectory, isEntryDirectory, createDirectory, checkDirectoryExists } = fileSystemUtilities;
+
+function writeFileEx(filePath, buffer) {
+  const file = openSync(filePath, 'w+');
+
+  writeSync(file, buffer);
+}
 
 function cleanDirectory(directoryPath) {
   const entryPaths = readDirectory(directoryPath);
@@ -46,6 +52,7 @@ function createParentDirectory(filePath) {
 }
 
 module.exports = Object.assign(fileSystemUtilities, {
+  writeFileEx,
   cleanDirectory,
   createParentDirectory
 });

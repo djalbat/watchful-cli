@@ -20,7 +20,9 @@ function transformFilesCallback(proceed, abort, context) {
     count
   });
 
-  forEach(filePaths, transformFileCallback, () => {
+  forEach(filePaths, transformFileCallback, done, context);
+
+  function done() {
     const { count } = context,
           success = (count === length);
 
@@ -29,8 +31,7 @@ function transformFilesCallback(proceed, abort, context) {
     success ?
       proceed() :
         abort();
-  }, context);
-
+  }
 }
 
 module.exports = transformFilesCallback;
@@ -56,4 +57,3 @@ function transformFileCallback(filePath, next, done, context) {
     done();
   }
 }
-
