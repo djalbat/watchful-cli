@@ -22,6 +22,10 @@ function transformFile(filePath, context, done) {
 
   transform(source, options, (error, result) => {
     if (error) {
+      const { message } = error;
+
+      error = message;  ///
+
       console.log(TRANSFORM_FAILED_MESSAGE);
 
       console.log(error);

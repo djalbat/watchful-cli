@@ -19,6 +19,10 @@ function bundleFiles(entryFilePath, context, done) {
 
   bundler.bundle((error, buffer) => {
     if (error) {
+      const { message } = error;
+
+      error = message;  ///
+
       console.log(BUNDLE_FAILED_MESSAGE);
 
       console.log(error);
