@@ -7,7 +7,8 @@ const { combinePaths, fileNameFromFilePath } = pathUtilities,
       { readFile, writeFile, createParentDirectory } = fileSystemUtilities;
 
 function transformFile(filePath, context, done) {
-  const { transform, babelOptions, sourceDirectoryPath, targetDirectoryPath } = context,
+  const { babel, babelOptions, sourceDirectoryPath, targetDirectoryPath } = context,
+        { transform } = babel,
         sourceFilePath = combinePaths(sourceDirectoryPath, filePath),  ///
         sourceFileContent = readFile(sourceFilePath),
         fileName = fileNameFromFilePath(filePath),

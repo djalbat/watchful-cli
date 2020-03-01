@@ -19,7 +19,7 @@ function watch(context) {
   const { sourceDirectoryPath } = context,
         pattern = `${sourceDirectoryPath}${DEFAULT_GLOB_PATTERN}`,
         watcher = chokidar.watch(pattern),
-        queue = Queue.fromNothing();
+        queue = Queue.fromEmptyHandler(queueEmptyHandler);
 
   watcher.on('ready', () => {
     watcher.on('all', (event, path) => {
@@ -34,6 +34,18 @@ function watch(context) {
       eventHandler(event, path, queue, context);
     });
   });
+
+  function queueEmptyHandler(previousTask) {
+    if (previousTask instanceof BundleFilesTask) {
+      return;
+    }
+
+    const bundleFilesTask = BundleFilesTask.fromContext(context);
+
+    if (bundleFilesTask !== null) {
+      queue.addTask(bundleFilesTask);
+    }
+  }
 }
 
 module.exports = watch;
@@ -42,35 +54,7 @@ function addOrChangeEventHandler(path, queue, context) {
   const transformFileTask = TransformFileTask.fromPathAndContext(path, context);
 
   if (transformFileTask !== null) {
-    const lastTask = queue.getLastTask();
-
-    if (lastTask === null) {
-      const tasks = [
-              transformFileTask
-            ],
-            bundleFilesTask = BundleFilesTask.fromContext(context);
-
-      if (bundleFilesTask !== null) {
-        tasks.push(bundleFilesTask);
-      }
-
-      queue.addTasks(tasks);
-    } else {
-      if (lastTask instanceof BundleFilesTask) {
-        queue.addTaskBeforeLastTask(transformFileTask);
-      } else {
-        const tasks = [
-                transformFileTask
-              ],
-              bundleFilesTask = BundleFilesTask.fromContext(context);
-
-        if (bundleFilesTask !== null) {
-          tasks.push(bundleFilesTask);
-        }
-
-        queue.addTasks(tasks);
-      }
-    }
+    queue.addTask(transformFileTask);
   }
 }
 
@@ -78,8 +62,6 @@ function unlinkDirEventHandler(path, queue, context) {
   const deleteDirectoryTask = DeleteDirectoryTask.fromPathAndContext(path, context);
 
   if (deleteDirectoryTask !== null) {
-    ///
-
     queue.addTask(deleteDirectoryTask);
   }
 }

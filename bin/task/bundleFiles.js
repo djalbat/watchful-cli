@@ -13,10 +13,8 @@ class BundleFilesTask extends Task {
 
     if (entryFilePath) {
       bundleFilesTask = new BundleFilesTask(bundleFiles, entryFilePath, context, () => {
-        console.log('Bundled files!');
+        ///
       });
-
-      console.log('Bundling files...');
     }
 
     return bundleFilesTask;

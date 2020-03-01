@@ -16,10 +16,8 @@ class TransformFileTask extends Task {
           filePath = pathWithoutDirectoryPathFromPathAndDirectoryPath(sourceFilePath, sourceDirectoryPath); ///
 
     transformFileTask = new TransformFileTask(transformFile, filePath, context, () => {
-      console.log(`Transformed '${sourceFilePath}'.`);
+      ///
     });
-
-    console.log(`Transforming '${sourceFilePath}'...`);
 
     return transformFileTask;
   }

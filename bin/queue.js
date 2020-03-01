@@ -1,76 +1,54 @@
 'use strict';
 
+require('setimmediate');
+
+const defer = setImmediate; ///
+
 const necessary = require('necessary');
 
 const { arrayUtilities } = necessary,
-      { first, last, push } = arrayUtilities;
+      { first } = arrayUtilities;
 
 class Queue {
-  constructor(tasks) {
+  constructor(tasks, emptyHandler) {
     this.tasks = tasks;
-  }
-
-  getLastTask() {
-    let lastTask = null;
-
-    const empty = this.isEmpty();
-
-    if (!empty) {
-      lastTask = last(this.tasks);
-    }
-
-    return lastTask;
+    this.emptyHandler = emptyHandler;
   }
 
   addTask(task) {
-    const empty = this.isEmpty();
+    defer(() => {
+      const empty = this.isEmpty();
 
-    this.tasks.push(task);
-    
-    if (empty) {
-      this.executeNextTask();
-    }
-  }
+      this.tasks.push(task);
 
-  addTasks(tasks) {
-    const empty = this.isEmpty();
-
-    push(this.tasks, tasks);
-
-    if (empty) {
-      this.executeNextTask();
-    }
-  }
-
-  addTaskBeforeLastTask(task) {
-    const lastTask = this.tasks.pop();
-
-    this.tasks.push(task);
-
-    this.tasks.push(lastTask);
+      if (empty) {
+        this.executeNextTask();
+      }
+    });
   }
 
   executeNextTask() {
     const firstTask = first(this.tasks),
-          nextTask = firstTask; ///
+          nextTask = firstTask, ///
+          next = this.next.bind(this);
 
     nextTask.execute(function() {
       const callback = nextTask.getCallback();
 
       callback.apply(nextTask, arguments);
 
-      this.next();
-    }.bind(this));
+      next();
+    });
   }
 
   next() {
-    this.tasks.shift();
+    const previousTask = this.tasks.shift();
 
     const empty = this.isEmpty();
 
-    if (!empty) {
-      this.executeNextTask();
-    }
+    empty ?
+      this.emptyHandler(previousTask) :
+        this.executeNextTask();
   }
   
   isEmpty() {
@@ -80,9 +58,9 @@ class Queue {
     return empty;
   }
 
-  static fromNothing() {
+  static fromEmptyHandler(emptyHandler) {
     const tasks = [],
-          queue = new Queue(tasks);
+          queue = new Queue(tasks, emptyHandler);
 
     return queue;
   }

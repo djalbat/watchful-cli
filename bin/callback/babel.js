@@ -12,11 +12,10 @@ const { resolve } = path,
 function babelCallback(proceed, abort, context) {
   try {
     const babelCorePath = resolve(BABEL_CORE_PATH),
-          babel = require(babelCorePath),
-          { transform } = babel;
+          babel = require(babelCorePath);
 
     Object.assign(context, {
-      transform
+      babel
     });
   } catch (error) {
     console.log(BABEL_NOT_INSTALLED);

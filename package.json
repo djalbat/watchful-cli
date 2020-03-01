@@ -15,7 +15,8 @@
   "dependencies": {
     "argumentative": "^2.0.0",
     "chokidar": "^3.3.1",
-    "necessary": "^4.0.6"
+    "necessary": "^4.0.6",
+    "setimmediate": "^1.0.5"
   },
   "devDependencies": {},
   "scripts": {}

@@ -2,6 +2,7 @@
 
 const HELP_OPTION = 'help',
       DEBUG_OPTION = 'debug',
+      QUIETLY_OPTION = 'quietly',
       VERSION_OPTION = 'version',
       ENTRY_FILE_OPTION = 'entry-file',
       BUNDLE_FILE_OPTION = 'bundle-file',
@@ -12,6 +13,7 @@ const HELP_OPTION = 'help',
 module.exports = {
   HELP_OPTION,
   DEBUG_OPTION,
+  QUIETLY_OPTION,
   VERSION_OPTION,
   ENTRY_FILE_OPTION,
   BUNDLE_FILE_OPTION,
