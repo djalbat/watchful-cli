@@ -7,6 +7,8 @@ function help() {
 
 Commands:
 
+  version                                        Show theh version
+
   help                                           Show this help
   
   batch                                          Batch build
