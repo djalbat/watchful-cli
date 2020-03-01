@@ -95,13 +95,13 @@ Now for the npm scripts:
 
 There are several points worth noting:
 
-* The `clean` script has nothing to do with Watchful. It deletes the `tmp` directory and is used in the build scripts to come. Note that since the watch scripts have to be killed by the user, the is no opportunity to clean up after watching and the `tmp` directory will remain. Add the `tmp/` directory to your `.gitignore` file, therefore, or make sure to always build before deployment.
+* The `clean` script has nothing to do with Watchful. It deletes the `tmp` directory and is used in the build scripts. Note that since the watch scripts have to be killed by the user, there is no opportunity to clean up after watching and consequently the `tmp` directory will remain. It is recommended that you add it to your `.gitignore` file, therefore, or make sure to always build before deployment.
 
 * The `watchful` script invokes Watchful with the requisite paths for the source and temp directories together with the entry and bundle files. The options have been abbreviated. Using a dedicated `watchful` script means that these options only have to be specified once.
 
-* The `batch`, `batch-debug`, `incremental` and `incremental-debug` scripts make use of the aforementioned `watchful`, passing it the requisite command plus additional options. The special `--` command tells npm to pass these options verbatim. The `incremental` command is optional and can be left out.
+* The `batch`, `batch-debug`, `incremental` and `incremental-debug` scripts all make use of the aforementioned `watchful` script, passing it the requisite command plus additional options. The special `--` command tells npm to pass these options verbatim. The `incremental` command is optional and can be left out.
 
-For a package rather than a bundle, you could remove the call to the final `clean` script from the build scripts; remove the entry and bundle file options from the `watchful` script, and change the temp directory to a lib directory.
+For a package rather than a bundle, you could remove the call to the final `clean` script from the build scripts; remove the entry and bundle file options from the `watchful` script; and change the temp directory to a lib directory.
  
 ## Contact
 
