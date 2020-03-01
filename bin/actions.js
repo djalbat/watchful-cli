@@ -15,6 +15,12 @@ function actions(command, argument, options) {
         helpOptionPresent = options.hasOwnProperty(HELP_OPTION),
         versionOptionPresent = options.hasOwnProperty(VERSION_OPTION);
 
+  const { quietly } = options;
+
+  console.log('======');
+  console.log(quietly);
+  console.log('======');
+
   if (false) {
     ///
   } else if (versionOptionPresent) {
