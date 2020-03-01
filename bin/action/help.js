@@ -21,6 +21,8 @@ Options:
   
   --debug|-d                                     Debug, that is enable source maps
   
+  --quietly|-q                                   Run with almost no console logging
+
   --entry-file|-b                                Entry file path
   
   --bundle-file|-b                               Bundle file path

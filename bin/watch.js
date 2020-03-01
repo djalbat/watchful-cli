@@ -16,12 +16,16 @@ const { DEFAULT_GLOB_PATTERN } = constants,
       { ADD_EVENT, CHANGE_EVENT, UNLINK_EVENT, UNLINK_DIR_EVENT } = events;
 
 function watch(context) {
-  const { sourceDirectoryPath } = context,
+  const { quietly, sourceDirectoryPath } = context,
         pattern = `${sourceDirectoryPath}${DEFAULT_GLOB_PATTERN}`,
         watcher = chokidar.watch(pattern),
         queue = Queue.fromEmptyHandler(queueEmptyHandler);
 
   watcher.on('ready', () => {
+    if (!quietly) {
+      console.log(`Watching '${pattern}'.`);
+    }
+
     watcher.on('all', (event, path) => {
       const pathFullyQualifiedPath = isPathFullQualifiedPath(path);
 

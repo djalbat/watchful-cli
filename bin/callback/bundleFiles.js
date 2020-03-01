@@ -1,10 +1,8 @@
 'use strict';
 
-const messages = require('../messages'),
-      bundleUtilities = require('../utilities/bundle');
+const bundleUtilities = require('../utilities/bundle');
 
-const { bundleFiles } = bundleUtilities,
-      { BROWSERIFY_FAILED_MESSAGE } = messages;
+const { bundleFiles } = bundleUtilities;
 
 function bundleFilesCallback(proceed, abort, context) {
   const { entryFilePath } = context;
@@ -15,17 +13,9 @@ function bundleFilesCallback(proceed, abort, context) {
     return;
   }
 
-  try {
-    bundleFiles(entryFilePath, context, () => {
-      proceed();
-    });
-  } catch (error) {
-    console.log(BROWSERIFY_FAILED_MESSAGE);
-
-    console.log(error);
-
-    abort();
-  }
+  bundleFiles(entryFilePath, context, () => {
+    proceed();
+  });
 }
 
 module.exports = bundleFilesCallback;

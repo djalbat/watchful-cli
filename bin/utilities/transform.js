@@ -1,9 +1,11 @@
 'use strict';
 
-const pathUtilities = require('../utilities/path'),
+const messages = require('../messages'),
+      pathUtilities = require('../utilities/path'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
-const { combinePaths, fileNameFromFilePath } = pathUtilities,
+const { TRANSFORM_FAILED_MESSAGE } = messages,
+      { combinePaths, fileNameFromFilePath } = pathUtilities,
       { readFile, writeFile, createParentDirectory } = fileSystemUtilities;
 
 function transformFile(filePath, context, done) {
@@ -20,7 +22,13 @@ function transformFile(filePath, context, done) {
 
   transform(source, options, (error, result) => {
     if (error) {
-      throw(error);
+      console.log(TRANSFORM_FAILED_MESSAGE);
+
+      console.log(error);
+
+      done();
+
+      return;
     }
 
     const { code } = result,
@@ -30,6 +38,12 @@ function transformFile(filePath, context, done) {
     createParentDirectory(targetFilPath);
 
     writeFile(targetFilPath, targetFileContent);
+
+    const { quietly } = context;
+
+    if (!quietly) {
+      console.log(`Transformed '${sourceFilePath}'.`);
+    }
 
     done();
   });

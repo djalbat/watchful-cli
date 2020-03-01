@@ -1,10 +1,12 @@
 'use strict';
 
-const pathUtilities = require('../utilities/path'),
+const messages = require('../messages'),
+      pathUtilities = require('../utilities/path'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
 const { stdout } = process,
       { combinePaths } = pathUtilities,
+      { BUNDLE_FAILED_MESSAGE } = messages,
       { writeFileEx, createParentDirectory } = fileSystemUtilities;
 
 function bundleFiles(entryFilePath, context, done) {
@@ -17,7 +19,13 @@ function bundleFiles(entryFilePath, context, done) {
 
   bundler.bundle((error, buffer) => {
     if (error) {
-      throw(error);
+      console.log(BUNDLE_FAILED_MESSAGE);
+
+      console.log(error);
+
+      done();
+
+      return;
     }
 
     const { bundleFilePath } = context;
@@ -28,6 +36,12 @@ function bundleFiles(entryFilePath, context, done) {
       createParentDirectory(bundleFilePath);
 
       writeFileEx(bundleFilePath, buffer);
+
+      const { quietly } = context;
+
+      if (!quietly) {
+        console.log(`Written bundle to '${bundleFilePath}'.`);
+      }
     }
 
     done();

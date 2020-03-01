@@ -2,13 +2,11 @@
 
 const necessary = require('necessary');
 
-const messages = require('../messages'),
-      transformUtilities = require('../utilities/transform');
+const transformUtilities = require('../utilities/transform');
 
 const { asynchronousUtilities } = necessary,
       { forEach } = asynchronousUtilities,
-      { transformFile } = transformUtilities,
-      { BABEL_FAILED_MESSAGE } = messages;
+      { transformFile } = transformUtilities;
 
 function transformFilesCallback(proceed, abort, context) {
   const { filePaths } = context,
@@ -37,23 +35,15 @@ function transformFilesCallback(proceed, abort, context) {
 module.exports = transformFilesCallback;
 
 function transformFileCallback(filePath, next, done, context) {
-  try {
-    transformFile(filePath, context, () => {
-      let { count } = context;
+  transformFile(filePath, context, () => {
+    let { count } = context;
 
-      count++;
+    count++;
 
-      Object.assign(context, {
-        count
-      });
-
-      next();
+    Object.assign(context, {
+      count
     });
-  } catch (error) {
-    console.log(BABEL_FAILED_MESSAGE);
 
-    console.log(error);
-
-    done();
-  }
+    next();
+  });
 }

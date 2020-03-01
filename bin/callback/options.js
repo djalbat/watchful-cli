@@ -17,7 +17,7 @@ const { pathFromOption } = pathUtilities,
 
 function optionsCallback(proceed, abort, context) {
   const { options } = context,
-        { entryFile, bundleFile, libDirectory, tempDirectory, sourceDirectory } = options;
+        { quietly, entryFile, bundleFile, libDirectory, tempDirectory, sourceDirectory } = options;
 
   if (!sourceDirectory) {
     console.log(NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE);
@@ -156,6 +156,7 @@ function optionsCallback(proceed, abort, context) {
         browserifyOptions = browserifyOptionsFromOptions(options);
 
   Object.assign(context, {
+    quietly,
     babelOptions,
     browserifyOptions
   });

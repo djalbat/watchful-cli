@@ -19,7 +19,11 @@ class DeleteFileTask extends Task {
 
     if (deletedTargetFileExists) {
       deleteFileTask = new DeleteFileTask(deleteFile, deletedTargetFilePath, () => {
-        console.log(`Deleted '${deletedTargetFilePath}'.`);
+        const { quietly } = context;
+
+        if (!quietly) {
+          console.log(`Deleted '${deletedTargetFilePath}'.`);
+        }
       });
     }
 

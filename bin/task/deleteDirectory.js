@@ -19,7 +19,11 @@ class DeleteDirectoryTask extends Task {
 
     if (deletedTargetDirectoryExists) {
       deleteDirectoryTask = new DeleteDirectoryTask(deleteDirectory, deletedTargetDirectoryPath, () => {
-        console.log(`Deleted '${deletedTargetDirectoryPath}'.`);
+        const { quietly } = context;
+
+        if (!quietly) {
+          console.log(`Deleted '${deletedTargetDirectoryPath}'.`);
+        }
       });
     }
 
