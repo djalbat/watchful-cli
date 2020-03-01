@@ -6,7 +6,7 @@ Watchful leverages [Babel](https://babeljs.io/) and [Browserify](http://browseri
 
 ### Why aren't Babel and Browserify included as dependencies?
 
-Babel presets and plugins require [@babel/core](https://babeljs.io/docs/en/babel-core) as a peer dependency, so you would have to include it in your project anyway. And since Browserify is optional, there seemed little point in including it as a dependency, either. Watchful is designed to run in your project directory and will load the versions of Babel and Browserify it finds in there. This gives you complete freedom over versioning and configuration, Watchful is completely agnostic to both. 
+Babel presets and plugins require [@babel/core](https://babeljs.io/docs/en/babel-core) as a peer dependency, so you would have to include it in your project anyway. And since Browserify is optional, there seemed little point in including it as a dependency, either. Watchful is designed to run in your project directory and will load the versions of Babel and Browserify it finds in there. This gives you complete control over versioning and configuration. Bar a `debug` option, Watchful is agnostic to both.  
 
 ## Installation
 
@@ -30,8 +30,21 @@ For a list of commands and options, run the following command:
 
     watchful help
         
+There are two main use cases, namely building a package and building a bundle. 
 
+For a package, you must supply the source and lib directories.
 
+    watchful batch --source-directory=es6/ --lib-directory=./lib
+    
+This will transpile all the JavaScript files in the `es6` directory and place them in the `lib` directory, honouring sub-directories. 
+
+Note that Watchful is tolerant of leading and trailing delimiters. It expects paths to be relative ones pointing to folders in the project directory, however. Relative paths outside of the project directory or any absolute paths will result in errors errors.
+
+For a bu, you must supply the source and temp directories, together with the entry file for the bundle:
+
+    watchful batch --source-directory=es6/ --temp-directory=./tmp --enty-file=main.js
+
+The path to the entry file is take to be relative to the source directory. You can also optionally supply a path to the bundle file by way of the `bundle-file` option, otherwise the output is piped to `stdout`.
 ## Contact
 
 - james.smith@djalbat.com
