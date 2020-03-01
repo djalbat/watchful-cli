@@ -44,7 +44,7 @@ The path to the entry file is taken to be relative to the source directory, not 
 
 ### Running by way of npm scripts
 
-As already mentioned, it is recommended that you install Watchful as a project dependency rather than globally, and run it with npm scripts. In this example we build a bundle for an application using ES6 and [JSX](https://reactjs.org/docs/introducing-jsx.html).
+As already mentioned, it is recommended that you install Watchful as a project dependency rather than globally, then run it with npm scripts. In this example we build a bundle for an application using ES6 and [JSX](https://reactjs.org/docs/introducing-jsx.html).
 
 The developer dependencies in the `package.json` file would like something like this:
 
@@ -81,7 +81,7 @@ Now for the npm scripts:
 ```
 "scripts": {
   "clean": "rm -rf ./tmp",
-  "watchful": "watchful --source-directory=./es6 --temp-directory=./tmp --entry-file=main.js --bundle-file=./public/lib/client.js",
+  "watchful": "watchful -s=./es6 -t=./tmp -e=main.js -b=./public/lib/client.js",
   "batch": "npm run watchful batch --",
   "batch-debug": "npm run watchful batch -- --debug",
   "incremental": "npm run watchful incremental -- --quietly",
@@ -93,8 +93,16 @@ Now for the npm scripts:
 }
 ```
 
-There are a few points worth noting:
+There are several points worth noting:
 
+* The `clean` script has nothing to do with Watchful. It deletes the `tmp` directory and is used in the build scripts to come. Note that since the watch scripts have to be killed by the user, the is no opportunity to clean up after watching and the `tmp` directory will remain. Add the `tmp/` directory to your `.gitignore` file, therefore, or make sure to always build before deployment.
+
+* The `watchful` script invokes Watchful with the requisite paths for the source and temp directories together with the entry and bundle files. The options have been abbreviated. Using a dedicated `watchful` script means that these options only have to be specified once.
+
+* The `batch`, `batch-debug`, `incremental` and `incremental-debug` scripts make use of the aforementioned `watchful`, passing it the requisite command plus additional options. The special `--` command tells npm to pass these options verbatim. The `incremental` command is optional and can be left out.
+
+For a package rather than a bundle, you could remove the call to the final `clean` script from the build scripts; remove the entry and bundle file options from the `watchful` script, and change the temp directory to a lib directory.
+ 
 ## Contact
 
 - james.smith@djalbat.com
