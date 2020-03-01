@@ -42,6 +42,59 @@ In order to build a bundle, you must supply the source and temp directories toge
 
 The path to the entry file is taken to be relative to the source directory, not the project directory. You can also optionally supply a path to the bundle file by way of the `--bundle-file` option, otherwise the output is piped to `stdout`.
 
+### Running by way of npm scripts
+
+As already mentioned, it is recommended that you install Watchful as a project dependency rather than globally, and run it with npm scripts. In this example we build a bundle for an application using ES6 and [JSX](https://reactjs.org/docs/introducing-jsx.html).
+
+The developer dependencies in the `package.json` file would like something like this:
+
+```
+"devDependencies": {
+  "@babel/core": "^7.8.6",
+  "@babel/plugin-transform-react-jsx": "^7.8.3",
+  "@babel/preset-env": "^7.8.6",
+  "browserify": "^16.5.0",
+  
+  ...
+
+  "watchful-cli": "^1.0.3"
+}
+```
+
+The `babel.config.json` file in the project directory would look something like this:
+
+```
+{
+  "presets": [
+    [
+      "@babel/env"
+    ]
+  ],
+  "plugins": [
+    "@babel/plugin-transform-react-jsx"
+  ]
+}
+```
+
+Now for the npm scripts:
+
+```
+"scripts": {
+  "clean": "rm -rf ./tmp",
+  "watchful": "watchful --source-directory=./es6 --temp-directory=./tmp --entry-file=main.js --bundle-file=./public/lib/client.js",
+  "batch": "npm run watchful batch --",
+  "batch-debug": "npm run watchful batch -- --debug",
+  "incremental": "npm run watchful incremental -- --quietly",
+  "incremental-debug": "npm run watchful incremental -- --debug --quietly",
+  "build": "npm run clean && npm run batch && npm run clean",
+  "build-debug": "npm run clean && npm run batch-debug && npm run clean",
+  "watch": "npm run clean && npm run batch && npm run incremental",
+  "watch-debug": "npm run clean && npm run batch-debug && npm run incremental-debug"
+}
+```
+
+There are a few points worth noting:
+
 ## Contact
 
 - james.smith@djalbat.com
