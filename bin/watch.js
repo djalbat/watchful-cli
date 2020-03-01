@@ -11,19 +11,19 @@ const Queue = require('./queue'),
       TransformFileTask = require('./task/transformFile'),
       DeleteDirectoryTask = require('./task/deleteDirectory');
 
-const { DEFAULT_GLOB_PATTERN } = constants,
+const { SOURCE_DIRECTORY_WATCH_PATTERN } = constants,
       { isPathFullQualifiedPath, pathFromFullyQualifiedPath } = pathUtilities,
       { ADD_EVENT, CHANGE_EVENT, UNLINK_EVENT, UNLINK_DIR_EVENT } = events;
 
 function watch(context) {
   const { quietly, sourceDirectoryPath } = context,
-        pattern = `${sourceDirectoryPath}${DEFAULT_GLOB_PATTERN}`,
-        watcher = chokidar.watch(pattern),
+        watchPattern = `${sourceDirectoryPath}${SOURCE_DIRECTORY_WATCH_PATTERN}`,
+        watcher = chokidar.watch(watchPattern),
         queue = Queue.fromEmptyHandler(queueEmptyHandler);
 
   watcher.on('ready', () => {
     if (!quietly) {
-      console.log(`Watching '${pattern}'.`);
+      console.log(`Watching '${watchPattern}'.`);
     }
 
     watcher.on('all', (event, path) => {

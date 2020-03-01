@@ -4,14 +4,14 @@ const DELIMITER = '/',
       WATCHFUL_CLI = 'watchful-cli',
       BROWSERIFY_PATH = './node_modules/browserify',
       BABEL_CORE_PATH = './node_modules/@babel/core',
-      DEFAULT_GLOB_PATTERN = '/**/*.js',
-      PACKAGE_JSON_FILE_NAME = 'package.json';
+      PACKAGE_JSON_FILE_NAME = 'package.json',
+      SOURCE_DIRECTORY_WATCH_PATTERN = '/**/*.js';
 
 module.exports = {
   DELIMITER,
   WATCHFUL_CLI,
   BROWSERIFY_PATH,
   BABEL_CORE_PATH,
-  DEFAULT_GLOB_PATTERN,
-  PACKAGE_JSON_FILE_NAME
+  PACKAGE_JSON_FILE_NAME,
+  SOURCE_DIRECTORY_WATCH_PATTERN
 };
