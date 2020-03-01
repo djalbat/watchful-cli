@@ -32,19 +32,19 @@ For a list of commands and options, run the following command:
         
 There are two main use cases, namely building a package and building a bundle. 
 
-For a package, you must supply the source and lib directories.
+For a package, you must supply the source and lib directories:
 
     watchful batch --source-directory=es6/ --lib-directory=./lib
     
 This will transpile all the JavaScript files in the `es6` directory and place them in the `lib` directory, honouring sub-directories. 
 
-Note that Watchful is tolerant of leading and trailing delimiters. It expects paths to be relative ones pointing to folders in the project directory, however. Relative paths outside of the project directory or any absolute paths will result in errors errors.
+Note that Watchful is tolerant of leading and trailing delimiters. It expects paths to be relative ones pointing to folders in the project directory, however. Relative paths outside of the project directory or any absolute paths will result in errors.
 
-For a bu, you must supply the source and temp directories, together with the entry file for the bundle:
+For a bundle, you must supply the source and temp directories together with the entry file for the bundle:
 
     watchful batch --source-directory=es6/ --temp-directory=./tmp --enty-file=main.js
 
-The path to the entry file is take to be relative to the source directory. You can also optionally supply a path to the bundle file by way of the `bundle-file` option, otherwise the output is piped to `stdout`.
+The path to the entry file is taken to be relative to the source directory. You can also optionally supply a path to the bundle file by way of the `--bundle-file` option, otherwise the output is piped to `stdout`.
 ## Contact
 
 - james.smith@djalbat.com
