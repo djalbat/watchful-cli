@@ -10,6 +10,14 @@ const { resolve } = path,
       { BROWSERIFY_NOT_INSTALLED } = messages;
 
 function browserifyCallback(proceed, abort, context) {
+  const { entryFilePath } = context;
+
+  if (!entryFilePath) {
+    proceed();
+
+    return;
+  }
+
   try {
     const browserifyPath = resolve(BROWSERIFY_PATH),
           browserify = require(browserifyPath);
