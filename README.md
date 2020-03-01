@@ -2,7 +2,7 @@
 
 Incremental builds with bundling.
 
-Watchful leverages [Babel](https://babeljs.io/) and [Browserify](http://browserify.org/) in order to provide a straightforward build tool that supports incremental transpilation together with bundling.
+Watchful leverages [Babel](https://babeljs.io/) and [Browserify](http://browserify.org/) to provide a straightforward build tool that supports incremental transpilation together with bundling.
 
 ## What aren't Babel and Browserify included as dependencies?
 
