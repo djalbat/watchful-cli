@@ -10,7 +10,6 @@ Babel presets and plugins require [@babel/core](https://babeljs.io/docs/en/babel
 
 Watchful works hand in hand with [Lively](https://github.com/djalbat/lively-cli). 
 
-
 ## Installation
 
 You can install Watchful via [npm](https://www.npmjs.com/):
@@ -29,10 +28,42 @@ If you would like to contribute or would simply like to have a look at the code,
     
 ## Usage
 
-For a list of commands and options, run the following command:
+The commands and options are as follows:
 
-    watchful help
-        
+```
+  watchful [<command>] [<options>]
+
+Commands:
+
+  version                                        Show theh version
+
+  help                                           Show this help
+  
+  batch                                          Batch build
+
+  [incremental]                                  Watch and build incrementally
+  
+Options:
+
+  --version|-v                                   Show the version
+
+  --help|-h                                      Show this help
+  
+  --debug|-d                                     Debug, that is enable source maps
+  
+  --quietly|-q                                   Run with almost no console logging
+
+  --entry-file|-b                                Entry file path
+  
+  --bundle-file|-b                               Bundle file path
+  
+  --lib-directory|-l                             Lib directory path
+
+  --temp-directory|-t                            Temp directory path
+
+  --source-directory|-s                          Source directory path
+```
+
 There are two main use cases, namely building a package and building a bundle. In order to build a package, you must supply the source and lib directories:
 
     watchful batch --source-directory=es6/ --lib-directory=./lib
