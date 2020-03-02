@@ -43,7 +43,7 @@ In order to build a bundle, you must supply the source and temp directories toge
 
     watchful batch --source-directory=es6/ --temp-directory=./tmp --enty-file=main.js
 
-The path to the entry file is taken to be relative to the source directory, not the project directory. You can also optionally supply a path to the bundle file by way of the `--bundle-file` option, otherwise the output is piped to `stdout`.
+The path to the entry file is taken to be relative to the temp directory, not the project directory. You can also optionally supply a path to the bundle file by way of the `--bundle-file` option, otherwise the output is piped to `stdout`.
 
 ### Running by way of npm scripts
 
