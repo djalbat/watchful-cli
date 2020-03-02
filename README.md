@@ -8,6 +8,9 @@ Watchful leverages [Babel](https://babeljs.io/) and [Browserify](http://browseri
 
 Babel presets and plugins require [@babel/core](https://babeljs.io/docs/en/babel-core) as a peer dependency, so you would have to include it in your project anyway. And since bundling is optional, there also seemed little point in including Browserify as a dependency. Watchful is designed to run in your project directory and will load the versions of Babel and Browserify it finds in there. This gives you complete control over versions and configuration. Aside from a `debug` option, Watchful is agnostic to both.  
 
+Watchful works hand in hand with [Lively](https://github.com/djalbat/lively-cli). 
+
+
 ## Installation
 
 You can install Watchful via [npm](https://www.npmjs.com/):
