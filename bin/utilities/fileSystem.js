@@ -61,6 +61,14 @@ function createDirectory(directoryPath) {
   fs.mkdirSync(directoryPath);
 }
 
+function isEntryFile(entryPath) {
+  const stat = fs.statSync(entryPath),
+        entryDirectory = stat.isDirectory(),
+        entryFile = !entryDirectory;
+
+  return entryFile;
+}
+
 function isEntryDirectory(entryPath) {
   const stat = fs.statSync(entryPath),
         entryDirectory = stat.isDirectory();
@@ -129,6 +137,7 @@ module.exports = {
   readDirectory,
   deleteDirectory,
   createDirectory,
+  isEntryFile,
   isEntryDirectory,
   checkFileExists,
   checkEntryExists,
