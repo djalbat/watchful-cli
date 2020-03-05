@@ -1,14 +1,24 @@
 'use strict';
 
-const fs = require('fs'),
-      necessary = require('necessary');
+const fs = require('fs');
 
 const pathUtilities = require('../utilities/path');
 
-const { fileSystemUtilities } = necessary,
-      { pathWithoutBottommostNameFromPath } = pathUtilities,
-      { openSync, writeSync, rmdirSync, unlinkSync, unlink } = fs,
-      { readDirectory, isEntryDirectory, createDirectory, checkDirectoryExists } = fileSystemUtilities;
+const { pathWithoutBottommostNameFromPath } = pathUtilities,
+      { openSync, writeSync, rmdirSync, unlinkSync } = fs;
+
+function readFile(filePath, encoding = 'utf8') {
+  const options = {
+          encoding
+        },
+        content = fs.readFileSync(filePath, options);
+
+  return content;
+}
+
+function writeFile(filePath, content) {
+  fs.writeFileSync(filePath, content);
+}
 
 function deleteFile(filePath, done) {
   unlinkSync(filePath);
@@ -22,12 +32,80 @@ function writeFileEx(filePath, buffer) {
   writeSync(file, buffer);
 }
 
+function readDirectory(directoryPath) {
+  const subEntryNames = fs.readdirSync(directoryPath);
+
+  return subEntryNames;
+}
+
 function deleteDirectory(directoryPath, done) {
   cleanDirectory(directoryPath);
 
   rmdirSync(directoryPath);
 
   done && done(); ///
+}
+
+function createDirectory(directoryPath) {
+  const directoryPathWithoutBottommostName = pathWithoutBottommostNameFromPath(directoryPath);
+
+  if ((directoryPathWithoutBottommostName !== '.') && (directoryPathWithoutBottommostName !== null)) {
+    const parentDirectoryPath = directoryPathWithoutBottommostName,  ///
+         parentDirectoryExists = checkDirectoryExists(parentDirectoryPath);
+
+    if (!parentDirectoryExists) {
+      createDirectory(parentDirectoryPath);
+    }
+  }
+
+  fs.mkdirSync(directoryPath);
+}
+
+function isEntryDirectory(entryPath) {
+  const stat = fs.statSync(entryPath),
+        entryDirectory = stat.isDirectory();
+
+  return entryDirectory;
+}
+
+function checkFileExists(filePath) {
+  let fileExists = false;
+
+  const entryPath = filePath, ///
+        entryExists = checkEntryExists(entryPath);
+
+  if (entryExists) {
+    const entryFile = isEntryFile(entryPath);
+
+    if (entryFile) {
+      fileExists = true;
+    }
+  }
+
+  return fileExists;
+}
+
+function checkEntryExists(entryPath) {
+  const entryExists = fs.existsSync(entryPath);
+
+  return entryExists;
+}
+
+function checkDirectoryExists(directoryPath) {
+  let directoryExists = false;
+
+  const entryPath = directoryPath, ///
+    entryExists = checkEntryExists(entryPath);
+
+  if (entryExists) {
+    const entryDirectory = isEntryDirectory(entryPath);
+
+    if (entryDirectory) {
+      directoryExists = true;
+    }
+  }
+
+  return directoryExists;
 }
 
 function createParentDirectory(filePath) {
@@ -43,12 +121,20 @@ function createParentDirectory(filePath) {
   }
 }
 
-module.exports = Object.assign(fileSystemUtilities, {
+module.exports = {
+  readFile,
+  writeFile,
   deleteFile,
   writeFileEx,
+  readDirectory,
   deleteDirectory,
+  createDirectory,
+  isEntryDirectory,
+  checkFileExists,
+  checkEntryExists,
+  checkDirectoryExists,
   createParentDirectory
-});
+};
 
 function cleanDirectory(directoryPath) {
   const entryPaths = readDirectory(directoryPath);
@@ -71,4 +157,3 @@ function cleanDirectory(directoryPath) {
     }
   });
 }
-

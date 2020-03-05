@@ -1,9 +1,9 @@
 'use strict';
 
 const messages = require('../messages'),
-      pathUtilities = require('../utilities/path');
+      optionUtilities = require('../utilities/option');
 
-const { pathFromOption } = pathUtilities,
+const { pathFromOption } = optionUtilities,
       { NO_ENTRY_FILE_SPECIFIED_MESSAGE,
         NO_TEMP_DIRECTORY_SPECIFIED_MESSAGE,
         NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE,
