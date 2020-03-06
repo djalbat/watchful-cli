@@ -1,10 +1,12 @@
 'use strict';
 
+const necessary = require('necessary');
+
 const constants = require('../constants'),
-      arrayUtilities = require('../utilities/array'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
-const { second } = arrayUtilities,
+const { arrayUtilities } = necessary,
+      { second } = arrayUtilities,
       { readFile } = fileSystemUtilities,
       { PACKAGE_JSON_FILE_NAME } = constants;
 

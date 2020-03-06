@@ -1,54 +1,37 @@
 'use strict';
 
-const constants = require('../constants'),
-      arrayUtilities = require('../utilities/array');
+const necessary = require('necessary');
+
+const constants = require('../constants');
 
 const { cwd } = process,
-      { DELIMITER } = constants,
-      { first, second, last } = arrayUtilities;
+  { DELIMITER } = constants,
+  { pathUtilities } = necessary,
+  { isPathName, bottommostNameFromPath } = pathUtilities;
 
 const currentWorkingDirectoryPath = cwd(),
       currentWorkingDirectoryPathLength = currentWorkingDirectoryPath.length;
 
-function isPathName(path) {
-  path = path.replace(/^\//,'').replace(/\/$/, ''); ///
+function pathFromOption(option) {
+  let path = null;
 
-  const pathName = (/\//.test(path) === false);
+  const optionAbsolutePath = /^\/.*/.test(option),
+        optionAllowedRelativePath = /^\.\/.*/.test(option),
+        optionForbiddenRelativePath = /^\.\.\/.*/.test(option);
 
-  return pathName;
-}
-
-function combinePaths(path, relativePath) {
-  let combinedPath = null;
-
-  const pathNames = path.split('/'),
-      relativePathNames = relativePath.split('/');
-
-  let lastPathName,
-    firstRelativePathName = first(relativePathNames);
-
-  if (firstRelativePathName === '.') {
-    relativePathNames.shift();
+  if (false) {
+    ///
+  } else if (optionAbsolutePath) {
+    ///
+  } else if (optionAllowedRelativePath) {
+    path = option.replace(/^\.\//, '').replace(/\/$/, '');
+  } else if (optionForbiddenRelativePath) {
+    path = null;
+  } else {
+    path = option;  ///
   }
 
-  firstRelativePathName = first(relativePathNames);
-  lastPathName = last(pathNames);
-
-  while ((firstRelativePathName === '..') && (lastPathName !== undefined)) {
-    relativePathNames.shift();
-    pathNames.pop();
-
-    firstRelativePathName = first(relativePathNames);
-    lastPathName = last(pathNames);
-  }
-
-  if (lastPathName !== undefined) {
-    const combinedPathNames = [].concat(pathNames).concat(relativePathNames);
-
-    combinedPath = combinedPathNames.join('/');
-  }
-
-  return combinedPath;
+  return path;
 }
 
 function fileNameFromFilePath(filePath) {
@@ -67,20 +50,6 @@ function fileNameFromFilePath(filePath) {
   return fileName;
 }
 
-function bottommostNameFromPath(path) {
-  let bottommostName = null;
-
-  const matches = path.match(/^.*\/([^\/]+\/?)$/);
-
-  if (matches !== null) {
-    const secondMatch = second(matches);
-
-    bottommostName = secondMatch;  ///
-  }
-
-  return bottommostName;
-}
-
 function isPathFullQualifiedPath(path) {
   const pathStartsWithCurrentWorkingDirectoryPath = path.startsWith(currentWorkingDirectoryPath),
         pathFullyQualifiedPath = pathStartsWithCurrentWorkingDirectoryPath; ///
@@ -94,20 +63,6 @@ function pathFromFullyQualifiedPath(fullyQualifiedPath) {
   return path;
 }
 
-function pathWithoutBottommostNameFromPath(path) {
-  let pathWithoutBottommostName = null;
-
-  const matches = path.match(/^(.*)\/[^\/]+\/?$/);
-
-  if (matches !== null) {
-    const secondMatch = second(matches);
-
-    pathWithoutBottommostName = secondMatch; ///
-  }
-
-  return pathWithoutBottommostName;
-}
-
 function pathWithoutDirectoryPathFromPathAndDirectoryPath(path, directoryPath) {
   const delimiterLength = DELIMITER.length,
         directoryPathLength = directoryPath.length,
@@ -116,12 +71,10 @@ function pathWithoutDirectoryPathFromPathAndDirectoryPath(path, directoryPath) {
   return pathWithoutDirectoryPath;
 }
 
-module.exports = {
-  isPathName,
-  combinePaths,
+module.exports = Object.assign(pathUtilities, {
+  pathFromOption,
   fileNameFromFilePath,
   isPathFullQualifiedPath,
   pathFromFullyQualifiedPath,
-  pathWithoutBottommostNameFromPath,
   pathWithoutDirectoryPathFromPathAndDirectoryPath
-};
+});

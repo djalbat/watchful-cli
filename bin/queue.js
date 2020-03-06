@@ -4,9 +4,10 @@ require('setimmediate');
 
 const defer = setImmediate; ///
 
-const arrayUtilities = require('./utilities/array');
+const necessary = require('necessary');
 
-const { first } = arrayUtilities;
+const { arrayUtilities } = necessary,
+      { first } = arrayUtilities;
 
 class Queue {
   constructor(tasks, emptyHandler) {

@@ -1,8 +1,9 @@
 'use strict';
 
-const asynchronousUtilities = require('../utilities/asynchronous');
+const necessary = require('necessary');
 
-const { whilst } = asynchronousUtilities;
+const { asynchronousUtilities } = necessary,
+      { whilst } = asynchronousUtilities;
 
 function executeCallbacks(callbacks, callback, context) {
   const completed = true;
@@ -24,7 +25,7 @@ function executeCallbacks(callbacks, callback, context) {
 }
 
 module.exports = {
-	executeCallbacks
+  executeCallbacks
 };
 
 function executeCallback(next, done, context, index) {

@@ -1,9 +1,11 @@
 'use strict';
 
-const transformUtilities = require('../utilities/transform'),
-      asynchronousUtilities = require('../utilities/asynchronous');
+const necessary = require('necessary');
 
-const { forEach } = asynchronousUtilities,
+const transformUtilities = require('../utilities/transform');
+
+const { asynchronousUtilities } = necessary,
+      { forEach } = asynchronousUtilities,
       { transformFile } = transformUtilities;
 
 function transformFilesCallback(proceed, abort, context) {
