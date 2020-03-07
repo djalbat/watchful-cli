@@ -51,8 +51,6 @@ Options:
   
   --debug|-d                                     Debug, that is enable source maps
   
-  --pause|-p                                     Pause in milliseconds when queuing
-
   --quietly|-q                                   Run with almost no console logging
 
   --entry-file|-b                                Entry file path
@@ -77,8 +75,6 @@ In order to build a bundle, you must supply the source and temp directories toge
     watchful batch --source-directory=es6/ --temp-directory=./tmp --enty-file=main.js
 
 The path to the entry file is taken to be relative to the temp directory, not the project directory. You can also optionally supply a path to the bundle file by way of the `--bundle-file` option, otherwise the output is piped to `stdout`.
-
-Watchful uses [chokidar](https://github.com/paulmillr/chokidar) to listen for changes to watched files and directories. If you make changes to more than about half a dozen files at once in an IDE such as WebStorm, it appears that because the changes are held in memory and then applied all at once, often not all of these changes are reported by chokidar before Watchful continues with its own execution. This resulted in bundles being rebuilt prior to all the changed files being transpiled or removed. For this reason, there is now a short pause of 100 milliseconds as changes are queued. You can alter the duration of this pause with the `--pause` option.
 
 ### Running by way of npm scripts
 

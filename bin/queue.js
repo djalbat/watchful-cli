@@ -1,27 +1,28 @@
 'use strict';
 
+require('setimmediate');
+
 const necessary = require('necessary');
 
 const { arrayUtilities } = necessary,
       { first } = arrayUtilities;
 
+const defer = setImmediate;
+
 class Queue {
-  constructor(tasks, pause, emptyHandler) {
+  constructor(tasks, emptyHandler) {
     this.tasks = tasks;
-    this.pause = pause;
     this.emptyHandler = emptyHandler;
   }
 
   addTask(task) {
-    setTimeout(() => {
-      const empty = this.isEmpty();
+    const empty = this.isEmpty();
 
-      this.tasks.push(task);
+    this.tasks.push(task);
 
-      if (empty) {
-        this.executeNextTask();
-      }
-    }, this.pause);
+    if (empty) {
+      this.executeNextTask();
+    }
   }
 
   executeNextTask() {
@@ -29,12 +30,14 @@ class Queue {
           nextTask = firstTask, ///
           next = this.next.bind(this);
 
-    nextTask.execute(function() {
-      const callback = nextTask.getCallback();
+    defer(() => {
+      nextTask.execute(function() {
+        const callback = nextTask.getCallback();
 
-      callback.apply(nextTask, arguments);
+        callback.apply(nextTask, arguments);
 
-      next();
+        next();
+      });
     });
   }
 
@@ -55,9 +58,9 @@ class Queue {
     return empty;
   }
 
-  static fromPauseAndEmptyHandler(pause, emptyHandler) {
+  static fromEmptyHandler(emptyHandler) {
     const tasks = [],
-          queue = new Queue(tasks, pause, emptyHandler);
+          queue = new Queue(tasks, emptyHandler);
 
     return queue;
   }

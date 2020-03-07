@@ -23,8 +23,6 @@ Options:
   
   --debug|-d                                     Debug, that is enable source maps
   
-  --pause|-p                                     Pause in milliseconds when queuing
-
   --quietly|-q                                   Run with almost no console logging
 
   --entry-file|-b                                Entry file path

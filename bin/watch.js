@@ -16,10 +16,10 @@ const { SOURCE_DIRECTORY_WATCH_PATTERN } = constants,
       { ADD_EVENT, CHANGE_EVENT, UNLINK_EVENT, UNLINK_DIR_EVENT } = events;
 
 function watch(context) {
-  const { pause, quietly, sourceDirectoryPath } = context,
+  const { quietly, sourceDirectoryPath } = context,
         watchPattern = `${sourceDirectoryPath}${SOURCE_DIRECTORY_WATCH_PATTERN}`,
         watcher = chokidar.watch(watchPattern),
-        queue = Queue.fromPauseAndEmptyHandler(pause, queueEmptyHandler);
+        queue = Queue.fromEmptyHandler(queueEmptyHandler);
 
   watcher.on('ready', () => {
     if (!quietly) {
