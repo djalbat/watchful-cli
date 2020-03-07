@@ -1,13 +1,11 @@
 'use strict';
 
-require('setimmediate');
-
 const necessary = require('necessary');
 
 const { arrayUtilities } = necessary,
       { first } = arrayUtilities;
 
-const defer = setImmediate;
+const defer = (func) => setTimeout(func, 0);
 
 class Queue {
   constructor(tasks, emptyHandler) {
