@@ -1,9 +1,11 @@
 'use strict';
 
 const messages = require('../messages'),
+      constants = require('../constants'),
       pathUtilities = require('../utilities/path');
 
-const { pathFromOption } = pathUtilities,
+const { DEFAULT_PAUSE } = constants,
+      { pathFromOption } = pathUtilities,
       { NO_ENTRY_FILE_SPECIFIED_MESSAGE,
         NO_TEMP_DIRECTORY_SPECIFIED_MESSAGE,
         NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE,
@@ -17,7 +19,13 @@ const { pathFromOption } = pathUtilities,
 
 function optionsCallback(proceed, abort, context) {
   const { options } = context,
-        { quietly, entryFile, bundleFile, libDirectory, tempDirectory, sourceDirectory } = options;
+        { pause = DEFAULT_PAUSE,
+          quietly,
+          entryFile,
+          bundleFile,
+          libDirectory,
+          tempDirectory,
+          sourceDirectory } = options;
 
   if (!sourceDirectory) {
     console.log(NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE);
@@ -156,6 +164,7 @@ function optionsCallback(proceed, abort, context) {
         browserifyOptions = browserifyOptionsFromOptions(options);
 
   Object.assign(context, {
+    pause,
     quietly,
     babelOptions,
     browserifyOptions

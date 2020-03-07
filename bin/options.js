@@ -1,6 +1,7 @@
 'use strict';
 
 const HELP_OPTION = 'help',
+      PAUSE_OPTION = 'pause',
       DEBUG_OPTION = 'debug',
       QUIETLY_OPTION = 'quietly',
       VERSION_OPTION = 'version',
@@ -12,6 +13,7 @@ const HELP_OPTION = 'help',
 
 module.exports = {
   HELP_OPTION,
+  PAUSE_OPTION,
   DEBUG_OPTION,
   QUIETLY_OPTION,
   VERSION_OPTION,

@@ -1,20 +1,19 @@
 'use strict';
 
-const defer = (func) => setTimeout(func, 100);
-
 const necessary = require('necessary');
 
 const { arrayUtilities } = necessary,
       { first } = arrayUtilities;
 
 class Queue {
-  constructor(tasks, emptyHandler) {
+  constructor(tasks, pause, emptyHandler) {
     this.tasks = tasks;
+    this.pause = pause;
     this.emptyHandler = emptyHandler;
   }
 
   addTask(task) {
-    defer(() => {
+    setTimeout(() => {
       const empty = this.isEmpty();
 
       this.tasks.push(task);
@@ -22,7 +21,7 @@ class Queue {
       if (empty) {
         this.executeNextTask();
       }
-    });
+    }, this.pause);
   }
 
   executeNextTask() {
@@ -56,9 +55,9 @@ class Queue {
     return empty;
   }
 
-  static fromEmptyHandler(emptyHandler) {
+  static fromPauseAndEmptyHandler(pause, emptyHandler) {
     const tasks = [],
-          queue = new Queue(tasks, emptyHandler);
+          queue = new Queue(tasks, pause, emptyHandler);
 
     return queue;
   }
