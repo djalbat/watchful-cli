@@ -1,8 +1,6 @@
 'use strict';
 
-require('setimmediate');
-
-const defer = setImmediate; ///
+const defer = (func) => setTimeout(func, 100);
 
 const necessary = require('necessary');
 
