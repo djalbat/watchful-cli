@@ -22,7 +22,7 @@ If you would like to contribute or would simply like to have a look at the code,
 
     git clone https://github.com/djalbat/watchful-cli.git
 
-...then install the necessary modules with npm from within the project's root directory:
+...then install the dependencies with npm from within the project's root directory:
 
     npm install
     
