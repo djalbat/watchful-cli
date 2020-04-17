@@ -1,5 +1,10 @@
 'use strict';
 
+const necessary = require("necessary");
+
+const { arrayUtilities } = necessary,
+      { first } = arrayUtilities;
+
 class Queue {
   constructor(tasks, emptyHandler) {
     this.tasks = tasks;
@@ -17,7 +22,8 @@ class Queue {
   }
 
   executeNextTask() {
-    const task = this.tasks.shift(),
+    const firstTask = first(this.tasks),
+          task = firstTask, ///
           next = this.next.bind(this);
 
     setTimeout(() => {
@@ -26,21 +32,22 @@ class Queue {
 
         callback.apply(task, arguments);
 
-        const previousTask = task;  ///
-
-        next(previousTask);
+        next();
       });
     }, 0 );
   }
 
-  next(previousTask) {
-    const empty = this.isEmpty();
+  next() {
+    const task = this.tasks.shift(),
+          empty = this.isEmpty();
 
     if (!empty) {
       this.executeNextTask();
 
       return;
     }
+
+    const previousTask = task;  ///
 
     this.emptyHandler(previousTask);
   }
