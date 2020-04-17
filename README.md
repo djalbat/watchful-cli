@@ -47,6 +47,8 @@ Options:
 
   --help|-h                                      Show this help
   
+  --pause|-p                                     Pause before building incrementally
+
   --debug|-d                                     Debug, that is enable source maps
   
   --quietly|-q                                   Run with almost no console logging
@@ -116,8 +118,8 @@ Now for the npm scripts:
   "watchful": "watchful -s=./es6 -t=./tmp -e=main.js -b=./public/lib/client.js",
   "batch": "npm run watchful batch --",
   "batch-debug": "npm run watchful batch -- --debug",
-  "incremental": "npm run watchful incremental -- --quietly",
-  "incremental-debug": "npm run watchful incremental -- --debug --quietly",
+  "incremental": "npm run watchful incremental -- --quietly --pause=100",
+  "incremental-debug": "npm run watchful incremental -- --debug --quietly --pause=100",
   "build": "npm run clean && npm run batch && npm run clean",
   "build-debug": "npm run clean && npm run batch-debug && npm run clean",
   "watch": "npm run clean && npm run batch && npm run incremental",
@@ -133,7 +135,9 @@ There are several points worth noting:
 
 * The `batch`, `batch-debug`, `incremental` and `incremental-debug` scripts all make use of the aforementioned `watchful` script, passing it the requisite command plus additional options. The special `--` command tells npm to pass these options verbatim. The `incremental` command is optional and can be left out.
 
-For a package rather than a bundle, you could remove the call to the final `clean` script from the build scripts; remove the entry and bundle file options from the `watchful` script; and change the temp directory to a lib directory.
+* For a package rather than a bundle, you could remove the call to the final `clean` script from the build scripts; remove the entry and bundle file options from the `watchful` script; and change the temp directory to a lib directory.
+
+* For incremental builds, the `pause` option has been set to 100 milliseconds. Usually this can be left at the default, which is 0 milliseconds. However, if you find that not all of the transformations are being completed before bundling starts, you may want to experiment with this option.
  
 ## Contact
 
