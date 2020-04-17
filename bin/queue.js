@@ -5,11 +5,10 @@ const necessary = require('necessary');
 const { arrayUtilities } = necessary,
       { first } = arrayUtilities;
 
-const defer = (func) => setTimeout(func, 0);
-
 class Queue {
-  constructor(tasks, emptyHandler) {
+  constructor(tasks, pause, emptyHandler) {
     this.tasks = tasks;
+    this.pause = pause;
     this.emptyHandler = emptyHandler;
   }
 
@@ -28,15 +27,15 @@ class Queue {
           nextTask = firstTask, ///
           next = this.next.bind(this);
 
-    defer(() => {
-      nextTask.execute(function() {
+    setTimeout(() => {
+      nextTask.execute(function() { ///
         const callback = nextTask.getCallback();
 
         callback.apply(nextTask, arguments);
 
         next();
       });
-    });
+    }, this.pause );
   }
 
   next() {
@@ -56,9 +55,9 @@ class Queue {
     return empty;
   }
 
-  static fromEmptyHandler(emptyHandler) {
+  static fromPauseAndEmptyHandler(pause, emptyHandler) {
     const tasks = [],
-          queue = new Queue(tasks, emptyHandler);
+          queue = new Queue(tasks, pause, emptyHandler);
 
     return queue;
   }

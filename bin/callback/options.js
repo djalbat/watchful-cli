@@ -17,7 +17,8 @@ const { pathFromOption } = pathUtilities,
 
 function optionsCallback(proceed, abort, context) {
   const { options } = context,
-        { quietly,
+        { pause,
+          quietly,
           entryFile,
           bundleFile,
           libDirectory,
@@ -161,6 +162,7 @@ function optionsCallback(proceed, abort, context) {
         browserifyOptions = browserifyOptionsFromOptions(options);
 
   Object.assign(context, {
+    pause,
     quietly,
     babelOptions,
     browserifyOptions

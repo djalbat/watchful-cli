@@ -3,6 +3,7 @@
 const options = require('./options');
 
 const { HELP_OPTION,
+        PAUSE_OPTION,
         DEBUG_OPTION,
         QUIETLY_OPTION,
         VERSION_OPTION,
@@ -13,6 +14,7 @@ const { HELP_OPTION,
         SOURCE_DIRECTORY_OPTION } = options;
 
 const h = HELP_OPTION,
+      p = PAUSE_OPTION,
       d = DEBUG_OPTION,
       q = QUIETLY_OPTION,
       v = VERSION_OPTION,
@@ -24,6 +26,7 @@ const h = HELP_OPTION,
 
 module.exports = {
   h,
+  p,
   d,
   q,
   v,
