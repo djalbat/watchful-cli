@@ -1,14 +1,8 @@
 'use strict';
 
-const necessary = require('necessary');
-
-const { arrayUtilities } = necessary,
-      { first } = arrayUtilities;
-
 class Queue {
-  constructor(tasks, pause, emptyHandler) {
+  constructor(tasks, emptyHandler) {
     this.tasks = tasks;
-    this.pause = pause;
     this.emptyHandler = emptyHandler;
   }
 
@@ -23,29 +17,32 @@ class Queue {
   }
 
   executeNextTask() {
-    const firstTask = first(this.tasks),
-          nextTask = firstTask, ///
+    const task = this.tasks.shift(),
           next = this.next.bind(this);
 
     setTimeout(() => {
-      nextTask.execute(function() { ///
-        const callback = nextTask.getCallback();
+      task.execute(function() { ///
+        const callback = task.getCallback();
 
-        callback.apply(nextTask, arguments);
+        callback.apply(task, arguments);
 
-        next();
+        const previousTask = task;  ///
+
+        next(previousTask);
       });
-    }, this.pause );
+    }, 0 );
   }
 
-  next() {
-    const previousTask = this.tasks.shift();
-
+  next(previousTask) {
     const empty = this.isEmpty();
 
-    empty ?
-      this.emptyHandler(previousTask) :
-        this.executeNextTask();
+    if (!empty) {
+      this.executeNextTask();
+
+      return;
+    }
+
+    this.emptyHandler(previousTask);
   }
   
   isEmpty() {
@@ -55,9 +52,9 @@ class Queue {
     return empty;
   }
 
-  static fromPauseAndEmptyHandler(pause, emptyHandler) {
+  static fromEmptyHandler(emptyHandler) {
     const tasks = [],
-          queue = new Queue(tasks, pause, emptyHandler);
+          queue = new Queue(tasks, emptyHandler);
 
     return queue;
   }

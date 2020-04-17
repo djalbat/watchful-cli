@@ -21,7 +21,7 @@ function watch(context) {
           sourceDirectoryPath } = context,
         watchPattern = `${sourceDirectoryPath}${SOURCE_DIRECTORY_WATCH_PATTERN}`,
         watcher = chokidar.watch(watchPattern),
-        queue = Queue.fromPauseAndEmptyHandler(pause, queueEmptyHandler);
+        queue = Queue.fromEmptyHandler(queueEmptyHandler);
 
   watcher.on('ready', () => {
     if (!quietly) {
@@ -46,11 +46,17 @@ function watch(context) {
       return;
     }
 
-    const bundleFilesTask = BundleFilesTask.fromContext(context);
+    setTimeout(() => {
+      const empty = queue.isEmpty();
 
-    if (bundleFilesTask !== null) {
-      queue.addTask(bundleFilesTask);
-    }
+      if (empty) {
+        const bundleFilesTask = BundleFilesTask.fromContext(context);
+
+        if (bundleFilesTask !== null) {
+          queue.addTask(bundleFilesTask);
+        }
+      }
+    }, pause);
   }
 }
 
