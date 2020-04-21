@@ -11,14 +11,8 @@ const { TRANSFORM_FAILED_MESSAGE } = messages,
 function transformFile(filePath, context, done) {
   const { babel, babelOptions, sourceDirectoryPath, targetDirectoryPath } = context,
         { transform } = babel,
-        sourceFilePath = combinePaths(sourceDirectoryPath, filePath);  ///
-
-  console.log(sourceDirectoryPath)
-  console.log(filePath)
-  console.log(sourceFilePath)
-
-
-  const sourceFileContent = readFile(sourceFilePath),
+        sourceFilePath = combinePaths(sourceDirectoryPath, filePath),  ///
+        sourceFileContent = readFile(sourceFilePath),
         fileName = fileNameFromFilePath(filePath),
         sourceFileName = fileName,  ///
         source = sourceFileContent,  ///
