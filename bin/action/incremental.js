@@ -7,8 +7,7 @@ const watch = require('../watch'),
       optionsCallback = require('../callback/options'),
       browserifyCallback = require('../callback/browserify');
 
-const { exit } = process,
-      { INCREMENTAL_BUILD_FAILED_MESSAGE } = messages;
+const { INCREMENTAL_BUILD_FAILED_MESSAGE } = messages;
 
 function incremental(options) {
   const callbacks = [
@@ -24,7 +23,7 @@ function incremental(options) {
     if (!success) {
       console.log(INCREMENTAL_BUILD_FAILED_MESSAGE);
 
-      exit(1);
+      process.exit(1);
     }
 
     watch(context);

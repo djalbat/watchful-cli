@@ -6,12 +6,11 @@ const necessary = require('necessary'),
 const main = require('./bin/main'),
       abbreviations = require('./bin/abbreviations');
 
-const { argv } = process,
-      { parseArgv } = argumentative,
+const { parseArgv } = argumentative,
       { arrayUtilities } = necessary,
       { first, second } = arrayUtilities;
 
-const { commands, options } = parseArgv(argv, abbreviations),
+const { commands, options } = parseArgv(process.argv, abbreviations),
       firstCommand = first(commands),
       secondCommand = second(commands),
       command = firstCommand || null, ///

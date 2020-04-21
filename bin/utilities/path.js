@@ -4,12 +4,11 @@ const necessary = require('necessary');
 
 const constants = require('../constants');
 
-const { cwd } = process,
-  { DELIMITER } = constants,
-  { pathUtilities } = necessary,
-  { isPathName, bottommostNameFromPath } = pathUtilities;
+const { DELIMITER } = constants,
+      { pathUtilities } = necessary,
+      { isPathName, bottommostNameFromPath } = pathUtilities;
 
-const currentWorkingDirectoryPath = cwd(),
+const currentWorkingDirectoryPath = process.cwd(),
       currentWorkingDirectoryPathLength = currentWorkingDirectoryPath.length;
 
 function pathFromOption(option) {

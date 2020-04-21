@@ -9,8 +9,7 @@ const action = require('../action'),
       transformFilesCallback = require('../callback/transformFiles'),
       retrieveFilePathsCallback = require('../callback/retrieveFilePaths');
 
-const { exit } = process,
-      { BATCH_BUILD_FAILED_MESSAGE } = messages;
+const { BATCH_BUILD_FAILED_MESSAGE } = messages;
 
 function batch(options) {
   const callbacks = [
@@ -29,10 +28,10 @@ function batch(options) {
     if (!success) {
       console.log(BATCH_BUILD_FAILED_MESSAGE);
 
-      exit(1);
+      process.exit(1);
     }
 
-    exit(0);
+    process.exit(0);
   }, context);
 }
 

@@ -4,8 +4,7 @@ const messages = require('../messages'),
       pathUtilities = require('../utilities/path'),
       fileSystemUtilities = require('../utilities/fileSystem');
 
-const { stdout } = process,
-      { combinePaths } = pathUtilities,
+const { combinePaths } = pathUtilities,
       { BUNDLE_FAILED_MESSAGE } = messages,
       { writeFileEx, createParentDirectory } = fileSystemUtilities;
 
@@ -35,7 +34,7 @@ function bundleFiles(entryFilePath, context, done) {
     const { bundleFilePath } = context;
 
     if (!bundleFilePath) {
-      stdout.write(buffer);
+      process.stdout.write(buffer);
     } else {
       createParentDirectory(bundleFilePath);
 
