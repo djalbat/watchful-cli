@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 function whilst(callback, done, context) {
   let count = -1;

@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
-const watch = require('../watch'),
-      action = require('../action'),
-      messages = require('../messages'),
-      babelCallback = require('../callback/babel'),
-      optionsCallback = require('../callback/options'),
-      browserifyCallback = require('../callback/browserify');
+const watch = require("../watch"),
+      action = require("../action"),
+      messages = require("../messages"),
+      babelCallback = require("../callback/babel"),
+      optionsCallback = require("../callback/options"),
+      browserifyCallback = require("../callback/browserify");
 
 const { INCREMENTAL_BUILD_FAILED_MESSAGE } = messages;
 

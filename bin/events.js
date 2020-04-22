@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const ADD_EVENT = 'add',
-      CHANGE_EVENT = 'change',
-      UNLINK_EVENT = 'unlink',
-      UNLINK_DIR_EVENT = 'unlinkDir';
+const ADD_EVENT = "add",
+      CHANGE_EVENT = "change",
+      UNLINK_EVENT = "unlink",
+      UNLINK_DIR_EVENT = "unlinkDir";
 
 module.exports = {
   ADD_EVENT,

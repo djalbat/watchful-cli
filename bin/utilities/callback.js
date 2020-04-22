@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const necessary = require('necessary');
+const necessary = require("necessary");
 
 const { asynchronousUtilities } = necessary,
       { whilst } = asynchronousUtilities;

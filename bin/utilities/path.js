@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const necessary = require('necessary');
+const necessary = require("necessary");
 
-const constants = require('../constants');
+const constants = require("../constants");
 
 const { DELIMITER } = constants,
       { pathUtilities } = necessary,
@@ -23,7 +23,7 @@ function pathFromOption(option) {
   } else if (optionAbsolutePath) {
     ///
   } else if (optionAllowedRelativePath) {
-    path = option.replace(/^\.\//, '').replace(/\/$/, '');
+    path = option.replace(/^\.\//, "").replace(/\/$/, "");
   } else if (optionForbiddenRelativePath) {
     path = null;
   } else {

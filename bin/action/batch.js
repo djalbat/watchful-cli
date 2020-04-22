@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 
-const action = require('../action'),
-      messages = require('../messages'),
-      babelCallback = require('../callback/babel'),
-      optionsCallback = require('../callback/options'),
-      browserifyCallback = require('../callback/browserify'),
-      bundleFilesCallback = require('../callback/bundleFiles'),
-      transformFilesCallback = require('../callback/transformFiles'),
-      retrieveFilePathsCallback = require('../callback/retrieveFilePaths');
+const action = require("../action"),
+      messages = require("../messages"),
+      babelCallback = require("../callback/babel"),
+      optionsCallback = require("../callback/options"),
+      browserifyCallback = require("../callback/browserify"),
+      bundleFilesCallback = require("../callback/bundleFiles"),
+      transformFilesCallback = require("../callback/transformFiles"),
+      retrieveFilePathsCallback = require("../callback/retrieveFilePaths");
 
 const { BATCH_BUILD_FAILED_MESSAGE } = messages;
 

@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
-const commands = require('./commands'),
-      options = require('./options'),
-      help = require('./action/help'),
-      batch = require('./action/batch'),
-      version = require('./action/version'),
-      incremental = require('./action/incremental');
+const commands = require("./commands"),
+      options = require("./options"),
+      help = require("./action/help"),
+      batch = require("./action/batch"),
+      version = require("./action/version"),
+      incremental = require("./action/incremental");
 
 const { HELP_OPTION, VERSION_OPTION } = options,
       { HELP_COMMAND, BATCH_COMMAND, VERSION_COMMAND, INCREMENTAL_COMMAND } = commands;

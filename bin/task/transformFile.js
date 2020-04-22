@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const Task = require('../task'),
-      pathUtilities = require('../utilities/path'),
-      transformUtilities = require('../utilities/transform');
+const Task = require("../task"),
+      pathUtilities = require("../utilities/path"),
+      transformUtilities = require("../utilities/transform");
 
 const { transformFile } = transformUtilities,
       { pathWithoutDirectoryPathFromPathAndDirectoryPath } = pathUtilities;

@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const fs = require('fs'),
-      necessary = require('necessary');
+const fs = require("fs"),
+      necessary = require("necessary");
 
-const pathUtilities = require('../utilities/path');
+const pathUtilities = require("../utilities/path");
 
 const { fileSystemUtilities } = necessary,
       { pathWithoutBottommostNameFromPath } = pathUtilities,
@@ -17,7 +17,7 @@ function deleteFile(filePath, done) {
 }
 
 function writeFileEx(filePath, buffer) {
-  const file = openSync(filePath, 'w+');
+  const file = openSync(filePath, "w+");
 
   writeSync(file, buffer);
 }
@@ -33,7 +33,7 @@ function deleteDirectory(directoryPath, done) {
 function createParentDirectory(filePath) {
   const filePathWithoutBottommostName = pathWithoutBottommostNameFromPath(filePath);
 
-  if ((filePathWithoutBottommostName !== '.') && (filePathWithoutBottommostName !== null)) {
+  if ((filePathWithoutBottommostName !== ".") && (filePathWithoutBottommostName !== null)) {
     const parentDirectoryPath = filePathWithoutBottommostName,  ///
           parentDirectoryExists = checkDirectoryExists(parentDirectoryPath);
 

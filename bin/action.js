@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const callbackUtilities = require('./utilities/callback');
+const callbackUtilities = require("./utilities/callback");
 
 const { executeCallbacks } = callbackUtilities;
 

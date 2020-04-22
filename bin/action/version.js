@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const constants = require('../constants'),
-      packageJSONUtilities = require('../utilities/packageJSON');
+const constants = require("../constants"),
+      packageJSONUtilities = require("../utilities/packageJSON");
 
 const { WATCHFUL_CLI } = constants,
       { getPackageVersion } = packageJSONUtilities;

@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const messages = require('../messages'),
-      pathUtilities = require('../utilities/path');
+const messages = require("../messages"),
+      pathUtilities = require("../utilities/path");
 
 const { pathFromOption } = pathUtilities,
       { NO_ENTRY_FILE_SPECIFIED_MESSAGE,
@@ -180,7 +180,7 @@ function babelOptionsFromOptions(options) {
         { debug } = options;
 
   if (debug) {
-    const sourceMaps = 'inline';
+    const sourceMaps = "inline";
 
     Object.assign(babelOptions, {
       sourceMaps

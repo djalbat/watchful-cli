@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 function pathFromOption(option) {
   let path = null;
@@ -12,7 +12,7 @@ function pathFromOption(option) {
   } else if (optionAbsolutePath) {
     ///
   } else if (optionAllowedRelativePath) {
-    path = option.replace(/^\.\//, '').replace(/\/$/, '');
+    path = option.replace(/^\.\//, "").replace(/\/$/, "");
   } else if (optionForbiddenRelativePath) {
     path = null;
   } else {

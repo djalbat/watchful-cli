@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const options = require('./options');
+const options = require("./options");
 
 const { HELP_OPTION,
         PAUSE_OPTION,

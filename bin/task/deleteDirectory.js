@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const Task = require('../task'),
-      pathUtilities = require('../utilities/path'),
-      fileSystemUtilities = require('../utilities/fileSystem');
+const Task = require("../task"),
+      pathUtilities = require("../utilities/path"),
+      fileSystemUtilities = require("../utilities/fileSystem");
 
 const { deleteDirectory, checkDirectoryExists } = fileSystemUtilities,
       { combinePaths, pathWithoutDirectoryPathFromPathAndDirectoryPath } = pathUtilities;

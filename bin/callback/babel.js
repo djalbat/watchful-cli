@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const path = require('path');
+const path = require("path");
 
-const messages = require('../messages'),
-      constants = require('../constants');
+const messages = require("../messages"),
+      constants = require("../constants");
 
 const { resolve } = path,
       { BABEL_CORE_PATH } = constants,

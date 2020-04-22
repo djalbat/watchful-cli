@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const bundleUtilities = require('../utilities/bundle');
+const bundleUtilities = require("../utilities/bundle");
 
 const { bundleFiles } = bundleUtilities;
 

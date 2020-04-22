@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const HELP_COMMAND = 'help',
-      BATCH_COMMAND = 'batch',
-      VERSION_COMMAND = 'version',
-      INCREMENTAL_COMMAND = 'incremental';
+const HELP_COMMAND = "help",
+      BATCH_COMMAND = "batch",
+      VERSION_COMMAND = "version",
+      INCREMENTAL_COMMAND = "incremental";
 
 module.exports = {
   HELP_COMMAND,

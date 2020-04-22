@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const necessary = require('necessary');
+const necessary = require("necessary");
 
-const constants = require('../constants'),
-      fileSystemUtilities = require('../utilities/fileSystem');
+const constants = require("../constants"),
+      fileSystemUtilities = require("../utilities/fileSystem");
 
 const { arrayUtilities } = necessary,
       { second } = arrayUtilities,

@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const Task = require('../task'),
-      bundleUtilities = require('../utilities/bundle');
+const Task = require("../task"),
+      bundleUtilities = require("../utilities/bundle");
 
 const { bundleFiles } = bundleUtilities;
 

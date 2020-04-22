@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const actions = require('./actions');
+const actions = require("./actions");
 
 function main(command, argument, options) {
   actions(command, argument, options);

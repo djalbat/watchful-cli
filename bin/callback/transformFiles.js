@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const necessary = require('necessary');
+const necessary = require("necessary");
 
-const transformUtilities = require('../utilities/transform');
+const transformUtilities = require("../utilities/transform");
 
 const { asynchronousUtilities } = necessary,
       { forEach } = asynchronousUtilities,

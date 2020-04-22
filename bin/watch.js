@@ -1,15 +1,15 @@
-'use strict';
+"use strict";
 
-const chokidar = require('chokidar');
+const chokidar = require("chokidar");
 
-const Queue = require('./queue'),
-      events = require('./events'),
-      constants = require('./constants'),
-      pathUtilities = require('./utilities/path'),
-      DeleteFileTask = require('./task/deleteFile'),
-      BundleFilesTask = require('./task/bundleFiles'),
-      TransformFileTask = require('./task/transformFile'),
-      DeleteDirectoryTask = require('./task/deleteDirectory');
+const Queue = require("./queue"),
+      events = require("./events"),
+      constants = require("./constants"),
+      pathUtilities = require("./utilities/path"),
+      DeleteFileTask = require("./task/deleteFile"),
+      BundleFilesTask = require("./task/bundleFiles"),
+      TransformFileTask = require("./task/transformFile"),
+      DeleteDirectoryTask = require("./task/deleteDirectory");
 
 const { isPathFullQualifiedPath, pathFromFullyQualifiedPath } = pathUtilities,
       { ADD_EVENT, CHANGE_EVENT, UNLINK_EVENT, UNLINK_DIR_EVENT } = events,
@@ -23,12 +23,12 @@ function watch(context) {
         watcher = chokidar.watch(watchPattern),
         queue = Queue.fromEmptyHandler(queueEmptyHandler);
 
-  watcher.on('ready', () => {
+  watcher.on("ready", () => {
     if (!quietly) {
       console.log(`Watching '${watchPattern}'.`);
     }
 
-    watcher.on('all', (event, path) => {
+    watcher.on("all", (event, path) => {
       const pathFullyQualifiedPath = isPathFullQualifiedPath(path);
 
       if (pathFullyQualifiedPath) {

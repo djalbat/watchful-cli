@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const messages = require('../messages'),
-      pathUtilities = require('../utilities/path'),
-      fileSystemUtilities = require('../utilities/fileSystem');
+const messages = require("../messages"),
+      pathUtilities = require("../utilities/path"),
+      fileSystemUtilities = require("../utilities/fileSystem");
 
 const { TRANSFORM_FAILED_MESSAGE } = messages,
       { combinePaths, fileNameFromFilePath } = pathUtilities,
