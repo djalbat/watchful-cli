@@ -28,6 +28,8 @@ If you would like to contribute or would simply like to have a look at the code,
     
 ## Usage
 
+Watchful has the following commands and options:
+
 ```
   watchful [<command>] [<options>]
 
