@@ -66,17 +66,19 @@ Options:
   --source-directory|-s                          Source directory path
 ```
 
-There are two main use cases, namely building a package and building a bundle. In order to build a package, you must supply the source and lib directories:
+There are two main use cases, namely building a package and building a bundle.
+
+In order to build a package, you must supply source and target directories, the latter in the guise of a lib directory:
 
     watchful batch --source-directory=es6/ --lib-directory=./lib
     
-This will transpile all the JavaScript files in the `es6` directory and place them in the `lib` director while honouring sub-directories. Note that Watchful is tolerant of leading and trailing delimiters. Nonetheless, it expects paths to be relative ones pointing to folders in the project directory. Relative paths outside of the project directory or any absolute paths will result in errors.
+This will transpile all the JavaScript files in the `es6` directory and place them in the `lib` directory while honouring sub-directories. Note that Watchful is tolerant of leading and trailing delimiters. Nonetheless, it expects paths to be relative ones pointing to folders in the project directory. Relative paths outside of the project directory or any absolute paths will result in errors.
 
-In order to build a bundle, you must supply the source directory and either a temp directory or a lib directory together with an entry file for the bundler:
+In order to build a bundle, you must supply the source directory and target directories together with an entry file for the bundler. The target directory can be either a temp directory or a lib directory:
 
     watchful batch --source-directory=es6/ --temp-directory=./tmp --enty-file=main.js
 
-The path to the entry file is taken to be relative to the temp directory, not the project directory. You can also optionally supply a path to the bundle file by way of the `--bundle-file` option, otherwise the output is piped to `stdout`.
+The path to the entry file is taken to be relative to the target directory, not the project directory. You can also optionally supply a path to the bundle file by way of the `--bundle-file` option, otherwise the output is piped to `stdout`. Either the temp or the lib directory can be given as the target directory, by the way, because there may be times when you want to both build a bundle and build a package.
 
 ### Running by way of npm scripts
 
