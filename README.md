@@ -72,7 +72,7 @@ There are two main use cases, namely building a package and building a bundle. I
     
 This will transpile all the JavaScript files in the `es6` directory and place them in the `lib` director while honouring sub-directories. Note that Watchful is tolerant of leading and trailing delimiters. Nonetheless, it expects paths to be relative ones pointing to folders in the project directory. Relative paths outside of the project directory or any absolute paths will result in errors.
 
-In order to build a bundle, you must supply the source and temp directories together with an entry file for the bundler:
+In order to build a bundle, you must supply the source directory and either a temp directory or a lib directory together with an entry file for the bundler:
 
     watchful batch --source-directory=es6/ --temp-directory=./tmp --enty-file=main.js
 
