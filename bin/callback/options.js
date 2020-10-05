@@ -5,7 +5,6 @@ const messages = require("../messages"),
 
 const { pathFromOption } = pathUtilities,
       { NO_ENTRY_FILE_SPECIFIED_MESSAGE,
-        NO_TEMP_DIRECTORY_SPECIFIED_MESSAGE,
         NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE,
         BOTH_LIB_AND_TEMP_DIRECTORIES_SPECIFIED_MESSAGE,
         NEITHER_LIB_NOR_TEMP_DIRECTORY_SPECIFIED_MESSAGE,
@@ -13,7 +12,8 @@ const { pathFromOption } = pathUtilities,
         BUNDLE_FILE_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE,
         LIB_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE,
         TEMP_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE,
-        SOURCE_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE } = messages;
+        SOURCE_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE,
+        ENTRY_FILE_BUT_NEITHER_LIB_NOR_TEMP_DIRECTORY_SPECIFIED_MESSAGE } = messages;
 
 function optionsCallback(proceed, abort, context) {
   const { options } = context,
@@ -60,8 +60,8 @@ function optionsCallback(proceed, abort, context) {
   }
 
   if (entryFile) {
-    if (!tempDirectory) {
-      console.log(NO_TEMP_DIRECTORY_SPECIFIED_MESSAGE);
+    if (!tempDirectory && !libDirectory) {
+      console.log(ENTRY_FILE_BUT_NEITHER_LIB_NOR_TEMP_DIRECTORY_SPECIFIED_MESSAGE);
 
       abort();
 
