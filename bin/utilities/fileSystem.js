@@ -7,7 +7,7 @@ const pathUtilities = require("../utilities/path");
 
 const { fileSystemUtilities } = necessary,
       { pathWithoutBottommostNameFromPath } = pathUtilities,
-      { openSync, writeSync, rmdirSync, unlinkSync, unlink } = fs,
+      { openSync, writeSync, rmdirSync, unlinkSync } = fs,
       { readDirectory, isEntryDirectory, createDirectory, checkDirectoryExists } = fileSystemUtilities;
 
 function deleteFile(filePath, done) {
@@ -43,7 +43,7 @@ function createParentDirectory(filePath) {
   }
 }
 
-module.exports = Object.assign(fileSystemUtilities, {
+module.exports = Object.assign({}, fileSystemUtilities, {
   deleteFile,
   writeFileEx,
   deleteDirectory,

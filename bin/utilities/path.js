@@ -70,7 +70,7 @@ function pathWithoutDirectoryPathFromPathAndDirectoryPath(path, directoryPath) {
   return pathWithoutDirectoryPath;
 }
 
-module.exports = Object.assign(pathUtilities, {
+module.exports = Object.assign({}, pathUtilities, {
   pathFromOption,
   fileNameFromFilePath,
   isPathFullQualifiedPath,

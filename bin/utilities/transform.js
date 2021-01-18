@@ -1,26 +1,27 @@
 "use strict";
 
+const path = require("path");
+
 const messages = require("../messages"),
       pathUtilities = require("../utilities/path"),
       fileSystemUtilities = require("../utilities/fileSystem");
 
 const { TRANSFORM_FAILED_MESSAGE } = messages,
-      { combinePaths, fileNameFromFilePath } = pathUtilities,
-      { readFile, writeFile, createParentDirectory } = fileSystemUtilities;
+      { writeFile, createParentDirectory } = fileSystemUtilities,
+      { combinePaths, pathWithoutBottommostNameFromPath } = pathUtilities;
 
 function transformFile(filePath, context, done) {
   const { babel, babelOptions, sourceDirectoryPath, targetDirectoryPath } = context,
-        { transform } = babel,
         sourceFilePath = combinePaths(sourceDirectoryPath, filePath),  ///
-        sourceFileContent = readFile(sourceFilePath),
-        fileName = fileNameFromFilePath(filePath),
-        sourceFileName = fileName,  ///
-        source = sourceFileContent,  ///
+        targetFilePath = combinePaths(targetDirectoryPath, filePath),  ///
+        targetFilePathWithoutBottommostName = pathWithoutBottommostNameFromPath(targetFilePath),
+        relativeSourceFilePath = path.relative(targetFilePathWithoutBottommostName, sourceFilePath),
+        sourceFileName = relativeSourceFilePath,  ///
         options = Object.assign(babelOptions, {
           sourceFileName
         });
 
-  transform(source, options, (error, result) => {
+  babel.transformFile(sourceFilePath, options, (error, result) => {
     if (error) {
       const { message } = error;
 
@@ -36,12 +37,11 @@ function transformFile(filePath, context, done) {
     }
 
     const { code } = result,
-          targetFilPath = combinePaths(targetDirectoryPath, filePath), ///
           targetFileContent = code; ///
 
-    createParentDirectory(targetFilPath);
+    createParentDirectory(targetFilePath);
 
-    writeFile(targetFilPath, targetFileContent);
+    writeFile(targetFilePath, targetFileContent);
 
     const { quietly } = context;
 
