@@ -1,9 +1,11 @@
 "use strict";
 
 const messages = require("../messages"),
+      constants = require("../constants"),
       pathUtilities = require("../utilities/path");
 
 const { pathFromOption } = pathUtilities,
+      { DEFAULT_PAUSE, DEFAULT_QUIETLY, DEFAULT_METRICS } = constants,
       { NO_ENTRY_FILE_SPECIFIED_MESSAGE,
         NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE,
         BOTH_LIB_AND_TEMP_DIRECTORIES_SPECIFIED_MESSAGE,
@@ -17,9 +19,9 @@ const { pathFromOption } = pathUtilities,
 
 function optionsCallback(proceed, abort, context) {
   const { options } = context,
-        { pause,
-          quietly,
-          metrics,
+        { pause = DEFAULT_PAUSE,
+          quietly = DEFAULT_QUIETLY,
+          metrics = DEFAULT_METRICS,
           entryFile,
           bundleFile,
           libDirectory,

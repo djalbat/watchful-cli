@@ -1,16 +1,6 @@
 "use strict";
 
-const constants = require("../constants");
-
-const { DEFAULT_METRICS } = constants;
-
 function startMetric(context) {
-  const { metrics = DEFAULT_METRICS } = context;
-
-  if (!metrics) {
-    return;
-  }
-
   const now = Date.now();
 
   Object.assign(context, {
@@ -19,12 +9,6 @@ function startMetric(context) {
 }
 
 function endMetric(context) {
-  const { metrics = DEFAULT_METRICS } = context;
-
-  if (!metrics) {
-    return;
-  }
-
   let { now } = context;
 
   const then = now; ///

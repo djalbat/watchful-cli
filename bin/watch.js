@@ -6,20 +6,33 @@ const Queue = require("./queue"),
       events = require("./events"),
       constants = require("./constants"),
       pathUtilities = require("./utilities/path"),
-      DeleteFileTask = require("./task/deleteFile"),
       BundleFilesTask = require("./task/bundleFiles"),
-      TransfileFileTask = require("./task/transpileFile"),
-      DeleteDirectoryTask = require("./task/deleteDirectory");
+      handlerUtilities = require("./utilities/handler"),
+      metricsUtilities = require("./utilities/metrics");
 
-const { isPathFullQualifiedPath, pathFromFullyQualifiedPath } = pathUtilities,
-      { DEFAULT_PAUSE, DEFAULT_QUIETLY, SOURCE_DIRECTORY_WATCH_PATTERN } = constants,
-      { ADD_EVENT, ALL_EVENT, READY_EVENT, CHANGE_EVENT, UNLINK_EVENT, UNLINK_DIR_EVENT } = events;
+const { ALL_EVENT, READY_EVENT } = events,
+      { startMetric, endMetric } = metricsUtilities,
+      { SOURCE_DIRECTORY_WATCH_PATTERN } = constants,
+      { eventHandler, queueEmptyHandler } = handlerUtilities,
+      { isPathFullQualifiedPath, pathFromFullyQualifiedPath } = pathUtilities;
 
 function watch(context) {
-  const { pause = DEFAULT_PAUSE, quietly = DEFAULT_QUIETLY, sourceDirectoryPath } = context,
+  const { quietly, metrics, sourceDirectoryPath } = context,
         watchPattern = `${sourceDirectoryPath}${SOURCE_DIRECTORY_WATCH_PATTERN}`,
         watcher = chokidar.watch(watchPattern),
-        queue = Queue.fromEmptyHandler(queueEmptyHandler);
+        queue = Queue.fromEmptyHandler((previousTask) => {
+          if (previousTask instanceof BundleFilesTask) {
+            return;
+          }
+
+          if (metrics) {
+            const seconds = endMetric(context);
+
+            console.log(`Transpiled files in ${seconds} seconds.`);
+          }
+
+          queueEmptyHandler(queue, context);
+        });
 
   watcher.on(READY_EVENT, () => {
     if (!quietly) {
@@ -35,71 +48,17 @@ function watch(context) {
         path = pathFromFullyQualifiedPath(fullyQualifiedPath);
       }
 
+      if (metrics) {
+        const empty = queue.isEmpty();
+
+        if (empty) {
+          startMetric(context);
+        }
+      }
+
       eventHandler(event, path, queue, context);
     });
   });
-
-  function queueEmptyHandler(previousTask) {
-    if (previousTask instanceof BundleFilesTask) {
-      return;
-    }
-
-    setTimeout(() => {
-      const empty = queue.isEmpty();
-
-      if (empty) {
-        const bundleFilesTask = BundleFilesTask.fromContext(context);
-
-        if (bundleFilesTask !== null) {
-          queue.addTask(bundleFilesTask);
-        }
-      }
-    }, pause);
-  }
 }
 
 module.exports = watch;
-
-function addOrChangeEventHandler(path, queue, context) {
-  const transpileFileTask = TransfileFileTask.fromPathAndContext(path, context);
-
-  if (transpileFileTask !== null) {
-    queue.addTask(transpileFileTask);
-  }
-}
-
-function unlinkDirEventHandler(path, queue, context) {
-  const deleteDirectoryTask = DeleteDirectoryTask.fromPathAndContext(path, context);
-
-  if (deleteDirectoryTask !== null) {
-    queue.addTask(deleteDirectoryTask);
-  }
-}
-
-function unlinkEventHandler(path, queue, context) {
-  const deleteFileTask = DeleteFileTask.fromPathAndContext(path, context);
-
-  if (deleteFileTask !== null) {
-    queue.addTask(deleteFileTask);
-  }
-}
-
-function eventHandler(event, path, queue, context) {
-  switch (event) {
-    case ADD_EVENT :
-    case CHANGE_EVENT :
-      addOrChangeEventHandler(path, queue, context);
-
-      break;
-
-    case UNLINK_DIR_EVENT :
-      unlinkDirEventHandler(path, queue, context);
-
-      break;
-
-    case UNLINK_EVENT :
-      unlinkEventHandler(path, queue, context);
-
-      break;
-  }
-}

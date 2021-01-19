@@ -1,10 +1,8 @@
 "use strict";
 
-const bundleUtilities = require("../utilities/bundle"),
-      metricsUtilities = require("../utilities/metrics");
+const bundleUtilities = require("../utilities/bundle");
 
-const { bundleFiles } = bundleUtilities,
-      { startMetric, endMetric } = metricsUtilities;
+const { bundleFiles } = bundleUtilities;
 
 function bundleFilesCallback(proceed, abort, context) {
   const { entryFilePath } = context;
@@ -15,13 +13,7 @@ function bundleFilesCallback(proceed, abort, context) {
     return;
   }
 
-  startMetric(context);
-
   bundleFiles(entryFilePath, context, () => {
-    const seconds = endMetric(context);
-
-    console.log(`Bundled files in ${seconds} seconds.`);
-
     proceed();
   });
 }

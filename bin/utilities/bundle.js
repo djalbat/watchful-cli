@@ -2,10 +2,12 @@
 
 const messages = require("../messages"),
       pathUtilities = require("../utilities/path"),
+      metricsUtilities = require("../utilities/metrics"),
       fileSystemUtilities = require("../utilities/fileSystem");
 
 const { combinePaths } = pathUtilities,
       { BUNDLE_FAILED_MESSAGE } = messages,
+      { startMetric, endMetric } = metricsUtilities,
       { writeFileEx, createParentDirectory } = fileSystemUtilities;
 
 function bundleFiles(entryFilePath, context, done) {
@@ -13,6 +15,8 @@ function bundleFiles(entryFilePath, context, done) {
         targetEntryFilePath = combinePaths(targetDirectoryPath, entryFilePath),
         options = browserifyOptions,  ///
         bundler = browserify(options); ///
+
+  startMetric(context);
 
   bundler.add(targetEntryFilePath);
 
@@ -40,10 +44,16 @@ function bundleFiles(entryFilePath, context, done) {
 
       writeFileEx(bundleFilePath, buffer);
 
-      const { quietly } = context;
+      const { metrics, quietly } = context;
 
       if (!quietly) {
         console.log(`Written bundle to '${bundleFilePath}'.`);
+      }
+
+      if (metrics) {
+        const seconds = endMetric(context);
+
+        console.log(`Bundled files in ${seconds} seconds.`);
       }
     }
 
