@@ -2,17 +2,15 @@
 
 const necessary = require("necessary");
 
-const messages = require("../messages"),
-      metricsUtilities = require("../utilities/metrics"),
-      transformUtilities = require("../utilities/transform");
+const metricsUtilities = require("../utilities/metrics"),
+      transpileUtilities = require("../utilities/transpile");
 
 const { asynchronousUtilities } = necessary,
       { forEach } = asynchronousUtilities,
-      { transformFile } = transformUtilities,
-      { startMetric, endMetric } = metricsUtilities,
-      { TRANSPILED_METRIC_MESSAGE } = messages;
+      { transpileFile } = transpileUtilities,
+      { startMetric, endMetric } = metricsUtilities;
 
-function transformFilesCallback(proceed, abort, context) {
+function transpileFilesCallback(proceed, abort, context) {
   const { filePaths } = context,
         filePathsLength = filePaths.length,
         length = filePathsLength, ///
@@ -24,16 +22,16 @@ function transformFilesCallback(proceed, abort, context) {
 
   startMetric(context);
 
-  forEach(filePaths, transformFileCallback, done, context);
+  forEach(filePaths, transpileFileCallback, done, context);
 
   function done() {
     const { count } = context,
           success = (count === length);
 
     if (success) {
-      const message = TRANSPILED_METRIC_MESSAGE;
+      const seconds = endMetric(context);
 
-      endMetric(context, message);
+      console.log(`Transpiled files in ${seconds} seconds.`);
     }
 
     delete context.count;
@@ -44,10 +42,10 @@ function transformFilesCallback(proceed, abort, context) {
   }
 }
 
-module.exports = transformFilesCallback;
+module.exports = transpileFilesCallback;
 
-function transformFileCallback(filePath, next, done, context) {
-  transformFile(filePath, context, () => {
+function transpileFileCallback(filePath, next, done, context) {
+  transpileFile(filePath, context, () => {
     let { count } = context;
 
     count++;

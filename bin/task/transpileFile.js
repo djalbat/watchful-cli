@@ -2,25 +2,25 @@
 
 const Task = require("../task"),
       pathUtilities = require("../utilities/path"),
-      transformUtilities = require("../utilities/transform");
+      transpileUtilities = require("../utilities/transpile");
 
-const { transformFile } = transformUtilities,
+const { transpileFile } = transpileUtilities,
       { pathWithoutDirectoryPathFromPathAndDirectoryPath } = pathUtilities;
 
-class TransformFileTask extends Task {
+class TranspileFileTask extends Task {
   static fromPathAndContext(path, context) {
-    let transformFileTask = null;
+    let transpileFileTask = null;
 
     const { sourceDirectoryPath } = context,
           sourceFilePath = path,  ///
           filePath = pathWithoutDirectoryPathFromPathAndDirectoryPath(sourceFilePath, sourceDirectoryPath); ///
 
-    transformFileTask = new TransformFileTask(transformFile, filePath, context, () => {
+    transpileFileTask = new TranspileFileTask(transpileFile, filePath, context, () => {
       ///
     });
 
-    return transformFileTask;
+    return transpileFileTask;
   }
 }
 
-module.exports = TransformFileTask;
+module.exports = TranspileFileTask;

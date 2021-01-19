@@ -8,15 +8,15 @@ const Queue = require("./queue"),
       pathUtilities = require("./utilities/path"),
       DeleteFileTask = require("./task/deleteFile"),
       BundleFilesTask = require("./task/bundleFiles"),
-      TransformFileTask = require("./task/transformFile"),
+      TransfileFileTask = require("./task/transpileFile"),
       DeleteDirectoryTask = require("./task/deleteDirectory");
 
 const { isPathFullQualifiedPath, pathFromFullyQualifiedPath } = pathUtilities,
-      { ADD_EVENT, ALL_EVENT, READY_EVENT, CHANGE_EVENT, UNLINK_EVENT, UNLINK_DIR_EVENT } = events,
-      { DEFAULT_PAUSE, DEFAULT_QUIETLY, DEFAULT_METRICS, SOURCE_DIRECTORY_WATCH_PATTERN } = constants;
+      { DEFAULT_PAUSE, DEFAULT_QUIETLY, SOURCE_DIRECTORY_WATCH_PATTERN } = constants,
+      { ADD_EVENT, ALL_EVENT, READY_EVENT, CHANGE_EVENT, UNLINK_EVENT, UNLINK_DIR_EVENT } = events;
 
 function watch(context) {
-  const { pause = DEFAULT_PAUSE, quietly = DEFAULT_QUIETLY, metrics = DEFAULT_METRICS, sourceDirectoryPath } = context,
+  const { pause = DEFAULT_PAUSE, quietly = DEFAULT_QUIETLY, sourceDirectoryPath } = context,
         watchPattern = `${sourceDirectoryPath}${SOURCE_DIRECTORY_WATCH_PATTERN}`,
         watcher = chokidar.watch(watchPattern),
         queue = Queue.fromEmptyHandler(queueEmptyHandler);
@@ -61,10 +61,10 @@ function watch(context) {
 module.exports = watch;
 
 function addOrChangeEventHandler(path, queue, context) {
-  const transformFileTask = TransformFileTask.fromPathAndContext(path, context);
+  const transpileFileTask = TransfileFileTask.fromPathAndContext(path, context);
 
-  if (transformFileTask !== null) {
-    queue.addTask(transformFileTask);
+  if (transpileFileTask !== null) {
+    queue.addTask(transpileFileTask);
   }
 }
 

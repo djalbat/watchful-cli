@@ -1,7 +1,11 @@
 "use strict";
 
+const constants = require("../constants");
+
+const { DEFAULT_METRICS } = constants;
+
 function startMetric(context) {
-  const { metrics } = context;
+  const { metrics = DEFAULT_METRICS } = context;
 
   if (!metrics) {
     return;
@@ -14,8 +18,8 @@ function startMetric(context) {
   });
 }
 
-function endMetric(context, message) {
-  const { metrics } = context;
+function endMetric(context) {
+  const { metrics = DEFAULT_METRICS } = context;
 
   if (!metrics) {
     return;
@@ -29,11 +33,9 @@ function endMetric(context, message) {
 
   const seconds = Math.floor((now - then) / 10) / 100;
 
-  message = message.replace("${seconds}", seconds); ///
-
-  console.log(message);
-
   delete context.now;
+
+  return seconds;
 }
 
 module.exports = {

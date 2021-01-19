@@ -10,7 +10,7 @@ const { TRANSFORM_FAILED_MESSAGE } = messages,
       { writeFile, createParentDirectory } = fileSystemUtilities,
       { combinePaths, pathWithoutBottommostNameFromPath } = pathUtilities;
 
-function transformFile(filePath, context, done) {
+function transpileFile(filePath, context, done) {
   const { babel, babelOptions, sourceDirectoryPath, targetDirectoryPath } = context,
         sourceFilePath = combinePaths(sourceDirectoryPath, filePath),  ///
         targetFilePath = combinePaths(targetDirectoryPath, filePath),  ///
@@ -46,7 +46,7 @@ function transformFile(filePath, context, done) {
     const { quietly } = context;
 
     if (!quietly) {
-      console.log(`Transformed '${sourceFilePath}'.`);
+      console.log(`Transpiled '${sourceFilePath}'.`);
     }
 
     done();
@@ -54,5 +54,5 @@ function transformFile(filePath, context, done) {
 }
 
 module.exports = {
-  transformFile
+  transpileFile
 };
