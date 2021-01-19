@@ -1,8 +1,12 @@
 "use strict";
 
-const bundleUtilities = require("../utilities/bundle");
+const messages = require("../messages"),
+      bundleUtilities = require("../utilities/bundle"),
+      metricsUtilities = require("../utilities/metrics");
 
-const { bundleFiles } = bundleUtilities;
+const { bundleFiles } = bundleUtilities,
+      { BUNDLED_METRIC_MESSAGE } = messages,
+      { startMetric, endMetric } = metricsUtilities;
 
 function bundleFilesCallback(proceed, abort, context) {
   const { entryFilePath } = context;
@@ -13,7 +17,13 @@ function bundleFilesCallback(proceed, abort, context) {
     return;
   }
 
+  startMetric(context);
+
   bundleFiles(entryFilePath, context, () => {
+    const message = BUNDLED_METRIC_MESSAGE;
+
+    endMetric(context, message);
+
     proceed();
   });
 }

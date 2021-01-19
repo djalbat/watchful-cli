@@ -2,11 +2,15 @@
 
 const necessary = require("necessary");
 
-const transformUtilities = require("../utilities/transform");
+const messages = require("../messages"),
+      metricsUtilities = require("../utilities/metrics"),
+      transformUtilities = require("../utilities/transform");
 
 const { asynchronousUtilities } = necessary,
       { forEach } = asynchronousUtilities,
-      { transformFile } = transformUtilities;
+      { transformFile } = transformUtilities,
+      { startMetric, endMetric } = metricsUtilities,
+      { TRANSPILED_METRIC_MESSAGE } = messages;
 
 function transformFilesCallback(proceed, abort, context) {
   const { filePaths } = context,
@@ -15,14 +19,22 @@ function transformFilesCallback(proceed, abort, context) {
         count = 0;
 
   Object.assign(context, {
-    count
+    count,
   });
+
+  startMetric(context);
 
   forEach(filePaths, transformFileCallback, done, context);
 
   function done() {
     const { count } = context,
           success = (count === length);
+
+    if (success) {
+      const message = TRANSPILED_METRIC_MESSAGE;
+
+      endMetric(context, message);
+    }
 
     delete context.count;
 

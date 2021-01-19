@@ -12,23 +12,21 @@ const Queue = require("./queue"),
       DeleteDirectoryTask = require("./task/deleteDirectory");
 
 const { isPathFullQualifiedPath, pathFromFullyQualifiedPath } = pathUtilities,
-      { ADD_EVENT, CHANGE_EVENT, UNLINK_EVENT, UNLINK_DIR_EVENT } = events,
-      { DEFAULT_PAUSE, DEFAULT_QUIETLY, SOURCE_DIRECTORY_WATCH_PATTERN } = constants;
+      { ADD_EVENT, ALL_EVENT, READY_EVENT, CHANGE_EVENT, UNLINK_EVENT, UNLINK_DIR_EVENT } = events,
+      { DEFAULT_PAUSE, DEFAULT_QUIETLY, DEFAULT_METRICS, SOURCE_DIRECTORY_WATCH_PATTERN } = constants;
 
 function watch(context) {
-  const { pause = DEFAULT_PAUSE,
-          quietly = DEFAULT_QUIETLY,
-          sourceDirectoryPath } = context,
+  const { pause = DEFAULT_PAUSE, quietly = DEFAULT_QUIETLY, metrics = DEFAULT_METRICS, sourceDirectoryPath } = context,
         watchPattern = `${sourceDirectoryPath}${SOURCE_DIRECTORY_WATCH_PATTERN}`,
         watcher = chokidar.watch(watchPattern),
         queue = Queue.fromEmptyHandler(queueEmptyHandler);
 
-  watcher.on("ready", () => {
+  watcher.on(READY_EVENT, () => {
     if (!quietly) {
       console.log(`Watching '${watchPattern}'.`);
     }
 
-    watcher.on("all", (event, path) => {
+    watcher.on(ALL_EVENT, (event, path) => {
       const pathFullyQualifiedPath = isPathFullQualifiedPath(path);
 
       if (pathFullyQualifiedPath) {

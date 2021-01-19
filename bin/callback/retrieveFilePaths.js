@@ -2,10 +2,12 @@
 
 const chokidar = require("chokidar");
 
-const messages = require("../messages"),
+const events = require("../events"),
+      messages = require("../messages"),
       pathUtilities = require("../utilities/path");
 
-const { ENTRY_FILE_NOT_INCLUDED_IN_BUNDLED_FILES } = messages,
+const { ADD_EVENT, READY_EVENT } = events,
+      { ENTRY_FILE_NOT_INCLUDED_IN_BUNDLED_FILES } = messages,
       { pathWithoutDirectoryPathFromPathAndDirectoryPath } = pathUtilities;
 
 function retrieveFilePathsCallback(proceed, abort, context) {
@@ -14,14 +16,14 @@ function retrieveFilePathsCallback(proceed, abort, context) {
         filePaths = [],
         watcher = chokidar.watch(globPattern);
 
-  watcher.on("add", (path) => {
+  watcher.on(ADD_EVENT, (path) => {
     const sourceFilePath = path,  ///
           filePath = pathWithoutDirectoryPathFromPathAndDirectoryPath(sourceFilePath, sourceDirectoryPath); ///
 
     filePaths.push(filePath);
   });
 
-  watcher.on("ready", () => {
+  watcher.on(READY_EVENT, () => {
     watcher.close().then(() => {
       const { entryFilePath } = context;
 

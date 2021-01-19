@@ -19,6 +19,7 @@ function optionsCallback(proceed, abort, context) {
   const { options } = context,
         { pause,
           quietly,
+          metrics,
           entryFile,
           bundleFile,
           libDirectory,
@@ -163,6 +164,7 @@ function optionsCallback(proceed, abort, context) {
 
   Object.assign(context, {
     pause,
+    metrics,
     quietly,
     babelOptions,
     browserifyOptions

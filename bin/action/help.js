@@ -25,6 +25,8 @@ Options:
   
   --pause|-p                                     Pause before building incrementally
 
+  --metrics|-m                                   Show metrics, that is the times taken
+
   --quietly|-q                                   Run with almost no console logging
 
   --entry-file|-b                                Entry file path

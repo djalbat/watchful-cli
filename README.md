@@ -53,6 +53,8 @@ Options:
 
   --debug|-d                                     Debug, that is enable source maps
   
+  --metrics|-m                                   Show metrics, that is the times taken
+
   --quietly|-q                                   Run with almost no console logging
 
   --entry-file|-b                                Entry file path
