@@ -11,14 +11,7 @@ const { asynchronousUtilities } = necessary,
       { startMetric, endMetric } = metricsUtilities;
 
 function transpileFilesCallback(proceed, abort, context) {
-  const { metrics, filePaths } = context,
-        filePathsLength = filePaths.length,
-        length = filePathsLength, ///
-        count = 0;
-
-  Object.assign(context, {
-    count,
-  });
+  const { metrics, filePaths } = context;
 
   if (metrics) {
     startMetric(context);
@@ -27,37 +20,18 @@ function transpileFilesCallback(proceed, abort, context) {
   forEach(filePaths, transpileFileCallback, done, context);
 
   function done() {
-    const { count } = context,
-          success = (count === length);
+    if (metrics) {
+      const seconds = endMetric(context);
 
-    if (success) {
-      if (metrics) {
-        const seconds = endMetric(context);
-
-        console.log(`Transpiled files in ${seconds} seconds.`);
-      }
+      console.log(`Transpiled files in ${seconds} seconds.`);
     }
 
-    delete context.count;
-
-    success ?
-      proceed() :
-        abort();
+    proceed();
   }
 }
 
 module.exports = transpileFilesCallback;
 
 function transpileFileCallback(filePath, next, done, context) {
-  transpileFile(filePath, context, () => {
-    let { count } = context;
-
-    count++;
-
-    Object.assign(context, {
-      count
-    });
-
-    next();
-  });
+  transpileFile(filePath, context, next);
 }

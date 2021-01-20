@@ -53,7 +53,7 @@ function bundleFiles(entryFilePath, context, done) {
       if (metrics) {
         const seconds = endMetric(context);
 
-        console.log(`Bundled files in ${seconds} seconds.`);
+        console.log(`Bundled all files in ${seconds} seconds.`);
       }
     }
 
