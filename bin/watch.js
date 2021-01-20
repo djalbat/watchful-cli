@@ -13,8 +13,8 @@ const Queue = require("./queue"),
 const { ALL_EVENT, READY_EVENT } = events,
       { SOURCE_DIRECTORY_WATCH_PATTERN } = constants,
       { eventHandler, queueEmptyHandler } = handlerUtilities,
-      { startSecondsMetric, endSecondsMetric } = metricsUtilities,
-      { isPathFullQualifiedPath, pathFromFullyQualifiedPath } = pathUtilities;
+      { isPathFullQualifiedPath, pathFromFullyQualifiedPath } = pathUtilities,
+      { startCountMetric, startSecondsMetric, endCountMetric, endSecondsMetric } = metricsUtilities;
 
 function watch(context) {
   const { quietly, metrics, sourceDirectoryPath } = context,
@@ -26,9 +26,10 @@ function watch(context) {
           }
 
           if (metrics) {
-            const seconds = endSecondsMetric(context);
+            const count = endCountMetric(context),
+                  seconds = endSecondsMetric(context);
 
-            console.log(`Transpiled files in ${seconds} seconds.`);
+            console.log(`Transpiled ${count} files in ${seconds} seconds.`);
           }
 
           queueEmptyHandler(queue, context);
@@ -52,6 +53,7 @@ function watch(context) {
         const empty = queue.isEmpty();
 
         if (empty) {
+          startCountMetric(context);
           startSecondsMetric(context);
         }
       }
