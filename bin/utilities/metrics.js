@@ -1,6 +1,6 @@
 "use strict";
 
-function startMetric(context) {
+function startSecondsMetric(context) {
   const now = Date.now();
 
   Object.assign(context, {
@@ -8,7 +8,7 @@ function startMetric(context) {
   });
 }
 
-function endMetric(context) {
+function endSecondsMetric(context) {
   let { now } = context;
 
   const then = now; ///
@@ -23,6 +23,6 @@ function endMetric(context) {
 }
 
 module.exports = {
-  startMetric,
-  endMetric
+  startSecondsMetric,
+  endSecondsMetric
 };
