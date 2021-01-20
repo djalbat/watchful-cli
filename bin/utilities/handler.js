@@ -29,7 +29,7 @@ function eventHandler(event, path, queue, context) {
 }
 
 function queueEmptyHandler(queue, context) {
-  const { pause } = context;
+  const { wait } = context;
 
   setTimeout(() => {
     const empty = queue.isEmpty();
@@ -41,7 +41,7 @@ function queueEmptyHandler(queue, context) {
         queue.addTask(bundleFilesTask);
       }
     }
-  }, pause);
+  }, wait);
 }
 
 module.exports = {

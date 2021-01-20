@@ -1,9 +1,8 @@
 "use strict";
 
 class Task {
-  constructor(method, ...remainingArgumentsThenCallback) {
-    const callback = remainingArgumentsThenCallback.pop(), ///
-          remainingArguments = remainingArgumentsThenCallback;  ///
+  constructor(method, ...remainingArguments) {
+    const callback = remainingArguments.pop();  ///
 
     this.method = method;
     this.callback = callback;

@@ -1,11 +1,11 @@
 "use strict";
 
 const messages = require("../messages"),
-      constants = require("../constants"),
+      defaults = require("../defaults"),
       pathUtilities = require("../utilities/path");
 
 const { pathFromOption } = pathUtilities,
-      { DEFAULT_PAUSE, DEFAULT_QUIETLY, DEFAULT_METRICS } = constants,
+      { DEFAULT_WAIT, DEFAULT_QUIETLY, DEFAULT_METRICS, DEFAULT_PARALLEL } = defaults,
       { NO_ENTRY_FILE_SPECIFIED_MESSAGE,
         NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE,
         BOTH_LIB_AND_TEMP_DIRECTORIES_SPECIFIED_MESSAGE,
@@ -19,9 +19,10 @@ const { pathFromOption } = pathUtilities,
 
 function optionsCallback(proceed, abort, context) {
   const { options } = context,
-        { pause = DEFAULT_PAUSE,
+        { wait = DEFAULT_WAIT,
           quietly = DEFAULT_QUIETLY,
           metrics = DEFAULT_METRICS,
+          parallel = DEFAULT_PARALLEL,
           entryFile,
           bundleFile,
           libDirectory,
@@ -165,9 +166,10 @@ function optionsCallback(proceed, abort, context) {
         browserifyOptions = browserifyOptionsFromOptions(options);
 
   Object.assign(context, {
-    pause,
+    wait,
     metrics,
     quietly,
+    parallel,
     babelOptions,
     browserifyOptions
   });

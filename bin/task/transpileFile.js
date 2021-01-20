@@ -16,7 +16,7 @@ class TranspileFileTask extends Task {
           filePath = pathWithoutDirectoryPathFromPathAndDirectoryPath(sourceFilePath, sourceDirectoryPath); ///
 
     transpileFileTask = new TranspileFileTask(transpileFile, filePath, context, () => {
-      ///
+
     });
 
     return transpileFileTask;

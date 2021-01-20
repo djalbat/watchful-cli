@@ -49,13 +49,15 @@ Options:
 
   --help|-h                                      Show this help
   
-  --pause|-p                                     Pause before building incrementally
+  --wait|-w                                      Wait before building incrementally
 
   --debug|-d                                     Debug, that is enable source maps
   
   --metrics|-m                                   Show metrics, that is the times taken
 
   --quietly|-q                                   Run with almost no console logging
+
+  --parallel|-p                                  Transpile in parallel
 
   --entry-file|-b                                Entry file path
   
@@ -124,8 +126,8 @@ Now for the npm scripts:
   "watchful": "watchful -s=./es6 -t=./tmp -e=main.js -b=./public/lib/client.js",
   "batch": "npm run watchful batch --",
   "batch-debug": "npm run watchful batch -- --debug",
-  "incremental": "npm run watchful incremental -- -qm --pause=100",
-  "incremental-debug": "npm run watchful incremental -- --debug -qm --pause=100",
+  "incremental": "npm run watchful incremental -- -qm --wait=100",
+  "incremental-debug": "npm run watchful incremental -- --debug -qm --wait=100",
   "build": "npm run clean && npm run batch && npm run clean",
   "build-debug": "npm run clean && npm run batch-debug && npm run clean",
   "watch": "npm run clean && npm run batch && npm run incremental",
@@ -143,7 +145,7 @@ There are several points worth noting:
 
 * For a package rather than a bundle, you could remove the call to the final `clean` script from the build scripts; remove the entry and bundle file options from the `watchful` script; and change the temp directory to a lib directory.
 
-* For incremental builds, the `pause` option has been set to 100 milliseconds. Usually this can be left at the default, which is 0 milliseconds. However, if you find that not all of the transformations are being completed before bundling starts, you may want to experiment with this option.
+* For incremental builds, the `wait` option has been set to 100 milliseconds. Usually this can be left at the default, which is 0 milliseconds. However, if you find that not all of the transformations are being completed before bundling starts, you may want to experiment with this option.
  
 ## Contact
 

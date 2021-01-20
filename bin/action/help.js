@@ -21,13 +21,15 @@ Options:
 
   --help|-h                                      Show this help
   
+  --wait|-w                                      Wait before building incrementally
+
   --debug|-d                                     Debug, that is enable source maps
   
-  --pause|-p                                     Pause before building incrementally
-
   --metrics|-m                                   Show metrics, that is the times taken
 
   --quietly|-q                                   Run with almost no console logging
+
+  --parallel|-p                                  Transpile in parallel
 
   --entry-file|-b                                Entry file path
   
