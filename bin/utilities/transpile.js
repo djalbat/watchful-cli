@@ -4,9 +4,11 @@ const path = require("path");
 
 const messages = require("../messages"),
       pathUtilities = require("../utilities/path"),
+      metricsUtilities = require("../utilities/metrics"),
       fileSystemUtilities = require("../utilities/fileSystem");
 
-const { TRANSFORM_FAILED_MESSAGE } = messages,
+const { updateCountMetric } = metricsUtilities,
+      { TRANSFORM_FAILED_MESSAGE } = messages,
       { writeFile, createParentDirectory } = fileSystemUtilities,
       { combinePaths, pathWithoutBottommostNameFromPath } = pathUtilities;
 
@@ -48,6 +50,8 @@ function transpileFile(filePath, context, done) {
     if (!quietly) {
       console.log(`Transpiled '${sourceFilePath}'.`);
     }
+
+    updateCountMetric(context);
 
     done();
   });

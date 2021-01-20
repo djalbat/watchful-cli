@@ -8,12 +8,13 @@ const metricsUtilities = require("../utilities/metrics"),
 const { asynchronousUtilities } = necessary,
       { forEach } = asynchronousUtilities,
       { transpileFile } = transpileUtilities,
-      { startSecondsMetric, endSecondsMetric } = metricsUtilities;
+      { startCountMetric, endCountMetric, startSecondsMetric, endSecondsMetric } = metricsUtilities;
 
 function transpileFilesCallback(proceed, abort, context) {
   const { metrics, filePaths } = context;
 
   if (metrics) {
+    startCountMetric(context);
     startSecondsMetric(context);
   }
 
@@ -21,9 +22,10 @@ function transpileFilesCallback(proceed, abort, context) {
 
   function done() {
     if (metrics) {
-      const seconds = endSecondsMetric(context);
+      const count = endCountMetric(context),
+            seconds = endSecondsMetric(context);
 
-      console.log(`Transpiled files in ${seconds} seconds.`);
+      console.log(`Transpiled ${count} files in ${seconds} seconds.`);
     }
 
     proceed();

@@ -1,5 +1,31 @@
 "use strict";
 
+function startCountMetric(context) {
+  const count = 0;
+
+  Object.assign(context, {
+    count
+  });
+}
+
+function endCountMetric(context) {
+  const { count } = context;
+
+  delete context.count;
+
+  return count;
+}
+
+function updateCountMetric(context) {
+  let { count } = context;
+
+  count++;
+
+  Object.assign(context, {
+    count
+  });
+}
+
 function startSecondsMetric(context) {
   const now = Date.now();
 
@@ -23,6 +49,9 @@ function endSecondsMetric(context) {
 }
 
 module.exports = {
+  startCountMetric,
+  endCountMetric,
+  updateCountMetric,
   startSecondsMetric,
   endSecondsMetric
 };
