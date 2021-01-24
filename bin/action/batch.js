@@ -7,7 +7,6 @@ const action = require("../action"),
       browserifyCallback = require("../callback/browserify"),
       bundleFilesCallback = require("../callback/bundleFiles"),
       transpileFilesCallback = require("../callback/transpileFiles"),
-      childProcessesCallback = require("../callback/childProcesses"),
       retrieveFilePathsCallback = require("../callback/retrieveFilePaths");
 
 const { BATCH_BUILD_FAILED_MESSAGE } = messages;
@@ -18,8 +17,7 @@ function batch(options) {
           babelCallback,
           browserifyCallback,
           retrieveFilePathsCallback,
-          childProcessesCallback,
-          // transpileFilesCallback,
+          transpileFilesCallback,
           // bundleFilesCallback
         ],
         context = {

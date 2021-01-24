@@ -1,24 +1,22 @@
 "use strict";
 
-const necessary = require("necessary");
-
 const metricsUtilities = require("../utilities/metrics"),
-      transpileUtilities = require("../utilities/transpile");
+      singleProcessTranspileFilesCallback = require("../callback/transpileFiles/singleProcess"),
+      childProcessesTranspileFilesCallback = require("../callback/transpileFiles/childProcesses");
 
-const { asynchronousUtilities } = necessary,
-      { forEach } = asynchronousUtilities,
-      { transpileFile } = transpileUtilities,
-      { startCountMetric, endCountMetric, updateCountMetric, startSecondsMetric, endSecondsMetric } = metricsUtilities;
+const { startCountMetric, endCountMetric, startSecondsMetric, endSecondsMetric } = metricsUtilities;
 
 function transpileFilesCallback(proceed, abort, context) {
-  const { metrics, filePaths } = context;
+  const { metrics, childProcesses } = context;
 
   if (metrics) {
     startCountMetric(context);
     startSecondsMetric(context);
   }
 
-  forEach(filePaths, transpileFileCallback, done, context);
+  (childProcesses === 0) ?
+    singleProcessTranspileFilesCallback(done, context) :
+      childProcessesTranspileFilesCallback(done, context);
 
   function done() {
     if (metrics) {
@@ -33,11 +31,3 @@ function transpileFilesCallback(proceed, abort, context) {
 }
 
 module.exports = transpileFilesCallback;
-
-function transpileFileCallback(filePath, next, done, context) {
-  transpileFile(filePath, context, () => {
-    updateCountMetric(context);
-
-    next();
-  });
-}

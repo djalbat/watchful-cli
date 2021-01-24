@@ -26,8 +26,11 @@ function optionsCallback(proceed, abort, context) {
           bundleFile,
           libDirectory,
           tempDirectory,
-          childProcesses = DEFAULT_CHILD_PROCESSES,
           sourceDirectory } = options;
+
+  let { childProcesses = DEFAULT_CHILD_PROCESSES} = options;
+
+  childProcesses = Number(childProcesses);
 
   if (!sourceDirectory) {
     console.log(NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE);
