@@ -4,16 +4,14 @@ const path = require("path");
 
 const messages = require("../messages"),
       pathUtilities = require("../utilities/path"),
-      metricsUtilities = require("../utilities/metrics"),
       fileSystemUtilities = require("../utilities/fileSystem");
 
-const { updateCountMetric } = metricsUtilities,
-      { TRANSFORM_FAILED_MESSAGE } = messages,
+const { TRANSFORM_FAILED_MESSAGE } = messages,
       { writeFile, createParentDirectory } = fileSystemUtilities,
       { combinePaths, pathWithoutBottommostNameFromPath } = pathUtilities;
 
 function transpileFile(filePath, context, done) {
-  const { babel, babelOptions, sourceDirectoryPath, targetDirectoryPath } = context,
+  const { babelCorePath, babelOptions, sourceDirectoryPath, targetDirectoryPath } = context,
         sourceFilePath = combinePaths(sourceDirectoryPath, filePath),  ///
         targetFilePath = combinePaths(targetDirectoryPath, filePath),  ///
         targetFilePathWithoutBottommostName = pathWithoutBottommostNameFromPath(targetFilePath),
@@ -21,7 +19,8 @@ function transpileFile(filePath, context, done) {
         sourceFileName = relativeSourceFilePath,  ///
         options = Object.assign(babelOptions, {
           sourceFileName
-        });
+        }),
+        babel = require(babelCorePath);
 
   babel.transformFile(sourceFilePath, options, (error, result) => {
     if (error) {
@@ -50,8 +49,6 @@ function transpileFile(filePath, context, done) {
     if (!quietly) {
       console.log(`Transpiled '${sourceFilePath}'.`);
     }
-
-    updateCountMetric(context);
 
     done();
   });

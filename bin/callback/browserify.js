@@ -19,11 +19,10 @@ function browserifyCallback(proceed, abort, context) {
   }
 
   try {
-    const browserifyPath = resolve(BROWSERIFY_PATH),
-          browserify = require(browserifyPath);
+    const browserifyPath = resolve(BROWSERIFY_PATH);
 
     Object.assign(context, {
-      browserify
+      browserifyPath
     });
   } catch (error) {
     console.log(BROWSERIFY_NOT_INSTALLED);

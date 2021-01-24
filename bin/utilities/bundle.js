@@ -11,8 +11,9 @@ const { combinePaths } = pathUtilities,
       { startSecondsMetric, endSecondsMetric } = metricsUtilities;
 
 function bundleFiles(entryFilePath, context, done) {
-  const { browserify, browserifyOptions, targetDirectoryPath } = context,
+  const { browserifyPath, browserifyOptions, targetDirectoryPath } = context,
         targetEntryFilePath = combinePaths(targetDirectoryPath, entryFilePath),
+        browserify = require(browserifyPath),
         options = browserifyOptions,  ///
         bundler = browserify(options); ///
 

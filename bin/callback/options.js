@@ -5,7 +5,7 @@ const messages = require("../messages"),
       pathUtilities = require("../utilities/path");
 
 const { pathFromOption } = pathUtilities,
-      { DEFAULT_WAIT, DEFAULT_QUIETLY, DEFAULT_METRICS, DEFAULT_PARALLEL } = defaults,
+      { DEFAULT_WAIT, DEFAULT_QUIETLY, DEFAULT_METRICS, DEFAULT_CHILD_PROCESSES } = defaults,
       { NO_ENTRY_FILE_SPECIFIED_MESSAGE,
         NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE,
         BOTH_LIB_AND_TEMP_DIRECTORIES_SPECIFIED_MESSAGE,
@@ -22,11 +22,11 @@ function optionsCallback(proceed, abort, context) {
         { wait = DEFAULT_WAIT,
           quietly = DEFAULT_QUIETLY,
           metrics = DEFAULT_METRICS,
-          parallel = DEFAULT_PARALLEL,
           entryFile,
           bundleFile,
           libDirectory,
           tempDirectory,
+          childProcesses = DEFAULT_CHILD_PROCESSES,
           sourceDirectory } = options;
 
   if (!sourceDirectory) {
@@ -169,8 +169,8 @@ function optionsCallback(proceed, abort, context) {
     wait,
     metrics,
     quietly,
-    parallel,
     babelOptions,
+    childProcesses,
     browserifyOptions
   });
 

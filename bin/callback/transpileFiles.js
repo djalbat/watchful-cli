@@ -8,7 +8,7 @@ const metricsUtilities = require("../utilities/metrics"),
 const { asynchronousUtilities } = necessary,
       { forEach } = asynchronousUtilities,
       { transpileFile } = transpileUtilities,
-      { startCountMetric, endCountMetric, startSecondsMetric, endSecondsMetric } = metricsUtilities;
+      { startCountMetric, endCountMetric, updateCountMetric, startSecondsMetric, endSecondsMetric } = metricsUtilities;
 
 function transpileFilesCallback(proceed, abort, context) {
   const { metrics, filePaths } = context;
@@ -35,5 +35,9 @@ function transpileFilesCallback(proceed, abort, context) {
 module.exports = transpileFilesCallback;
 
 function transpileFileCallback(filePath, next, done, context) {
-  transpileFile(filePath, context, next);
+  transpileFile(filePath, context, () => {
+    updateCountMetric(context);
+
+    next();
+  });
 }

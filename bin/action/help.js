@@ -25,11 +25,9 @@ Options:
 
   --debug|-d                                     Debug, that is enable source maps
   
-  --metrics|-m                                   Show metrics, that is the times taken
+  --metrics|-m                                   Show metrics, that is file counts and times
 
   --quietly|-q                                   Run with almost no console logging
-
-  --parallel|-p                                  Transpile in parallel
 
   --entry-file|-b                                Entry file path
   
@@ -40,6 +38,8 @@ Options:
   --temp-directory|-t                            Temp directory path
 
   --source-directory|-s                          Source directory path
+
+  --child-processes|-c                           Create so many child processes
   
 Further information:
 

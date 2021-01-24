@@ -1,6 +1,7 @@
 "use strict";
 
-const DELIMITER = "/",
+const MESSAGE = "message",
+      DELIMITER = "/",
       WATCHFUL_CLI = "watchful-cli",
       BROWSERIFY_PATH = "./node_modules/browserify",
       BABEL_CORE_PATH = "./node_modules/@babel/core",
@@ -8,6 +9,7 @@ const DELIMITER = "/",
       SOURCE_DIRECTORY_WATCH_PATTERN = "/**/*.js";
 
 module.exports = {
+  MESSAGE,
   DELIMITER,
   WATCHFUL_CLI,
   BROWSERIFY_PATH,
