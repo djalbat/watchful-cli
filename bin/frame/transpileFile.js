@@ -2,31 +2,27 @@
 
 const child_process = require("child_process");
 
-const constants = require("../constants"),
-      metricsUtilities = require("../utilities/metrics");
+const constants = require("../constants");
 
-const { MESSAGE } = constants,
-      { updateCountMetric } = metricsUtilities;
+const { MESSAGE } = constants;
 
 class TranspileFileFrame {
-  constructor(childProcess) {
+  constructor(childProcess, callback) {
     this.childProcess = childProcess;
+    this.callback = callback;
   }
 
-  send(filePath) { this.childProcess.send(filePath);}
-
-  callback(next, context) {
-    const { transpileFileFrames } = context,
-          transpileFileFrame = this;  ///
-
-    transpileFileFrames.push(transpileFileFrame);
-
-    updateCountMetric(context);
-
-    next();
+  send(filePath) {
+    this.childProcess.send(filePath);
   }
 
-  static fromNext(next, context) {
+  messageHandler(message) {
+    const transpileFileFrame = this;  ///
+
+    this.callback(transpileFileFrame);
+  }
+
+  static fromCallback(callback, context) {
     const { quietly, babelOptions,  babelCorePath, sourceDirectoryPath, targetDirectoryPath } = context,
           childContext = {
             quietly,
@@ -40,9 +36,9 @@ class TranspileFileFrame {
             childContextString
           ],
           childProcess = child_process.fork(require.resolve("../childProcess/transpileFile"), parameters),
-          transpileFileFrame = new TranspileFileFrame(childProcess);
+          transpileFileFrame = new TranspileFileFrame(childProcess, callback);
 
-    childProcess.on(MESSAGE, (message) => transpileFileFrame.callback(next, context));
+    childProcess.on(MESSAGE, (message) => transpileFileFrame.messageHandler(message));
 
     return transpileFileFrame;
   }

@@ -1,21 +1,25 @@
 "use strict";
 
-const TranspileFileFrame = require("../../frame/transpileFile");
+const metricsUtilities = require("../../utilities/metrics"),
+      TranspileFileFrame = require("../../frame/transpileFile");
+
+const { updateCountMetric } = metricsUtilities;
 
 function childProcessesTranspileFilesCallback(done, context) {
   const { filePaths, childProcessesLength } = context,
+        transpileFileFrames = [],
         filePathsLength = filePaths.length,
-        transpileFileFrames = [];
+        length = Math.min(filePathsLength, childProcessesLength);
+
+  for (let count = 0; count < length; count++) {
+    const transpileFileFrame = TranspileFileFrame.fromCallback(callback, context);
+
+    transpileFileFrames.push(transpileFileFrame);
+  }
 
   Object.assign(context, {
     transpileFileFrames
   });
-
-  for (let count = 0; count < childProcessesLength; count++) {
-    const transpileFileFrame = TranspileFileFrame.fromNext(next, context);
-
-    transpileFileFrames.push(transpileFileFrame);
-  }
 
   let index = 0;
 
@@ -38,6 +42,14 @@ function childProcessesTranspileFilesCallback(done, context) {
           transpileFileFrame = transpileFileFrames.pop();
 
     transpileFileFrame.send(filePath);
+  }
+
+  function callback(transpileFileFrame) {
+    transpileFileFrames.push(transpileFileFrame);
+
+    updateCountMetric(context);
+
+    next();
   }
 }
 
