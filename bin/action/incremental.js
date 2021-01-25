@@ -4,14 +4,14 @@ const watch = require("../watch"),
       action = require("../action"),
       messages = require("../messages"),
       babelCallback = require("../callback/babel"),
-      optionsCallback = require("../callback/options"),
+      initialiseCallback = require("../callback/initialise"),
       browserifyCallback = require("../callback/browserify");
 
 const { INCREMENTAL_BUILD_FAILED_MESSAGE } = messages;
 
 function incremental(options) {
   const callbacks = [
-          optionsCallback,
+          initialiseCallback,
           babelCallback,
           browserifyCallback
         ],

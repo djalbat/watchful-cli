@@ -3,7 +3,7 @@
 const action = require("../action"),
       messages = require("../messages"),
       babelCallback = require("../callback/babel"),
-      optionsCallback = require("../callback/options"),
+      initialiseCallback = require("../callback/initialise"),
       browserifyCallback = require("../callback/browserify"),
       bundleFilesCallback = require("../callback/bundleFiles"),
       transpileFilesCallback = require("../callback/transpileFiles"),
@@ -13,7 +13,7 @@ const { BATCH_BUILD_FAILED_MESSAGE } = messages;
 
 function batch(options) {
   const callbacks = [
-          optionsCallback,
+          initialiseCallback,
           babelCallback,
           browserifyCallback,
           retrieveFilePathsCallback,

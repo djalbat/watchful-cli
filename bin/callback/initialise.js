@@ -2,9 +2,11 @@
 
 const messages = require("../messages"),
       defaults = require("../defaults"),
-      pathUtilities = require("../utilities/path");
+      pathUtilities = require("../utilities/path"),
+      metricsUtilities = require("../utilities/metrics");
 
 const { pathFromOption } = pathUtilities,
+      { initialiseMetrics } = metricsUtilities,
       { DEFAULT_WAIT, DEFAULT_QUIETLY, DEFAULT_METRICS, DEFAULT_CHILD_PROCESSES } = defaults,
       { NO_ENTRY_FILE_SPECIFIED_MESSAGE,
         NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE,
@@ -17,7 +19,7 @@ const { pathFromOption } = pathUtilities,
         SOURCE_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE,
         ENTRY_FILE_BUT_NEITHER_LIB_NOR_TEMP_DIRECTORY_SPECIFIED_MESSAGE } = messages;
 
-function optionsCallback(proceed, abort, context) {
+function initialiseCallback(proceed, abort, context) {
   const { options } = context,
         { wait = DEFAULT_WAIT,
           quietly = DEFAULT_QUIETLY,
@@ -26,11 +28,9 @@ function optionsCallback(proceed, abort, context) {
           bundleFile,
           libDirectory,
           tempDirectory,
-          sourceDirectory } = options;
-
-  let { childProcesses = DEFAULT_CHILD_PROCESSES} = options;
-
-  childProcesses = Number(childProcesses);
+          childProcesses = DEFAULT_CHILD_PROCESSES,
+          sourceDirectory } = options,
+          childProcessesLength = Number(childProcesses);  ///
 
   if (!sourceDirectory) {
     console.log(NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE);
@@ -173,16 +173,18 @@ function optionsCallback(proceed, abort, context) {
     metrics,
     quietly,
     babelOptions,
-    childProcesses,
-    browserifyOptions
+    browserifyOptions,
+    childProcessesLength
   });
 
   delete context.options;
 
+  initialiseMetrics(context);
+
   proceed();
 }
 
-module.exports = optionsCallback;
+module.exports = initialiseCallback;
 
 function babelOptionsFromOptions(options) {
   const babelOptions = {},

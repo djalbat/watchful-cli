@@ -7,14 +7,14 @@ const metricsUtilities = require("../utilities/metrics"),
 const { startCountMetric, endCountMetric, startSecondsMetric, endSecondsMetric } = metricsUtilities;
 
 function transpileFilesCallback(proceed, abort, context) {
-  const { metrics, childProcesses } = context;
+  const { metrics, childProcessesLength } = context;
 
   if (metrics) {
     startCountMetric(context);
     startSecondsMetric(context);
   }
 
-  (childProcesses === 0) ?
+  (childProcessesLength === 0) ?
     singleProcessTranspileFilesCallback(done, context) :
       childProcessesTranspileFilesCallback(done, context);
 

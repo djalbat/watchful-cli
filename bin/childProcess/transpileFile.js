@@ -6,17 +6,17 @@ const constants = require("../constants"),
       transpileUtilities = require("../utilities/transpile");
 
 const { arrayUtilities } = necessary,
-      { third, fourth } = arrayUtilities,
-      { transpileFile } = transpileUtilities,
-      { EMPTY_MESSAGE } = constants;
+      { third } = arrayUtilities,
+      { MESSAGE } = constants,
+      { transpileFile } = transpileUtilities;
 
 const args = process.argv,  ///
       thirdArg = third(args),
-      fourthArg = fourth(args),
-      contextString = fourthArg, ///
-      filePath = thirdArg,  ///
+      contextString = thirdArg, ///
       context = JSON.parse(contextString);
 
-transpileFile(filePath, context, () => {
-  process.send(EMPTY_MESSAGE);
+process.on(MESSAGE, (message) => {
+  const filePath = message; ///
+
+  transpileFile(filePath, context, () => process.send(filePath));
 });

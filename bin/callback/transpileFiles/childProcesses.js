@@ -1,45 +1,44 @@
 "use strict";
 
-const necessary = require("necessary"),
-      child_process = require("child_process");
-
-const constants = require("../../constants"),
-      metricsUtilities = require("../../utilities/metrics");
-
-const { asynchronousUtilities } = necessary,
-      { MESSAGE } = constants,
-      { repeatedly } = asynchronousUtilities,
-      { updateCountMetric } = metricsUtilities;
+const TranspileFileFrame = require("../../frame/transpileFile");
 
 function childProcessesTranspileFilesCallback(done, context) {
-  const { filePaths } = context,
-        filePathsLength = filePaths.length;
+  const { filePaths, childProcessesLength } = context,
+        filePathsLength = filePaths.length,
+        transpileFileFrames = [];
 
-  repeatedly(transpileFileChildProcessCallback, filePathsLength, done, context);
+  Object.assign(context, {
+    transpileFileFrames
+  });
+
+  for (let count = 0; count < childProcessesLength; count++) {
+    const transpileFileFrame = TranspileFileFrame.fromNext(next, context);
+
+    transpileFileFrames.push(transpileFileFrame);
+  }
+
+  let index = 0;
+
+  for (let count = 0; count < childProcessesLength; count++) {
+    next();
+  }
+
+  function next() {
+    if (index === filePathsLength) {
+      const transpileFileFramesLength = transpileFileFrames.length;
+
+      if (transpileFileFramesLength === childProcessesLength) {
+        done();
+      }
+
+      return;
+    }
+
+    const filePath = filePaths[index++],
+          transpileFileFrame = transpileFileFrames.pop();
+
+    transpileFileFrame.send(filePath);
+  }
 }
 
 module.exports = childProcessesTranspileFilesCallback;
-
-function transpileFileChildProcessCallback(next, done ,context, index) {
-  const { quietly, filePaths, babelCorePath, babelOptions, sourceDirectoryPath, targetDirectoryPath } = context,
-        filePath = filePaths[index],
-        childContext = {
-          quietly,
-          babelCorePath,
-          babelOptions,
-          sourceDirectoryPath,
-          targetDirectoryPath
-        },
-        childContextString = JSON.stringify(childContext),
-        parameters = [
-          filePath,
-          childContextString
-        ],
-        childProcess = child_process.fork(require.resolve("../../childProcess/transpileFile"), parameters);
-
-  childProcess.on(MESSAGE, (message) => {
-    updateCountMetric(context);
-
-    next();
-  });
-}

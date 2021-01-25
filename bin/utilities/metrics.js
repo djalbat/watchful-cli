@@ -1,41 +1,57 @@
 "use strict";
 
-function startCountMetric(context) {
-  const count = 0;
+function initialiseMetrics(context) {
+  const metrics = {};
 
   Object.assign(context, {
+    metrics
+  });
+}
+
+function startCountMetric(context) {
+  const { metrics } = context;
+
+  const count = 0;
+
+  Object.assign(metrics, {
     count
   });
 }
 
 function endCountMetric(context) {
-  const { count } = context;
+  const { metrics } = context,
+        { count } = metrics;
 
-  delete context.count;
+  delete metrics.count;
 
   return count;
 }
 
 function updateCountMetric(context) {
-  let { count } = context;
+  const { metrics } = context;
+
+  let { count } = metrics;
 
   count++;
 
-  Object.assign(context, {
+  Object.assign(metrics, {
     count
   });
 }
 
 function startSecondsMetric(context) {
-  const now = Date.now();
+  const { metrics } = context,
+        now = Date.now();
 
-  Object.assign(context, {
+  Object.assign(metrics, {
     now
   });
 }
 
 function endSecondsMetric(context) {
-  let { now } = context;
+  const { metrics } = context;
+
+  let { now } = metrics;
 
   const then = now; ///
 
@@ -43,12 +59,13 @@ function endSecondsMetric(context) {
 
   const seconds = Math.floor((now - then) / 10) / 100;
 
-  delete context.now;
+  delete metrics.now;
 
   return seconds;
 }
 
 module.exports = {
+  initialiseMetrics,
   startCountMetric,
   endCountMetric,
   updateCountMetric,
