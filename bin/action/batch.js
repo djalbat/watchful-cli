@@ -18,7 +18,7 @@ function batch(options) {
           browserifyCallback,
           retrieveFilePathsCallback,
           transpileFilesCallback,
-          // bundleFilesCallback
+          bundleFilesCallback
         ],
         context = {
           options
