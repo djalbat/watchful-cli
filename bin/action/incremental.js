@@ -5,7 +5,8 @@ const watch = require("../watch"),
       messages = require("../messages"),
       babelCallback = require("../callback/babel"),
       initialiseCallback = require("../callback/initialise"),
-      browserifyCallback = require("../callback/browserify");
+      browserifyCallback = require("../callback/browserify"),
+      retrieveFilePathsCallback = require("../callback/retrieveFilePaths");
 
 const { INCREMENTAL_BUILD_FAILED_MESSAGE } = messages;
 
@@ -13,7 +14,8 @@ function incremental(options) {
   const callbacks = [
           initialiseCallback,
           babelCallback,
-          browserifyCallback
+          browserifyCallback,
+          retrieveFilePathsCallback
         ],
         context = {
           options

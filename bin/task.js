@@ -25,7 +25,7 @@ class Task {
     const method = this.getMethod(),
           remainingArguments = this.getRemainingArguments();
 
-    method.call(null, ...remainingArguments, callback);
+    method.call(this, ...remainingArguments, callback);
   }
 }
 

@@ -8,7 +8,7 @@ const { deleteFile, checkFileExists } = fileSystemUtilities,
       { combinePaths, pathWithoutDirectoryPathFromPathAndDirectoryPath } = pathUtilities;
 
 class DeleteFileTask extends Task {
-  static fromPathAndContext(path, context) {
+  static fromPath(path, context) {
     let deleteFileTask = null;
 
     const { sourceDirectoryPath, targetDirectoryPath } = context,

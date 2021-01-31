@@ -5,7 +5,7 @@ const necessary = require("necessary");
 const { arrayUtilities } = necessary,
       { first } = arrayUtilities;
 
-class Queue {
+class SingleProcessQueue {
   constructor(tasks, emptyHandler) {
     this.tasks = tasks;
     this.emptyHandler = emptyHandler;
@@ -17,11 +17,11 @@ class Queue {
     this.tasks.push(task);
 
     if (empty) {
-      this.executeNextTask();
+      this.executeFirstTask();
     }
   }
 
-  executeNextTask() {
+  executeFirstTask() {
     const firstTask = first(this.tasks),
           task = firstTask, ///
           next = this.next.bind(this);
@@ -42,7 +42,7 @@ class Queue {
           empty = this.isEmpty();
 
     if (!empty) {
-      this.executeNextTask();
+      this.executeFirstTask();
 
       return;
     }
@@ -61,10 +61,10 @@ class Queue {
 
   static fromEmptyHandler(emptyHandler) {
     const tasks = [],
-          queue = new Queue(tasks, emptyHandler);
+          singleProcessQueue = new SingleProcessQueue(tasks, emptyHandler);
 
-    return queue;
+    return singleProcessQueue;
   }
 }
 
-module.exports = Queue;
+module.exports = SingleProcessQueue;

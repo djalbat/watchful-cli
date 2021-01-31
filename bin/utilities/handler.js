@@ -3,16 +3,17 @@
 const events = require("../events"),
       DeleteFileTask = require("../task/deleteFile"),
       BundleFilesTask = require("../task/bundleFiles"),
-      TranspileFileTask = require("../task/transpileFile"),
-      DeleteDirectoryTask = require("../task/deleteDirectory");
+      DeleteDirectoryTask = require("../task/deleteDirectory"),
+      SingleProcessTranspileFileTask = require("../task/transpileFile/singleProcess"),
+      MultipleProcessesTranspileFileTask = require("../task/transpileFile/multipleProcesses");
 
 const { ADD_EVENT, CHANGE_EVENT, UNLINK_EVENT, UNLINK_DIR_EVENT } = events;
 
-function eventHandler(event, path, queue, context) {
+function eventHandler(event, run, path, queue, context) {
   switch (event) {
     case ADD_EVENT :
     case CHANGE_EVENT :
-      addOrChangeEventHandler(path, queue, context);
+      addOrChangeEventHandler(run, path, queue, context);
 
       break;
 
@@ -49,16 +50,17 @@ module.exports = {
   queueEmptyHandler
 }
 
-function addOrChangeEventHandler(path, queue, context) {
-  const transpileFileTask = TranspileFileTask.fromPathAndContext(path, context);
+function addOrChangeEventHandler(run, path, queue, context) {
+  const { processesLength } = context,
+        transpileFileTask = (processesLength < 2) ?
+                              SingleProcessTranspileFileTask.fromPath(path, context) :
+                                MultipleProcessesTranspileFileTask.fromRunAndPath(run, path, context);
 
-  if (transpileFileTask !== null) {
-    queue.addTask(transpileFileTask);
-  }
+  queue.addTask(transpileFileTask);
 }
 
 function unlinkDirEventHandler(path, queue, context) {
-  const deleteDirectoryTask = DeleteDirectoryTask.fromPathAndContext(path, context);
+  const deleteDirectoryTask = DeleteDirectoryTask.fromPath(path, context);
 
   if (deleteDirectoryTask !== null) {
     queue.addTask(deleteDirectoryTask);
@@ -66,7 +68,7 @@ function unlinkDirEventHandler(path, queue, context) {
 }
 
 function unlinkEventHandler(path, queue, context) {
-  const deleteFileTask = DeleteFileTask.fromPathAndContext(path, context);
+  const deleteFileTask = DeleteFileTask.fromPath(path, context);
 
   if (deleteFileTask !== null) {
     queue.addTask(deleteFileTask);

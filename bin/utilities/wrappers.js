@@ -1,16 +1,12 @@
 "use strict";
-"use strict";
 
-const metricsUtilities = require("../utilities/metrics"),
-      TranspileFileWrapper = require("../wrapper/transpileFile");
+const TranspileFileWrapper = require("../wrapper/transpileFile");
 
-const { updateCountMetric } = metricsUtilities;
-
-function createTranspileFileWrappers(done, context) {
+function createTranspileFileWrappers(callback, context) {
   const { filePaths, processesLength } = context,
-        transpileFileWrappers = [],
         filePathsLength = filePaths.length,
-        length = Math.min(filePathsLength, processesLength);
+        length = Math.min(filePathsLength, processesLength),
+        transpileFileWrappers = [];
 
   for (let count = 0; count < length; count++) {
     const transpileFileWrapper = TranspileFileWrapper.fromCallback(callback, context);
@@ -22,34 +18,7 @@ function createTranspileFileWrappers(done, context) {
     transpileFileWrappers
   });
 
-  let index = 0;
-
-  function next() {
-    if (index === filePathsLength) {
-      const transpileFileWrappersLength = transpileFileWrappers.length;
-
-      if (transpileFileWrappersLength === processesLength) {
-        done();
-      }
-
-      return;
-    }
-
-    const filePath = filePaths[index++],
-          transpileFileWrapper = transpileFileWrappers.pop();
-
-    transpileFileWrapper.send(filePath);
-  }
-
-  function callback(transpileFileWrapper) {
-    transpileFileWrappers.push(transpileFileWrapper);
-
-    updateCountMetric(context);
-
-    next();
-  }
-
-  return next;
+  return transpileFileWrappers;
 }
 
 module.exports = {

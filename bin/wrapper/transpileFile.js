@@ -7,9 +7,26 @@ const constants = require("../constants");
 const { MESSAGE } = constants;
 
 class TranspileFileWrapper {
-  constructor(process, callback) {
+  constructor(process, callback, parameters) {
     this.process = process;
     this.callback = callback;
+    this.parameters = parameters;
+  }
+
+  getProcess() {
+    return this.process;
+  }
+
+  getCallback() {
+    return this.callback;
+  }
+
+  setParameters(parameters) {
+    this.parameters = parameters;
+  }
+
+  getParameters() {
+    return this.parameters;
   }
 
   send(filePath) {
@@ -34,11 +51,12 @@ class TranspileFileWrapper {
     }
 
     const contextString = JSON.stringify(context),
-          parameters = [
+          args = [
             contextString
           ],
-          process = child_process.fork(require.resolve("../process/transpileFile"), parameters),
-          transpileFileWrapper = new TranspileFileWrapper(process, callback);
+          process = child_process.fork(require.resolve("../process/transpileFile"), args),
+          parameters = null,
+          transpileFileWrapper = new TranspileFileWrapper(process, callback, parameters);
 
     process.on(MESSAGE, (message) => transpileFileWrapper.messageHandler(message));
 

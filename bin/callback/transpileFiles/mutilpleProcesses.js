@@ -1,16 +1,16 @@
 "use strict";
 
-const wrappersUtilities = require("../../utilities/wrappers");
+const batchWrappersUtilities = require("../../utilities/wrappers/batch");
 
-const { createTranspileFileWrappers } = wrappersUtilities;
+const { createBatchTranspileFileWrappers } = batchWrappersUtilities;
 
 function multipleProcessesTranspileFilesCallback(done, context) {
-  const next = createTranspileFileWrappers(done, context),
+  const run = createBatchTranspileFileWrappers(done, context),
         { transpileFileWrappers } = context,
         transpileFileWrappersLength = transpileFileWrappers.length;
 
   for (let count = 0; count < transpileFileWrappersLength; count++) {
-    next();
+    run();
   }
 }
 

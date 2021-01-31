@@ -1,24 +1,20 @@
 "use strict";
 
 const Task = require("../task"),
-      pathUtilities = require("../utilities/path"),
-      metricsUtilities = require("../utilities/metrics"),
-      transpileUtilities = require("../utilities/transpile");
+      pathUtilities = require("../utilities/path");
 
-const { transpileFile } = transpileUtilities,
-      { updateCountMetric } = metricsUtilities,
-      { pathWithoutDirectoryPathFromPathAndDirectoryPath } = pathUtilities;
+const { pathWithoutDirectoryPathFromPathAndDirectoryPath } = pathUtilities;
 
 class TranspileFileTask extends Task {
-  static fromPathAndContext(path, context) {
-    let transpileFileTask = null;
+  static fromPathAndMethod(path, method, context) {
+    let transpileFileTask;
 
     const { sourceDirectoryPath } = context,
           sourceFilePath = path,  ///
           filePath = pathWithoutDirectoryPathFromPathAndDirectoryPath(sourceFilePath, sourceDirectoryPath); ///
 
-    transpileFileTask = new TranspileFileTask(transpileFileMethod, filePath, context, () => {
-      updateCountMetric(context);
+    transpileFileTask = new TranspileFileTask(method, filePath, context, () => {
+      ///
     });
 
     return transpileFileTask;
@@ -26,11 +22,3 @@ class TranspileFileTask extends Task {
 }
 
 module.exports = TranspileFileTask;
-
-function transpileFileMethod(filePath, context, next) {
-  transpileFile(filePath, context, () => {
-    updateCountMetric(context);
-
-    next();
-  });
-}
