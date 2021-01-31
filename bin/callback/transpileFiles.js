@@ -14,7 +14,7 @@ function transpileFilesCallback(proceed, abort, context) {
     startSecondsMetric(context);
   }
 
-  (processesLength === 0) ?
+  (processesLength < 2) ?
     singleProcessTranspileFilesCallback(done, context) :
       multipleProcessesTranspileFilesCallback(done, context);
 

@@ -3,7 +3,7 @@
 const DEFAULT_WAIT = 0,
       DEFAULT_QUIETLY = false,
       DEFAULT_METRICS = false,
-      DEFAULT_PROCESSES = 0;
+      DEFAULT_PROCESSES = 1;
 
 module.exports = {
   DEFAULT_WAIT,
