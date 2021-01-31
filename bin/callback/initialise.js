@@ -7,7 +7,7 @@ const messages = require("../messages"),
 
 const { pathFromOption } = pathUtilities,
       { initialiseMetrics } = metricsUtilities,
-      { DEFAULT_WAIT, DEFAULT_QUIETLY, DEFAULT_METRICS, DEFAULT_CHILD_PROCESSES } = defaults,
+      { DEFAULT_WAIT, DEFAULT_QUIETLY, DEFAULT_METRICS, DEFAULT_PROCESSES } = defaults,
       { NO_ENTRY_FILE_SPECIFIED_MESSAGE,
         NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE,
         BOTH_LIB_AND_TEMP_DIRECTORIES_SPECIFIED_MESSAGE,
@@ -24,13 +24,13 @@ function initialiseCallback(proceed, abort, context) {
         { wait = DEFAULT_WAIT,
           quietly = DEFAULT_QUIETLY,
           metrics = DEFAULT_METRICS,
+          processes = DEFAULT_PROCESSES,
           entryFile,
           bundleFile,
           libDirectory,
           tempDirectory,
-          childProcesses = DEFAULT_CHILD_PROCESSES,
           sourceDirectory } = options,
-          childProcessesLength = Number(childProcesses);  ///
+          processesLength = Number(processes);  ///
 
   if (!sourceDirectory) {
     console.log(NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE);
@@ -173,8 +173,8 @@ function initialiseCallback(proceed, abort, context) {
     metrics,
     quietly,
     babelOptions,
-    browserifyOptions,
-    childProcessesLength
+    processesLength,
+    browserifyOptions
   });
 
   delete context.options;

@@ -57,6 +57,8 @@ Options:
 
   --quietly|-q                                   Run with almost no console logging
 
+  --processes|-p                                 The number of processes
+
   --entry-file|-b                                Entry file path
   
   --bundle-file|-b                               Bundle file path
@@ -66,8 +68,6 @@ Options:
   --temp-directory|-t                            Temp directory path
 
   --source-directory|-s                          Source directory path
-
-  --child-processes|-c                           Create so many child processes
 ```
 
 There are two main use cases, namely building a package and building a bundle.

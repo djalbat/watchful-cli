@@ -2,21 +2,21 @@
 
 const metricsUtilities = require("../utilities/metrics"),
       singleProcessTranspileFilesCallback = require("../callback/transpileFiles/singleProcess"),
-      childProcessesTranspileFilesCallback = require("../callback/transpileFiles/childProcesses");
+      multipleProcessesTranspileFilesCallback = require("../callback/transpileFiles/mutilpleProcesses");
 
 const { startCountMetric, endCountMetric, startSecondsMetric, endSecondsMetric } = metricsUtilities;
 
 function transpileFilesCallback(proceed, abort, context) {
-  const { metrics, childProcessesLength } = context;
+  const { metrics, processesLength } = context;
 
   if (metrics) {
     startCountMetric(context);
     startSecondsMetric(context);
   }
 
-  (childProcessesLength === 0) ?
+  (processesLength === 0) ?
     singleProcessTranspileFilesCallback(done, context) :
-      childProcessesTranspileFilesCallback(done, context);
+      multipleProcessesTranspileFilesCallback(done, context);
 
   function done() {
     if (metrics) {
