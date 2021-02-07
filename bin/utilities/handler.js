@@ -3,27 +3,26 @@
 const events = require("../events"),
       DeleteFileTask = require("../task/deleteFile"),
       BundleFilesTask = require("../task/bundleFiles"),
-      DeleteDirectoryTask = require("../task/deleteDirectory"),
-      SingleProcessTranspileFileTask = require("../task/transpileFile/singleProcess"),
-      MultipleProcessesTranspileFileTask = require("../task/transpileFile/multipleProcesses");
+      TranspileFileTask = require("../task/transpileFile"),
+      DeleteDirectoryTask = require("../task/deleteDirectory");
 
 const { ADD_EVENT, CHANGE_EVENT, UNLINK_EVENT, UNLINK_DIR_EVENT } = events;
 
-function eventHandler(event, run, path, queue, context) {
+function eventHandler(queue, event, path, context) {
   switch (event) {
     case ADD_EVENT :
     case CHANGE_EVENT :
-      addOrChangeEventHandler(run, path, queue, context);
+      addOrChangeEventHandler(queue, path, context);
 
       break;
 
     case UNLINK_DIR_EVENT :
-      unlinkDirEventHandler(path, queue, context);
+      unlinkDirEventHandler(queue, context);
 
       break;
 
     case UNLINK_EVENT :
-      unlinkEventHandler(path, queue, context);
+      unlinkEventHandler(queue, path, context);
 
       break;
   }
@@ -50,16 +49,15 @@ module.exports = {
   queueEmptyHandler
 }
 
-function addOrChangeEventHandler(run, path, queue, context) {
-  const { processesLength } = context,
-        transpileFileTask = (processesLength < 2) ?
-                              SingleProcessTranspileFileTask.fromPath(path, context) :
-                                MultipleProcessesTranspileFileTask.fromRunAndPath(run, path, context);
+function addOrChangeEventHandler(queue, path, context) {
+  const transpileFileTask = TranspileFileTask.fromPath(path, context);
 
-  queue.addTask(transpileFileTask);
+  if (transpileFileTask !== null) {
+    queue.addTask(transpileFileTask);
+  }
 }
 
-function unlinkDirEventHandler(path, queue, context) {
+function unlinkDirEventHandler(queue, path, context) {
   const deleteDirectoryTask = DeleteDirectoryTask.fromPath(path, context);
 
   if (deleteDirectoryTask !== null) {
@@ -67,7 +65,7 @@ function unlinkDirEventHandler(path, queue, context) {
   }
 }
 
-function unlinkEventHandler(path, queue, context) {
+function unlinkEventHandler(queue, path, context) {
   const deleteFileTask = DeleteFileTask.fromPath(path, context);
 
   if (deleteFileTask !== null) {

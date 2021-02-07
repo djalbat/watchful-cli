@@ -84,6 +84,8 @@ In order to build a bundle, you must supply the source directory and target dire
 
 The path to the entry file is taken to be relative to the target directory, not the project directory. You can also optionally supply a path to the bundle file by way of the `--bundle-file` option, otherwise the output is piped to `stdout`. Either the temp or the lib directory can be given as the target directory, by the way, because there may be times when you want to both build a bundle and build a package.
 
+Multiple processes are supported in batch mode, set the `--processes` option to a number greater than 1 to enable them. Be careful not to set this too high. On a modern Mac laptop the optimal number is only 4 processes. Any more and performance actually deteriorates. Remember that multiple processes are only supported in batch mode where the gains are likely to be significant. In incremental mode, the gains are likely to be in the region of a tenth of a second or even less, and therefore not worth the implementation effort. Also bear in mind that there is an overhead associated with creating more than one process and therefore you will only see gains if transpiling dozens of files rather than just a few.
+
 ### Running by way of npm scripts
 
 As already mentioned, it is recommended that you install Watchful as a project dependency rather than globally, then run it with npm scripts. In this example we build a bundle for an application using ES6 and [JSX](https://reactjs.org/docs/introducing-jsx.html).

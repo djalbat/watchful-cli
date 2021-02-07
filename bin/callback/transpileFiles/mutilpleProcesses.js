@@ -1,16 +1,55 @@
 "use strict";
 
-const batchWrappersUtilities = require("../../utilities/wrappers/batch");
+const metricsUtilities = require("../../utilities/metrics"),
+      TranspileFileWrapper = require("../../wrapper/transpileFile");
 
-const { createBatchTranspileFileWrappers } = batchWrappersUtilities;
+const { updateCountMetric } = metricsUtilities;
 
 function multipleProcessesTranspileFilesCallback(done, context) {
-  const run = createBatchTranspileFileWrappers(done, context),
-        { transpileFileWrappers } = context,
-        transpileFileWrappersLength = transpileFileWrappers.length;
+  const { filePaths, processesLength } = context,
+        filePathsLength = filePaths.length,
+        transpileFileWrappers = [],
+        transpileFileWrappersLength = Math.min(filePathsLength, processesLength);
 
   for (let count = 0; count < transpileFileWrappersLength; count++) {
-    run();
+    const transpileFileWrapper = TranspileFileWrapper.fromCallback(callback, context);
+
+    transpileFileWrappers.push(transpileFileWrapper);
+  }
+
+  Object.assign(context, {
+    transpileFileWrappers
+  });
+
+  let index = 0;
+
+  function next() {
+    if (index === filePathsLength) {
+      const transpileFileWrappersLength = transpileFileWrappers.length;
+
+      if (transpileFileWrappersLength === processesLength) {
+        done();
+      }
+
+      return;
+    }
+
+    const filePath = filePaths[index++],
+          transpileFileWrapper = transpileFileWrappers.pop();
+
+    transpileFileWrapper.send(filePath);
+  }
+
+  function callback(transpileFileWrapper) {
+    transpileFileWrappers.push(transpileFileWrapper);
+
+    updateCountMetric(context);
+
+    next();
+  }
+
+  for (let count = 0; count < transpileFileWrappersLength; count++) {
+    next();
   }
 }
 
