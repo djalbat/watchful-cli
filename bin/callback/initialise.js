@@ -2,12 +2,14 @@
 
 const messages = require("../messages"),
       defaults = require("../defaults"),
+      constants = require("../constants"),
       pathUtilities = require("../utilities/path"),
       metricsUtilities = require("../utilities/metrics");
 
-const { pathFromOption } = pathUtilities,
+const { BROWSERIFY } = constants,
+      { pathFromOption } = pathUtilities,
       { initialiseMetrics } = metricsUtilities,
-      { DEFAULT_WAIT, DEFAULT_QUIETLY, DEFAULT_METRICS, DEFAULT_PROCESSES } = defaults,
+      { WAIT_DEFAULT, BUNDLER_DEFAULT, QUIETLY_DEFAULT, METRICS_DEFAULT, PROCESSES_DEFAULT } = defaults,
       { NO_ENTRY_FILE_SPECIFIED_MESSAGE,
         NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE,
         BOTH_LIB_AND_TEMP_DIRECTORIES_SPECIFIED_MESSAGE,
@@ -21,10 +23,11 @@ const { pathFromOption } = pathUtilities,
 
 function initialiseCallback(proceed, abort, context) {
   const { options } = context,
-        { wait = DEFAULT_WAIT,
-          quietly = DEFAULT_QUIETLY,
-          metrics = DEFAULT_METRICS,
-          processes = DEFAULT_PROCESSES,
+        { wait = WAIT_DEFAULT,
+          bundler = BUNDLER_DEFAULT,
+          quietly = QUIETLY_DEFAULT,
+          metrics = METRICS_DEFAULT,
+          processes = PROCESSES_DEFAULT,
           entryFile,
           bundleFile,
           libDirectory,
@@ -165,21 +168,34 @@ function initialiseCallback(proceed, abort, context) {
     });
   }
 
-  const babelOptions = babelOptionsFromOptions(options),
-        browserifyOptions = browserifyOptionsFromOptions(options);
 
   Object.assign(context, {
     wait,
-    metrics,
+    bundler,
     quietly,
-    babelOptions,
-    processesLength,
-    browserifyOptions
+    metrics,
+    processesLength
   });
 
   delete context.options;
 
-  initialiseMetrics(context);
+  if (metrics) {
+    initialiseMetrics(context);
+  }
+
+  const babelOptions = babelOptionsFromOptions(options);
+
+  Object.assign(context, {
+    babelOptions
+  });
+
+  if (bundler === BROWSERIFY) {
+    const browserifyOptions = browserifyOptionsFromOptions(options);
+
+    Object.assign(context, {
+      browserifyOptions
+    });
+  }
 
   proceed();
 }

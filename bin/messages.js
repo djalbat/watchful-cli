@@ -1,6 +1,7 @@
 "use strict";
 
 const BABEL_NOT_INSTALLED = "The '@babel/core' package is not installed.",
+      ESBUILD_NOT_INSTALLED = "esbuild is not installed.",
       BROWSERIFY_NOT_INSTALLED = "Browserify is not installed.",
       BUNDLE_FAILED_MESSAGE = "Browserify failed:",
       TRANSFORM_FAILED_MESSAGE = "Babel failed:",
@@ -20,6 +21,7 @@ const BABEL_NOT_INSTALLED = "The '@babel/core' package is not installed.",
 
 module.exports = {
   BABEL_NOT_INSTALLED,
+  ESBUILD_NOT_INSTALLED,
   BROWSERIFY_NOT_INSTALLED,
   BUNDLE_FAILED_MESSAGE,
   TRANSFORM_FAILED_MESSAGE,

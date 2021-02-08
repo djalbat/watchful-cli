@@ -9,7 +9,7 @@ const { resolve } = path,
       { BABEL_CORE_PATH } = constants,
       { BABEL_NOT_INSTALLED } = messages;
 
-function babelCallback(proceed, abort, context) {
+function babelCorePathCallback(proceed, abort, context) {
   try {
     const babelCorePath = resolve(BABEL_CORE_PATH);
 
@@ -25,4 +25,4 @@ function babelCallback(proceed, abort, context) {
   proceed();
 }
 
-module.exports = babelCallback;
+module.exports = babelCorePathCallback;

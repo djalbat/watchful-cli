@@ -1,13 +1,19 @@
 "use strict";
 
-const DEFAULT_WAIT = 0,
-      DEFAULT_QUIETLY = false,
-      DEFAULT_METRICS = false,
-      DEFAULT_PROCESSES = 1;
+const constants = require("./constants");
+
+const { BROWSERIFY } = constants;
+
+const WAIT_DEFAULT = 0,
+      BUNDLER_DEFAULT = BROWSERIFY,
+      QUIETLY_DEFAULT = false,
+      METRICS_DEFAULT = false,
+      PROCESSES_DEFAULT = 1;
 
 module.exports = {
-  DEFAULT_WAIT,
-  DEFAULT_QUIETLY,
-  DEFAULT_METRICS,
-  DEFAULT_PROCESSES
+  WAIT_DEFAULT,
+  BUNDLER_DEFAULT,
+  QUIETLY_DEFAULT,
+  METRICS_DEFAULT,
+  PROCESSES_DEFAULT
 };

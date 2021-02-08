@@ -6,13 +6,19 @@ const messages = require("../messages"),
       constants = require("../constants");
 
 const { resolve } = path,
-      { BROWSERIFY_PATH } = constants,
-      { BROWSERIFY_NOT_INSTALLED } = messages;
+      { BROWSERIFY_NOT_INSTALLED } = messages,
+      { BROWSERIFY_PATH, BROWSERIFY } = constants;
 
-function browserifyCallback(proceed, abort, context) {
-  const { entryFilePath } = context;
+function browserifyPathCallback(proceed, abort, context) {
+  const { bundler, entryFilePath } = context;
 
   if (!entryFilePath) {
+    proceed();
+
+    return;
+  }
+
+  if (bundler !== BROWSERIFY) {
     proceed();
 
     return;
@@ -33,4 +39,4 @@ function browserifyCallback(proceed, abort, context) {
   proceed();
 }
 
-module.exports = browserifyCallback;
+module.exports = browserifyPathCallback;
