@@ -1,6 +1,8 @@
 "use strict";
 
-const INLINE = "inline",
+const SWC = "swc",
+      BABEL = "babel",
+      INLINE = "inline",
       MESSAGE = "message",
       ESBUILD = "esbuild",
       DELIMITER = "/",
@@ -10,6 +12,8 @@ const INLINE = "inline",
       SOURCE_DIRECTORY_WATCH_PATTERN = "/**/*.js";
 
 module.exports = {
+  SWC,
+  BABEL,
   INLINE,
   MESSAGE,
   ESBUILD,

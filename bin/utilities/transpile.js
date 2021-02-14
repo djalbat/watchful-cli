@@ -8,18 +8,23 @@ const paths = require("../paths"),
       pathUtilities = require("../utilities/path"),
       fileSystemUtilities = require("../utilities/fileSystem");
 
-const { INLINE } = constants,
-      { BABEL_CORE_PATH } = paths,
+const { BABEL, INLINE } = constants,
+      { SWC_CORE_PATH, BABEL_CORE_PATH } = paths,
       { writeFile, createParentDirectory } = fileSystemUtilities,
       { combinePaths, pathWithoutBottommostNameFromPath } = pathUtilities,
-      { BABEL_FAILED_MESSAGE, BABEL_NOT_INSTALLED_MESSAGE } = messages;
+      { SWC_FAILED_MESSAGE,
+        BABEL_FAILED_MESSAGE,
+        SWC_NOT_INSTALLED_MESSAGE,
+        BABEL_NOT_INSTALLED_MESSAGE } = messages;
 
 function transpileFile(filePath, context, callback) {
-  const { sourceDirectoryPath, targetDirectoryPath } = context,
+  const { transpiler, sourceDirectoryPath, targetDirectoryPath } = context,
         sourceFilePath = combinePaths(sourceDirectoryPath, filePath),  ///
         targetFilePath = combinePaths(targetDirectoryPath, filePath);  ///
 
-  babelFile(sourceFilePath, targetFilePath, context, callbackEx);
+  (transpiler === BABEL) ?
+    babelFile(sourceFilePath, targetFilePath, context, callbackEx) :
+      swcFile(sourceFilePath, targetFilePath, context, callbackEx);
 
   function callbackEx(success) {
     const { quietly } = context;
@@ -37,6 +42,8 @@ module.exports = {
 };
 
 function babelFile(sourceFilePath, targetFilePath, context, callback) {
+  let transpiler;
+
   const { debug } = context,
         targetFilePathWithoutBottommostName = pathWithoutBottommostNameFromPath(targetFilePath),
         relativeSourceFilePath = path.relative(targetFilePathWithoutBottommostName, sourceFilePath),
@@ -53,12 +60,11 @@ function babelFile(sourceFilePath, targetFilePath, context, callback) {
     });
   }
 
-  let babel;
-
   try {
-    const babelCorePath = path.resolve(BABEL_CORE_PATH);
+    const babelCorePath = path.resolve(BABEL_CORE_PATH),
+          babel = require(babelCorePath);
 
-    babel = require(babelCorePath);
+    transpiler = babel; ///
   } catch (error) {
     const success = false;
 
@@ -69,7 +75,7 @@ function babelFile(sourceFilePath, targetFilePath, context, callback) {
     return;
   }
 
-  babel.transformFile(sourceFilePath, options, (error, result) => {
+  transpiler.transformFile(sourceFilePath, options, (error, result) => {
     if (error) {
       const success = false,
             { message } = error;
@@ -95,4 +101,53 @@ function babelFile(sourceFilePath, targetFilePath, context, callback) {
 
     callback(success);
   });
+}
+
+function swcFile(sourceFilePath, targetFilePath, context, callback) {
+  let transpiler;
+
+  try {
+    const swcCorePath = path.resolve(SWC_CORE_PATH),
+          swc = require(swcCorePath);
+
+    transpiler = swc; ///
+  } catch (error) {
+    const success = false;
+
+    console.log(SWC_NOT_INSTALLED_MESSAGE);
+
+    callback(success);
+
+    return;
+  }
+
+  const { debug } = context,
+        sourceMaps = debug, ///
+        filename = targetFilePath,  ///
+        options = {
+          filename,
+          sourceMaps
+        }
+
+  transpiler.transformFile(sourceFilePath, options)
+    .then((output) => {
+      const success = true,
+            { code, map } = output,
+            targetFileContent = code; ///
+
+      createParentDirectory(targetFilePath);
+
+      writeFile(targetFilePath, targetFileContent);
+
+      callback(success);
+    })
+    .catch((error) => {
+      const success = false;
+
+      console.log(SWC_FAILED_MESSAGE);
+
+      console.log(error);
+
+      callback(success);
+    });
 }

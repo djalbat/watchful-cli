@@ -1,10 +1,12 @@
 "use strict";
 
-const BABEL_FAILED_MESSAGE = "Babel failed:",
+const SWC_FAILED_MESSAGE = "swc failed:",
+      BABEL_FAILED_MESSAGE = "Babel failed:",
       ESBUILD_FAILED_MESSAGE = "esbuild failed.",
       BROWSERIFY_FAILED_MESSAGE = "Browserify failed:",
       BATCH_BUILD_FAILED_MESSAGE = "The batch build failed.",
       INCREMENTAL_BUILD_FAILED_MESSAGE = "The incremental build failed.",
+      SWC_NOT_INSTALLED_MESSAGE = "The '@swc/core' package is not installed.",
       BABEL_NOT_INSTALLED_MESSAGE = "The '@babel/core' package is not installed.",
       ESBUILD_NOT_INSTALLED_MESSAGE = "esbuild is not installed.",
       BROWSERIFY_NOT_INSTALLED_MESSAGE = "Browserify is not installed.",
@@ -21,11 +23,13 @@ const BABEL_FAILED_MESSAGE = "Babel failed:",
       ENTRY_FILE_BUT_NEITHER_LIB_NOR_TEMP_DIRECTORY_SPECIFIED_MESSAGE = "If an entry file has been specified then a temp or a lib directory must also be given.";
 
 module.exports = {
+  SWC_FAILED_MESSAGE,
   BABEL_FAILED_MESSAGE,
   ESBUILD_FAILED_MESSAGE,
   BROWSERIFY_FAILED_MESSAGE,
   BATCH_BUILD_FAILED_MESSAGE,
   INCREMENTAL_BUILD_FAILED_MESSAGE,
+  SWC_NOT_INSTALLED_MESSAGE,
   BABEL_NOT_INSTALLED_MESSAGE,
   ESBUILD_NOT_INSTALLED_MESSAGE,
   BROWSERIFY_NOT_INSTALLED_MESSAGE,

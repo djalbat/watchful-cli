@@ -93,20 +93,20 @@ function esbuildFiles(targetEntryFilePath, context, callback) {
         };
 
   bundler.build(options)
-  .then(() => {
-    const success = true;
+    .then(() => {
+      const success = true;
 
-    callback(success);
-  })
-  .catch((error) => {
-    const success = false;
+      callback(success);
+    })
+    .catch((error) => {
+      const success = false;
 
-    console.log(ESBUILD_FAILED_MESSAGE);
+      console.log(ESBUILD_FAILED_MESSAGE);
 
-    console.log(error);
+      console.log(error);
 
-    callback(success);
-  });
+      callback(success);
+    });
 }
 
 function browserifyFiles(targetEntryFilePath, context, callback) {
@@ -150,7 +150,7 @@ function browserifyFiles(targetEntryFilePath, context, callback) {
       return;
     }
 
-    const success = false,
+    const success = true,
           { bundleFilePath } = context;
 
     if (bundleFilePath) {

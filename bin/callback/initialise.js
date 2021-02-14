@@ -12,7 +12,8 @@ const { pathFromOption } = pathUtilities,
         BUNDLER_DEFAULT,
         QUIETLY_DEFAULT,
         METRICS_DEFAULT,
-        PROCESSES_DEFAULT } = defaults,
+        PROCESSES_DEFAULT,
+        TRANSPILER_DEFAULT } = defaults,
       { NO_ENTRY_FILE_SPECIFIED_MESSAGE,
         NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE,
         BOTH_LIB_AND_TEMP_DIRECTORIES_SPECIFIED_MESSAGE,
@@ -32,6 +33,7 @@ function initialiseCallback(proceed, abort, context) {
           quietly = QUIETLY_DEFAULT,
           metrics = METRICS_DEFAULT,
           processes = PROCESSES_DEFAULT,
+          transpiler = TRANSPILER_DEFAULT,
           entryFile,
           bundleFile,
           libDirectory,
@@ -178,6 +180,7 @@ function initialiseCallback(proceed, abort, context) {
     bundler,
     quietly,
     metrics,
+    transpiler,
     processesLength
   });
 

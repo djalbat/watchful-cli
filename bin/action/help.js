@@ -27,12 +27,14 @@ Options:
   
   --metrics|-m                                   Show metrics, that is file counts and times
 
-  --bundler|-u                                   The bundler, either \`browserify\` or \`esbuild\`
-
   --quietly|-q                                   Run with almost no console logging
 
   --processes|-p                                 The number of processes
   
+  --bundler|-u                                   The bundler, either \`browserify\` or \`esbuild\`
+
+  --transpiler|-r                                The transpiler, either \`babel\` or \`swc\`
+
   --entry-file|-b                                Entry file path
   
   --bundle-file|-b                               Bundle file path
