@@ -3,9 +3,11 @@
 const path = require("path"),
       child_process = require("child_process");
 
-const constants = require("../constants");
+const paths = require("../paths"),
+      constants = require("../constants");
 
-const { MESSAGE, BABEL_CORE_PATH } = constants;
+const { MESSAGE } = constants,
+      { BABEL_CORE_PATH } = paths;
 
 class TranspileFileWrapper {
   constructor(process, callback, parameters) {
@@ -34,10 +36,10 @@ class TranspileFileWrapper {
     this.process.send(filePath);
   }
 
-  messageHandler(message) {
+  messageHandler(success) {
     const transpileFileWrapper = this;  ///
 
-    this.callback(transpileFileWrapper);
+    this.callback(transpileFileWrapper, success);
   }
 
   static fromCallback(callback, context) {

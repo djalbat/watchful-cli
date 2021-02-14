@@ -2,17 +2,19 @@
 
 const path = require("path");
 
-const messages = require("../messages"),
+const paths = require("../paths"),
+      messages = require("../messages"),
       constants = require("../constants"),
       pathUtilities = require("../utilities/path"),
       fileSystemUtilities = require("../utilities/fileSystem");
 
-const { INLINE, BABEL_CORE_PATH } = constants,
+const { INLINE } = constants,
+      { BABEL_CORE_PATH } = paths,
       { writeFile, createParentDirectory } = fileSystemUtilities,
-      { BABEL_FAILED_MESSAGE, BABEL_NOT_INSTALLED } = messages,
-      { combinePaths, pathWithoutBottommostNameFromPath } = pathUtilities;
+      { combinePaths, pathWithoutBottommostNameFromPath } = pathUtilities,
+      { BABEL_FAILED_MESSAGE, BABEL_NOT_INSTALLED_MESSAGE } = messages;
 
-function transpileFile(filePath, context, done) {
+function transpileFile(filePath, context, callback) {
   const { debug, sourceDirectoryPath, targetDirectoryPath } = context,
         sourceFilePath = combinePaths(sourceDirectoryPath, filePath),  ///
         targetFilePath = combinePaths(targetDirectoryPath, filePath),  ///
@@ -38,16 +40,19 @@ function transpileFile(filePath, context, done) {
 
     babel = require(babelCorePath);
   } catch (error) {
-    console.log(BABEL_NOT_INSTALLED);
+    const success = false;
 
-    done();
+    console.log(BABEL_NOT_INSTALLED_MESSAGE);
+
+    callback(success);
 
     return;
   }
 
   babel.transformFile(sourceFilePath, options, (error, result) => {
     if (error) {
-      const { message } = error;
+      const success = false,
+            { message } = error;
 
       error = message;  ///
 
@@ -55,12 +60,13 @@ function transpileFile(filePath, context, done) {
 
       console.log(error);
 
-      done();
+      callback(success);
 
       return;
     }
 
     const { code } = result,
+          success = true,
           targetFileContent = code; ///
 
     createParentDirectory(targetFilePath);
@@ -73,7 +79,7 @@ function transpileFile(filePath, context, done) {
       console.log(`Transpiled '${sourceFilePath}'.`);
     }
 
-    done();
+    callback(success);
   });
 }
 

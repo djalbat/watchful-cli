@@ -7,7 +7,7 @@ const events = require("../events"),
       pathUtilities = require("../utilities/path");
 
 const { ADD_EVENT, READY_EVENT } = events,
-      { ENTRY_FILE_NOT_INCLUDED_IN_BUNDLED_FILES } = messages,
+      { ENTRY_FILE_NOT_INCLUDED_IN_BUNDLED_FILES_MESSAGE } = messages,
       { pathWithoutDirectoryPathFromPathAndDirectoryPath } = pathUtilities;
 
 function retrieveFilePathsCallback(proceed, abort, context) {
@@ -31,7 +31,7 @@ function retrieveFilePathsCallback(proceed, abort, context) {
         const filePathsIncludesEntryFilePath = filePaths.includes(entryFilePath);
 
         if (!filePathsIncludesEntryFilePath) {
-          console.log(ENTRY_FILE_NOT_INCLUDED_IN_BUNDLED_FILES);
+          console.log(ENTRY_FILE_NOT_INCLUDED_IN_BUNDLED_FILES_MESSAGE);
 
           abort();
 

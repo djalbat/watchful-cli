@@ -18,5 +18,5 @@ const args = process.argv,  ///
 process.on(MESSAGE, (message) => {
   const filePath = message; ///
 
-  transpileFile(filePath, context, () => process.send(filePath));
+  transpileFile(filePath, context, (success) => process.send(success));
 });

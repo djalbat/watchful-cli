@@ -40,10 +40,12 @@ function multipleProcessesTranspileFilesCallback(done, context) {
     transpileFileWrapper.send(filePath);
   }
 
-  function callback(transpileFileWrapper) {
+  function callback(transpileFileWrapper, success) {
     transpileFileWrappers.push(transpileFileWrapper);
 
-    updateCountMetric(context);
+    if (success) {
+      updateCountMetric(context);
+    }
 
     next();
   }

@@ -1,16 +1,23 @@
 "use strict";
 
-const messages = require("../messages"),
+const path = require("path");
+
+const paths = require("../paths"),
+      messages = require("../messages"),
       constants = require("../constants"),
       pathUtilities = require("../utilities/path"),
       metricsUtilities = require("../utilities/metrics"),
       fileSystemUtilities = require("../utilities/fileSystem");
 
 const { combinePaths } = pathUtilities,
+      { BROWSERIFY } = constants,
+      { ESBUILD_PATH, BROWSERIFY_PATH } = paths,
       { writeFileEx, createParentDirectory } = fileSystemUtilities,
       { startSecondsMetric, endSecondsMetric } = metricsUtilities,
-      { BROWSERIFY, ESBUILD_PATH, BROWSERIFY_PATH } = constants,
-      { ESBUILD_FAILED_MESSAGE, ESBUILD_NOT_INSTALLED, BROWSERIFY_NOT_INSTALLED, BROWSERIFY_FAILED_MESSAGE } = messages;
+      { ESBUILD_FAILED_MESSAGE,
+        BROWSERIFY_FAILED_MESSAGE,
+        ESBUILD_NOT_INSTALLED_MESSAGE,
+        BROWSERIFY_NOT_INSTALLED_MESSAGE } = messages;
 
 function bundleFiles(entryFilePath, context, done) {
   const { metrics, bundler, targetDirectoryPath } = context,
@@ -24,19 +31,25 @@ function bundleFiles(entryFilePath, context, done) {
     browserifyFiles(targetEntryFilePath, context, callback) :
       esbuildFiles(targetEntryFilePath, context, callback);
 
-  function callback() {
+  function callback(success) {
     const { quietly, bundleFilePath } = context;
 
-    if (!quietly) {
-      if (bundleFilePath) {
-        console.log(`Written bundle to '${bundleFilePath}'.`);
+    if (success) {
+      if (!quietly) {
+        if (bundleFilePath) {
+          console.log(`Written bundle to '${bundleFilePath}'.`);
+        }
       }
-    }
 
-    if (metrics) {
-      const seconds = endSecondsMetric(context);
+      if (metrics) {
+        const seconds = endSecondsMetric(context);
 
-      console.log(`Bundled all files in ${seconds} seconds.`);
+        console.log(`Bundled all files in ${seconds} seconds.`);
+      }
+    } else {
+      if (metrics) {
+        endSecondsMetric(context);
+      }
     }
 
     done();
@@ -58,9 +71,11 @@ function esbuildFiles(targetEntryFilePath, context, callback) {
 
     bundler = esbuild;  ///
   } catch (error) {
-    console.log(ESBUILD_NOT_INSTALLED);
+    const success = false;
 
-    callback();
+    console.log(ESBUILD_NOT_INSTALLED_MESSAGE);
+
+    callback(success);
 
     return;
   }
@@ -81,14 +96,18 @@ function esbuildFiles(targetEntryFilePath, context, callback) {
 
   bundler.build(options)
   .then(() => {
-    callback();
+    const success = true;
+
+    callback(success);
   })
   .catch((error) => {
+    const success = false;
+
     console.log(ESBUILD_FAILED_MESSAGE);
 
     console.log(error);
 
-    callback();
+    callback(success);
   });
 }
 
@@ -106,9 +125,11 @@ function browserifyFiles(targetEntryFilePath, context, callback) {
 
     bundler = browserify(options); ///
   } catch (error) {
-    console.log(BROWSERIFY_NOT_INSTALLED);
+    const success = false;
 
-    callback();
+    console.log(BROWSERIFY_NOT_INSTALLED_MESSAGE);
+
+    callback(success);
 
     return;
   }
@@ -117,7 +138,8 @@ function browserifyFiles(targetEntryFilePath, context, callback) {
 
   bundler.bundle((error, buffer) => {
     if (error) {
-      const { message } = error;
+      const success = false,
+            { message } = error;
 
       error = message;  ///
 
@@ -125,12 +147,13 @@ function browserifyFiles(targetEntryFilePath, context, callback) {
 
       console.log(error);
 
-      callback();
+      callback(success);
 
       return;
     }
 
-    const { bundleFilePath } = context;
+    const success = false,
+          { bundleFilePath } = context;
 
     if (bundleFilePath) {
       createParentDirectory(bundleFilePath);
@@ -140,7 +163,6 @@ function browserifyFiles(targetEntryFilePath, context, callback) {
       process.stdout.write(buffer);
     }
 
-    callback();
+    callback(success);
   });
 }
-

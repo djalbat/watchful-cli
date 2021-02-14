@@ -19,8 +19,10 @@ function singleProcessTranspileFilesCallback(done, context) {
 module.exports = singleProcessTranspileFilesCallback;
 
 function transpileFileCallback(filePath, next, done, context) {
-  transpileFile(filePath, context, () => {
-    updateCountMetric(context);
+  transpileFile(filePath, context, (success) => {
+    if (success) {
+      updateCountMetric(context);
+    }
 
     next();
   });
