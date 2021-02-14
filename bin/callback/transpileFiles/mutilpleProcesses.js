@@ -9,9 +9,9 @@ function multipleProcessesTranspileFilesCallback(done, context) {
   const { filePaths, processesLength } = context,
         filePathsLength = filePaths.length,
         transpileFileWrappers = [],
-        transpileFileWrappersLength = Math.min(filePathsLength, processesLength);
+        length = Math.min(filePathsLength, processesLength);
 
-  for (let count = 0; count < transpileFileWrappersLength; count++) {
+  for (let count = 0; count < length; count++) {
     const transpileFileWrapper = TranspileFileWrapper.fromCallback(callback, context);
 
     transpileFileWrappers.push(transpileFileWrapper);
@@ -27,7 +27,7 @@ function multipleProcessesTranspileFilesCallback(done, context) {
     if (index === filePathsLength) {
       const transpileFileWrappersLength = transpileFileWrappers.length;
 
-      if (transpileFileWrappersLength === processesLength) {
+      if (transpileFileWrappersLength === length) {
         done();
       }
 
@@ -48,7 +48,7 @@ function multipleProcessesTranspileFilesCallback(done, context) {
     next();
   }
 
-  for (let count = 0; count < transpileFileWrappersLength; count++) {
+  for (let count = 0; count < length; count++) {
     next();
   }
 }

@@ -16,11 +16,10 @@ class TranspileFileTask extends Task {
 
     const { sourceDirectoryPath } = context,
           sourceFilePath = path,  ///
-          method = transpileFileMethod, ///
           filePath = pathWithoutDirectoryPathFromPathAndDirectoryPath(sourceFilePath, sourceDirectoryPath); ///
 
-    transpileFileTask = new TranspileFileTask(method, filePath, context, () => {
-      ///
+    transpileFileTask = new TranspileFileTask(transpileFile, filePath, context, () => {
+      updateCountMetric(context);
     });
 
     return transpileFileTask;
@@ -28,11 +27,3 @@ class TranspileFileTask extends Task {
 }
 
 module.exports = TranspileFileTask;
-
-function transpileFileMethod(filePath, context, callback) {
-  transpileFile(filePath, context, () => {
-    updateCountMetric(context);
-
-    callback();
-  });
-}

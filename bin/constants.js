@@ -1,6 +1,7 @@
 "use strict";
 
-const MESSAGE = "message",
+const INLINE = "inline",
+      MESSAGE = "message",
       ESBUILD = "esbuild",
       DELIMITER = "/",
       BROWSERIFY = "browserify",
@@ -12,6 +13,7 @@ const MESSAGE = "message",
       SOURCE_DIRECTORY_WATCH_PATTERN = "/**/*.js";
 
 module.exports = {
+  INLINE,
   MESSAGE,
   ESBUILD,
   DELIMITER,

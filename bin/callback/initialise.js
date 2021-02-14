@@ -2,14 +2,17 @@
 
 const messages = require("../messages"),
       defaults = require("../defaults"),
-      constants = require("../constants"),
       pathUtilities = require("../utilities/path"),
       metricsUtilities = require("../utilities/metrics");
 
-const { BROWSERIFY } = constants,
-      { pathFromOption } = pathUtilities,
+const { pathFromOption } = pathUtilities,
       { initialiseMetrics } = metricsUtilities,
-      { WAIT_DEFAULT, BUNDLER_DEFAULT, QUIETLY_DEFAULT, METRICS_DEFAULT, PROCESSES_DEFAULT } = defaults,
+      { WAIT_DEFAULT,
+        DEBUG_DEFAULT,
+        BUNDLER_DEFAULT,
+        QUIETLY_DEFAULT,
+        METRICS_DEFAULT,
+        PROCESSES_DEFAULT } = defaults,
       { NO_ENTRY_FILE_SPECIFIED_MESSAGE,
         NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE,
         BOTH_LIB_AND_TEMP_DIRECTORIES_SPECIFIED_MESSAGE,
@@ -24,6 +27,7 @@ const { BROWSERIFY } = constants,
 function initialiseCallback(proceed, abort, context) {
   const { options } = context,
         { wait = WAIT_DEFAULT,
+          debug = DEBUG_DEFAULT,
           bundler = BUNDLER_DEFAULT,
           quietly = QUIETLY_DEFAULT,
           metrics = METRICS_DEFAULT,
@@ -168,9 +172,9 @@ function initialiseCallback(proceed, abort, context) {
     });
   }
 
-
   Object.assign(context, {
     wait,
+    debug,
     bundler,
     quietly,
     metrics,
@@ -183,49 +187,7 @@ function initialiseCallback(proceed, abort, context) {
     initialiseMetrics(context);
   }
 
-  const babelOptions = babelOptionsFromOptions(options);
-
-  Object.assign(context, {
-    babelOptions
-  });
-
-  if (bundler === BROWSERIFY) {
-    const browserifyOptions = browserifyOptionsFromOptions(options);
-
-    Object.assign(context, {
-      browserifyOptions
-    });
-  }
-
   proceed();
 }
 
 module.exports = initialiseCallback;
-
-function babelOptionsFromOptions(options) {
-  const babelOptions = {},
-        { debug } = options;
-
-  if (debug) {
-    const sourceMaps = "inline";
-
-    Object.assign(babelOptions, {
-      sourceMaps
-    });
-  }
-
-  return babelOptions;
-}
-
-function browserifyOptionsFromOptions(options) {
-  const browserifyOptions = {},
-        { debug } = options;
-
-  if (debug) {
-    Object.assign(browserifyOptions, {
-      debug
-    });
-  }
-
-  return browserifyOptions;
-}

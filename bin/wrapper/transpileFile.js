@@ -40,11 +40,11 @@ class TranspileFileWrapper {
   }
 
   static fromCallback(callback, context) {
-    const { quietly, babelOptions,  babelCorePath, sourceDirectoryPath, targetDirectoryPath } = context;
+    const { debug, quietly, babelCorePath, sourceDirectoryPath, targetDirectoryPath } = context;
 
     context = { ///
+      debug,
       quietly,
-      babelOptions,
       babelCorePath,
       sourceDirectoryPath,
       targetDirectoryPath

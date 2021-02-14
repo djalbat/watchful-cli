@@ -3,24 +3,35 @@
 const path = require("path");
 
 const messages = require("../messages"),
+      constants = require("../constants"),
       pathUtilities = require("../utilities/path"),
       fileSystemUtilities = require("../utilities/fileSystem");
 
-const { TRANSFORM_FAILED_MESSAGE } = messages,
+const { INLINE } = constants,
+      { BABEL_FAILED_MESSAGE } = messages,
       { writeFile, createParentDirectory } = fileSystemUtilities,
       { combinePaths, pathWithoutBottommostNameFromPath } = pathUtilities;
 
 function transpileFile(filePath, context, done) {
-  const { babelCorePath, babelOptions, sourceDirectoryPath, targetDirectoryPath } = context,
+  const { debug, babelCorePath, sourceDirectoryPath, targetDirectoryPath } = context,
         sourceFilePath = combinePaths(sourceDirectoryPath, filePath),  ///
         targetFilePath = combinePaths(targetDirectoryPath, filePath),  ///
         targetFilePathWithoutBottommostName = pathWithoutBottommostNameFromPath(targetFilePath),
         relativeSourceFilePath = path.relative(targetFilePathWithoutBottommostName, sourceFilePath),
         sourceFileName = relativeSourceFilePath,  ///
-        options = Object.assign(babelOptions, {
+        options = {
           sourceFileName
-        }),
-        babel = require(babelCorePath);
+        };
+
+  if (debug) {
+    const sourceMaps = INLINE;
+
+    Object.assign(options, {
+      sourceMaps
+    });
+  }
+
+  const babel = require(babelCorePath);
 
   babel.transformFile(sourceFilePath, options, (error, result) => {
     if (error) {
@@ -28,7 +39,7 @@ function transpileFile(filePath, context, done) {
 
       error = message;  ///
 
-      console.log(TRANSFORM_FAILED_MESSAGE);
+      console.log(BABEL_FAILED_MESSAGE);
 
       console.log(error);
 
