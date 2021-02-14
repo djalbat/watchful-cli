@@ -41,11 +41,11 @@ function multipleProcessesTranspileFilesCallback(done, context) {
   }
 
   function callback(transpileFileWrapper, success) {
-    transpileFileWrappers.push(transpileFileWrapper);
-
     if (success) {
       updateCountMetric(context);
     }
+
+    transpileFileWrappers.push(transpileFileWrapper);
 
     next();
   }

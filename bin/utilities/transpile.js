@@ -15,9 +15,29 @@ const { INLINE } = constants,
       { BABEL_FAILED_MESSAGE, BABEL_NOT_INSTALLED_MESSAGE } = messages;
 
 function transpileFile(filePath, context, callback) {
-  const { debug, sourceDirectoryPath, targetDirectoryPath } = context,
+  const { sourceDirectoryPath, targetDirectoryPath } = context,
         sourceFilePath = combinePaths(sourceDirectoryPath, filePath),  ///
-        targetFilePath = combinePaths(targetDirectoryPath, filePath),  ///
+        targetFilePath = combinePaths(targetDirectoryPath, filePath);  ///
+
+  babelFile(sourceFilePath, targetFilePath, context, callbackEx);
+
+  function callbackEx(success) {
+    const { quietly } = context;
+
+    if (!quietly) {
+      console.log(`Transpiled '${sourceFilePath}'.`);
+    }
+
+    callback(success);
+  }
+}
+
+module.exports = {
+  transpileFile
+};
+
+function babelFile(sourceFilePath, targetFilePath, context, callback) {
+  const { debug } = context,
         targetFilePathWithoutBottommostName = pathWithoutBottommostNameFromPath(targetFilePath),
         relativeSourceFilePath = path.relative(targetFilePathWithoutBottommostName, sourceFilePath),
         sourceFileName = relativeSourceFilePath,  ///
@@ -73,16 +93,6 @@ function transpileFile(filePath, context, callback) {
 
     writeFile(targetFilePath, targetFileContent);
 
-    const { quietly } = context;
-
-    if (!quietly) {
-      console.log(`Transpiled '${sourceFilePath}'.`);
-    }
-
     callback(success);
   });
 }
-
-module.exports = {
-  transpileFile
-};

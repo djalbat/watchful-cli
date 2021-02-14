@@ -32,23 +32,21 @@ function bundleFiles(entryFilePath, context, done) {
       esbuildFiles(targetEntryFilePath, context, callback);
 
   function callback(success) {
-    const { quietly, bundleFilePath } = context;
+    const { metrics, quietly, bundleFilePath } = context;
+
+    if (metrics) {
+      const seconds = endSecondsMetric(context);
+
+      if (success) {
+        console.log(`Bundled all files in ${seconds} seconds.`);
+      }
+    }
 
     if (success) {
       if (!quietly) {
         if (bundleFilePath) {
           console.log(`Written bundle to '${bundleFilePath}'.`);
         }
-      }
-
-      if (metrics) {
-        const seconds = endSecondsMetric(context);
-
-        console.log(`Bundled all files in ${seconds} seconds.`);
-      }
-    } else {
-      if (metrics) {
-        endSecondsMetric(context);
       }
     }
 
