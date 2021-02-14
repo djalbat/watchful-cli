@@ -7,13 +7,13 @@ const messages = require("../messages"),
       pathUtilities = require("../utilities/path"),
       fileSystemUtilities = require("../utilities/fileSystem");
 
-const { INLINE } = constants,
-      { BABEL_FAILED_MESSAGE } = messages,
+const { INLINE, BABEL_CORE_PATH } = constants,
       { writeFile, createParentDirectory } = fileSystemUtilities,
+      { BABEL_FAILED_MESSAGE, BABEL_NOT_INSTALLED } = messages,
       { combinePaths, pathWithoutBottommostNameFromPath } = pathUtilities;
 
 function transpileFile(filePath, context, done) {
-  const { debug, babelCorePath, sourceDirectoryPath, targetDirectoryPath } = context,
+  const { debug, sourceDirectoryPath, targetDirectoryPath } = context,
         sourceFilePath = combinePaths(sourceDirectoryPath, filePath),  ///
         targetFilePath = combinePaths(targetDirectoryPath, filePath),  ///
         targetFilePathWithoutBottommostName = pathWithoutBottommostNameFromPath(targetFilePath),
@@ -31,7 +31,19 @@ function transpileFile(filePath, context, done) {
     });
   }
 
-  const babel = require(babelCorePath);
+  let babel;
+
+  try {
+    const babelCorePath = path.resolve(BABEL_CORE_PATH);
+
+    babel = require(babelCorePath);
+  } catch (error) {
+    console.log(BABEL_NOT_INSTALLED);
+
+    done();
+
+    return;
+  }
 
   babel.transformFile(sourceFilePath, options, (error, result) => {
     if (error) {

@@ -6,11 +6,11 @@ const messages = require("../messages"),
       metricsUtilities = require("../utilities/metrics"),
       fileSystemUtilities = require("../utilities/fileSystem");
 
-const { BROWSERIFY } = constants,
-      { combinePaths } = pathUtilities,
+const { combinePaths } = pathUtilities,
       { writeFileEx, createParentDirectory } = fileSystemUtilities,
       { startSecondsMetric, endSecondsMetric } = metricsUtilities,
-      { ESBUILD_FAILED_MESSAGE, BROWSERIFY_FAILED_MESSAGE } = messages;
+      { BROWSERIFY, ESBUILD_PATH, BROWSERIFY_PATH } = constants,
+      { ESBUILD_FAILED_MESSAGE, ESBUILD_NOT_INSTALLED, BROWSERIFY_NOT_INSTALLED, BROWSERIFY_FAILED_MESSAGE } = messages;
 
 function bundleFiles(entryFilePath, context, done) {
   const { metrics, bundler, targetDirectoryPath } = context,
@@ -48,23 +48,38 @@ module.exports = {
 };
 
 function esbuildFiles(targetEntryFilePath, context, callback) {
-  const { esbuildPath, bundleFilePath } = context,
-        esbuild = require(esbuildPath),
-        bundler = esbuild,  ///
-        entryPoint = targetEntryFilePath, ///
+  let bundler;
+
+  const { bundleFilePath } = context;
+
+  try {
+    const esbuildPath = path.resolve(ESBUILD_PATH),
+          esbuild = require(esbuildPath);
+
+    bundler = esbuild;  ///
+  } catch (error) {
+    console.log(ESBUILD_NOT_INSTALLED);
+
+    callback();
+
+    return;
+  }
+
+  const entryPoint = targetEntryFilePath, ///
         entryPoints = [
           entryPoint
         ],
         sourcemap = true,
         outfile = bundleFilePath,
-        bundle = true;
+        bundle = true,
+        options = {
+          entryPoints,
+          sourcemap,
+          outfile,
+          bundle
+        };
 
-  bundler.build({
-    entryPoints,
-    sourcemap,
-    outfile,
-    bundle
-  })
+  bundler.build(options)
   .then(() => {
     callback();
   })
@@ -78,12 +93,25 @@ function esbuildFiles(targetEntryFilePath, context, callback) {
 }
 
 function browserifyFiles(targetEntryFilePath, context, callback) {
-  const { debug, browserifyPath } = context,
-        browserify = require(browserifyPath),
+  let bundler;
+
+  const { debug } = context,
         options = {
           debug
-        },
-        bundler = browserify(options); ///
+        };
+
+  try {
+    const browserifyPath = path.resolve(BROWSERIFY_PATH),
+          browserify = require(browserifyPath);
+
+    bundler = browserify(options); ///
+  } catch (error) {
+    console.log(BROWSERIFY_NOT_INSTALLED);
+
+    callback();
+
+    return;
+  }
 
   bundler.add(targetEntryFilePath);
 

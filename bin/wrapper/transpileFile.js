@@ -1,10 +1,11 @@
 "use strict";
 
-const child_process = require("child_process");
+const path = require("path"),
+      child_process = require("child_process");
 
 const constants = require("../constants");
 
-const { MESSAGE } = constants;
+const { MESSAGE, BABEL_CORE_PATH } = constants;
 
 class TranspileFileWrapper {
   constructor(process, callback, parameters) {
@@ -40,7 +41,8 @@ class TranspileFileWrapper {
   }
 
   static fromCallback(callback, context) {
-    const { debug, quietly, babelCorePath, sourceDirectoryPath, targetDirectoryPath } = context;
+    const { debug, quietly, sourceDirectoryPath, targetDirectoryPath } = context,
+          babelCorePath = path.resolve(BABEL_CORE_PATH);
 
     context = { ///
       debug,
