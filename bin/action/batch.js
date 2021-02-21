@@ -5,13 +5,17 @@ const action = require("../action"),
       initialiseCallback = require("../callback/initialise"),
       bundleFilesCallback = require("../callback/bundleFiles"),
       transpileFilesCallback = require("../callback/transpileFiles"),
-      retrieveFilePathsCallback = require("../callback/retrieveFilePaths");
+      retrieveFilePathsCallback = require("../callback/retrieveFilePaths"),
+      createBundleFilesFunctionCallback = require("../callback/createBundleFilesFunction"),
+      createTranspileFileFunctionCallback = require("../callback/createTranspileFileFunction");
 
 const { BATCH_BUILD_FAILED_MESSAGE } = messages;
 
 function batch(options) {
   const callbacks = [
           initialiseCallback,
+          createTranspileFileFunctionCallback,
+          createBundleFilesFunctionCallback,
           retrieveFilePathsCallback,
           transpileFilesCallback,
           bundleFilesCallback

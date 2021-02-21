@@ -2,12 +2,11 @@
 
 const necessary = require("necessary");
 
-const metricsUtilities = require("../../utilities/metrics"),
-      transpileUtilities = require("../../utilities/transpile");
+const transpileFile = require("../../transpileFile"),
+      metricsUtilities = require("../../utilities/metrics");
 
 const { asynchronousUtilities } = necessary,
       { forEach } = asynchronousUtilities,
-      { transpileFile } = transpileUtilities,
       { updateCountMetric } = metricsUtilities;
 
 function singleProcessTranspileFilesCallback(done, context) {

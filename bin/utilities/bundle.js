@@ -6,161 +6,123 @@ const paths = require("../paths"),
       messages = require("../messages"),
       constants = require("../constants"),
       pathUtilities = require("../utilities/path"),
-      metricsUtilities = require("../utilities/metrics"),
       fileSystemUtilities = require("../utilities/fileSystem");
 
 const { combinePaths } = pathUtilities,
       { BROWSERIFY } = constants,
       { ESBUILD_PATH, BROWSERIFY_PATH } = paths,
       { writeFileEx, createParentDirectory } = fileSystemUtilities,
-      { startSecondsMetric, endSecondsMetric } = metricsUtilities,
       { ESBUILD_FAILED_MESSAGE,
         BROWSERIFY_FAILED_MESSAGE,
         ESBUILD_NOT_INSTALLED_MESSAGE,
         BROWSERIFY_NOT_INSTALLED_MESSAGE } = messages;
 
-function bundleFiles(entryFilePath, context, done) {
-  const { metrics, bundler, targetDirectoryPath } = context,
-        targetEntryFilePath = combinePaths(targetDirectoryPath, entryFilePath);
+function createBundleFilesFunction(context) {
+  const { debug, bundler, bundleFilePath, entryFilePath, targetDirectoryPath } = context,
+        targetEntryFilePath = combinePaths(targetDirectoryPath, entryFilePath),
+        bundleFilesFunction = (bundler === BROWSERIFY) ?
+                                createBrowserifyBundleFilesFunction(targetEntryFilePath, bundleFilePath, debug) :
+                                  createEsbuildBundleFilesFunction(targetEntryFilePath, bundleFilePath, debug);
 
-  if (metrics) {
-    startSecondsMetric(context);
-  }
-
-  (bundler === BROWSERIFY) ?
-    browserifyFiles(targetEntryFilePath, context, callback) :
-      esbuildFiles(targetEntryFilePath, context, callback);
-
-  function callback(success) {
-    const { metrics, quietly, bundleFilePath } = context;
-
-    if (metrics) {
-      const seconds = endSecondsMetric(context);
-
-      if (success) {
-        console.log(`Bundled all files in ${seconds} seconds.`);
-      }
-    }
-
-    if (success) {
-      if (!quietly) {
-        if (bundleFilePath) {
-          console.log(`Written bundle to '${bundleFilePath}'.`);
-        }
-      }
-    }
-
-    done();
-  }
+  return bundleFilesFunction;
 }
 
 module.exports = {
-  bundleFiles
+  createBundleFilesFunction
 };
 
-function esbuildFiles(targetEntryFilePath, context, callback) {
-  let bundler;
-
-  const { bundleFilePath } = context;
+function createEsbuildBundleFilesFunction(targetEntryFilePath, bundleFilePath, debug) {
+  let esBuildBundleFilesFunction = null;
 
   try {
     const esbuildPath = path.resolve(ESBUILD_PATH),
-          esbuild = require(esbuildPath);
+          esbuild = require(esbuildPath),
+          bundler = esbuild,  ///
+          entryPoint = targetEntryFilePath, ///
+          entryPoints = [
+            entryPoint
+          ],
+          sourcemap = debug,
+          outfile = bundleFilePath,
+          bundle = true,
+          options = {
+            entryPoints,
+            sourcemap,
+            outfile,
+            bundle
+          };
 
-    bundler = esbuild;  ///
+    esBuildBundleFilesFunction = (callback) => {
+      bundler.build(options)
+        .then(() => {
+          const success = true;
+
+          callback(success);
+        })
+        .catch((error) => {
+          const success = false;
+
+          console.log(ESBUILD_FAILED_MESSAGE);
+
+          console.log(error);
+
+          callback(success);
+        });
+    };
   } catch (error) {
-    const success = false;
-
     console.log(ESBUILD_NOT_INSTALLED_MESSAGE);
-
-    callback(success);
-
-    return;
   }
 
-  const entryPoint = targetEntryFilePath, ///
-        entryPoints = [
-          entryPoint
-        ],
-        sourcemap = true,
-        outfile = bundleFilePath,
-        bundle = true,
-        options = {
-          entryPoints,
-          sourcemap,
-          outfile,
-          bundle
-        };
-
-  bundler.build(options)
-    .then(() => {
-      const success = true;
-
-      callback(success);
-    })
-    .catch((error) => {
-      const success = false;
-
-      console.log(ESBUILD_FAILED_MESSAGE);
-
-      console.log(error);
-
-      callback(success);
-    });
+  return esBuildBundleFilesFunction;
 }
 
-function browserifyFiles(targetEntryFilePath, context, callback) {
-  let bundler;
+function createBrowserifyBundleFilesFunction(targetEntryFilePath, bundleFilePath, debug) {
+  let browserifyBundleFilesFunction = null;
 
-  const { debug } = context,
-        options = {
+  const options = {
           debug
         };
 
   try {
     const browserifyPath = path.resolve(BROWSERIFY_PATH),
-          browserify = require(browserifyPath);
+          browserify = require(browserifyPath),
+          bundler = browserify(options); ///
 
-    bundler = browserify(options); ///
+    bundler.add(targetEntryFilePath);
+
+    browserifyBundleFilesFunction = (callback) => {
+      bundler.bundle((error, buffer) => {
+        if (error) {
+          const success = false,
+               { message } = error;
+
+          error = message;  ///
+
+          console.log(BROWSERIFY_FAILED_MESSAGE);
+
+          console.log(error);
+
+          callback(success);
+
+          return;
+        }
+
+        const success = true;
+
+        if (bundleFilePath) {
+          createParentDirectory(bundleFilePath);
+
+          writeFileEx(bundleFilePath, buffer);
+        } else {
+          process.stdout.write(buffer);
+        }
+
+        callback(success);
+      });
+    };
   } catch (error) {
-    const success = false;
-
     console.log(BROWSERIFY_NOT_INSTALLED_MESSAGE);
-
-    callback(success);
-
-    return;
   }
 
-  bundler.add(targetEntryFilePath);
-
-  bundler.bundle((error, buffer) => {
-    if (error) {
-      const success = false,
-            { message } = error;
-
-      error = message;  ///
-
-      console.log(BROWSERIFY_FAILED_MESSAGE);
-
-      console.log(error);
-
-      callback(success);
-
-      return;
-    }
-
-    const success = true,
-          { bundleFilePath } = context;
-
-    if (bundleFilePath) {
-      createParentDirectory(bundleFilePath);
-
-      writeFileEx(bundleFilePath, buffer);
-    } else {
-      process.stdout.write(buffer);
-    }
-
-    callback(success);
-  });
+  return browserifyBundleFilesFunction;
 }

@@ -1,8 +1,6 @@
 "use strict";
 
-const bundleUtilities = require("../utilities/bundle");
-
-const { bundleFiles } = bundleUtilities;
+const bundleFiles = require("../bundleFiles");
 
 function bundleFilesCallback(proceed, abort, context) {
   const { entryFilePath } = context;

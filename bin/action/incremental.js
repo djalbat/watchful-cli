@@ -4,13 +4,17 @@ const watch = require("../watch"),
       action = require("../action"),
       messages = require("../messages"),
       initialiseCallback = require("../callback/initialise"),
-      retrieveFilePathsCallback = require("../callback/retrieveFilePaths");
+      retrieveFilePathsCallback = require("../callback/retrieveFilePaths"),
+      createBundleFilesFunctionCallback = require("../callback/createBundleFilesFunction"),
+      createTranspileFileFunctionCallback = require("../callback/createTranspileFileFunction");
 
 const { INCREMENTAL_BUILD_FAILED_MESSAGE } = messages;
 
 function incremental(options) {
   const callbacks = [
           initialiseCallback,
+          createTranspileFileFunctionCallback,
+          createBundleFilesFunctionCallback,
           retrieveFilePathsCallback
         ],
         context = {
