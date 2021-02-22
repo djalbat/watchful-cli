@@ -83,9 +83,7 @@ function initialiseCallback(proceed, abort, context) {
 
       return;
     }
-  }
 
-  if (entryFile) {
     const entryFileOption = entryFile,  ///
           entryFilePath = pathFromOption(entryFileOption);
 
@@ -96,6 +94,12 @@ function initialiseCallback(proceed, abort, context) {
 
       return;
     }
+
+    Object.assign(context, {
+      entryFilePath
+    });
+  } else {
+    const entryFilePath = null;
 
     Object.assign(context, {
       entryFilePath

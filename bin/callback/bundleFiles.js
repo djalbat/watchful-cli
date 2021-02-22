@@ -11,7 +11,7 @@ function bundleFilesCallback(proceed, abort, context) {
     return;
   }
 
-  bundleFiles(entryFilePath, context, () => {
+  bundleFiles(context, () => {
     proceed();
   });
 }

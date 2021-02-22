@@ -18,11 +18,10 @@ const { combinePaths } = pathUtilities,
         BROWSERIFY_NOT_INSTALLED_MESSAGE } = messages;
 
 function createBundleFilesFunction(context) {
-  const { debug, bundler, bundleFilePath, entryFilePath, targetDirectoryPath } = context,
-        targetEntryFilePath = combinePaths(targetDirectoryPath, entryFilePath),
+  const { debug, bundler } = context,
         bundleFilesFunction = (bundler === BROWSERIFY) ?
-                                createBrowserifyBundleFilesFunction(targetEntryFilePath, bundleFilePath, debug) :
-                                  createEsbuildBundleFilesFunction(targetEntryFilePath, bundleFilePath, debug);
+                                createBrowserifyBundleFilesFunction(debug) :
+                                  createEsbuildBundleFilesFunction(debug);
 
   return bundleFilesFunction;
 }
@@ -31,28 +30,30 @@ module.exports = {
   createBundleFilesFunction
 };
 
-function createEsbuildBundleFilesFunction(targetEntryFilePath, bundleFilePath, debug) {
+function createEsbuildBundleFilesFunction(debug) {
   let esBuildBundleFilesFunction = null;
 
   try {
     const esbuildPath = path.resolve(ESBUILD_PATH),
-          esbuild = require(esbuildPath),
-          bundler = esbuild,  ///
-          entryPoint = targetEntryFilePath, ///
-          entryPoints = [
-            entryPoint
-          ],
-          sourcemap = debug,
-          outfile = bundleFilePath,
-          bundle = true,
-          options = {
-            entryPoints,
-            sourcemap,
-            outfile,
-            bundle
-          };
+          esbuild = require(esbuildPath);
 
-    esBuildBundleFilesFunction = (callback) => {
+    esBuildBundleFilesFunction = (entryFilePath, bundleFilePath, targetDirectoryPath, callback) => {
+      const bundler = esbuild,  ///
+            targetEntryFilePath = combinePaths(targetDirectoryPath, entryFilePath),
+            entryPoint = targetEntryFilePath, ///
+            entryPoints = [
+              entryPoint
+            ],
+            sourcemap = debug,
+            outfile = bundleFilePath,
+            bundle = true,
+            options = {
+              entryPoints,
+              sourcemap,
+              outfile,
+              bundle
+            };
+
       bundler.build(options)
         .then(() => {
           const success = true;
@@ -76,21 +77,22 @@ function createEsbuildBundleFilesFunction(targetEntryFilePath, bundleFilePath, d
   return esBuildBundleFilesFunction;
 }
 
-function createBrowserifyBundleFilesFunction(targetEntryFilePath, bundleFilePath, debug) {
+function createBrowserifyBundleFilesFunction(debug) {
   let browserifyBundleFilesFunction = null;
-
-  const options = {
-          debug
-        };
 
   try {
     const browserifyPath = path.resolve(BROWSERIFY_PATH),
-          browserify = require(browserifyPath),
-          bundler = browserify(options); ///
+          browserify = require(browserifyPath);
 
-    bundler.add(targetEntryFilePath);
+    browserifyBundleFilesFunction = (entryFilePath, bundleFilePath, targetDirectoryPath, callback) => {
+      const options = {
+              debug
+            },
+            bundler = browserify(options), ///
+            targetEntryFilePath = combinePaths(targetDirectoryPath, entryFilePath);
 
-    browserifyBundleFilesFunction = (callback) => {
+      bundler.add(targetEntryFilePath);
+
       bundler.bundle((error, buffer) => {
         if (error) {
           const success = false,

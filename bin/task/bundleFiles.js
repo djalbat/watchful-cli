@@ -12,7 +12,7 @@ class BundleFilesTask extends Task {
     const { entryFilePath } = context;
 
     if (entryFilePath) {
-      bundleFilesTask = new BundleFilesTask(bundleFiles, entryFilePath, context, () => {
+      bundleFilesTask = new BundleFilesTask(bundleFiles, context, () => {
         ///
       });
     }

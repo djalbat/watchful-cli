@@ -4,14 +4,14 @@ const metricsUtilities = require("./utilities/metrics");
 
 const { startSecondsMetric, endSecondsMetric } = metricsUtilities;
 
-function bundleFiles(entryFilePath, context, done) {
-  const { metrics, bundleFilesFunction } = context;
+function bundleFiles(context, done) {
+  const { metrics, entryFilePath, bundleFilePath, targetDirectoryPath, bundleFilesFunction } = context;
 
   if (metrics) {
     startSecondsMetric(context);
   }
 
-  bundleFilesFunction((success) => {
+  bundleFilesFunction(entryFilePath, bundleFilePath, targetDirectoryPath, (success) => {
     const { metrics, quietly, bundleFilePath } = context;
 
     if (metrics) {
