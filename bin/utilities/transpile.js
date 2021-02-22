@@ -39,17 +39,20 @@ function createBabelTranspileFileFunction(debug) {
           transpiler = babel; ///
 
     babelTranspileFileFunction = (sourceFilePath, targetFilePath, callback) => {
-      const sourceFileName = sourceFileNameFromSourceFilePathAndTargetFilePath(sourceFilePath, targetFilePath),
-            options = {
-              sourceFileName
-            };
+      let options;
 
       if (debug) {
-        const sourceMaps = INLINE;
+        const sourceMaps = INLINE,
+              sourceFileName = sourceFileNameFromSourceFilePathAndTargetFilePath(sourceFilePath, targetFilePath),
+              options = {
+                sourceFileName
+              };
 
         Object.assign(options, {
           sourceMaps
         });
+      } else {
+        options = {};
       }
 
       transpiler.transformFile(sourceFilePath, options, (error, result) => {
@@ -104,23 +107,33 @@ function createSWCTranspileFileFunction(debug) {
 
       transpiler.transformFile(sourceFilePath, options)
         .then((output) => {
-          const success = true,
-                { code, map } = output,
-                mapJSON = JSON.parse(map),
-                sourceFileName = sourceFileNameFromSourceFilePathAndTargetFilePath(sourceFilePath, targetFilePath),
-                source = sourceFileName,  ///
-                sources = [
-                  source
-                ];
+          const success = true;
 
-          Object.assign(mapJSON, {
-            sources
-          });
+          let targetFileContent;
 
-          const mapJSONString = JSON.stringify(mapJSON),
-                base64EncodedMapJSONString = Buffer.from(mapJSONString).toString("base64"),
-                targetFileContent = `${code}
+          if (debug) {
+            const { code, map } = output,
+                  mapJSON = JSON.parse(map),
+                  sourceFileName = sourceFileNameFromSourceFilePathAndTargetFilePath(sourceFilePath, targetFilePath),
+                  source = sourceFileName,  ///
+                  sources = [
+                    source
+                  ];
+
+            Object.assign(mapJSON, {
+              sources
+            });
+
+            const mapJSONString = JSON.stringify(mapJSON),
+                  base64EncodedMapJSONString = Buffer.from(mapJSONString).toString("base64");
+
+            targetFileContent = `${code}
 ${SOURCE_MAP_PREAMBLE}${base64EncodedMapJSONString}`; ///
+          } else {
+            const { code } = output;
+
+            targetFileContent = code; ///
+          }
 
           createParentDirectory(targetFilePath);
 
