@@ -5,13 +5,13 @@ const path = require("path");
 const paths = require("../paths"),
       messages = require("../messages"),
       constants = require("../constants"),
-      pathUtilities = require("../utilities/path"),
+      sourceMapUtilities = require("../utilities/sourceMap"),
       fileSystemUtilities = require("../utilities/fileSystem");
 
 const { SWC_CORE_PATH, BABEL_CORE_PATH } = paths,
       { writeFile, createParentDirectory } = fileSystemUtilities,
-      { pathWithoutBottommostNameFromPath } = pathUtilities,
       { BABEL, INLINE, SOURCE_MAP_PREAMBLE } = constants,
+      { sourceFileNameFromSourceFilePathAndTargetFilePath } = sourceMapUtilities,
       { SWC_FAILED_MESSAGE,
         BABEL_FAILED_MESSAGE,
         SWC_NOT_INSTALLED_MESSAGE,
@@ -39,9 +39,7 @@ function createBabelTranspileFileFunction(debug) {
           transpiler = babel; ///
 
     babelTranspileFileFunction = (sourceFilePath, targetFilePath, callback) => {
-      const targetFilePathWithoutBottommostName = pathWithoutBottommostNameFromPath(targetFilePath),
-            relativeSourceFilePath = path.relative(targetFilePathWithoutBottommostName, sourceFilePath),
-            sourceFileName = relativeSourceFilePath,  ///
+      const sourceFileName = sourceFileNameFromSourceFilePathAndTargetFilePath(sourceFilePath, targetFilePath),
             options = {
               sourceFileName
             };
@@ -109,7 +107,17 @@ function createSWCTranspileFileFunction(debug) {
           const success = true,
                 { code, map } = output,
                 mapJSON = JSON.parse(map),
-                mapJSONString = JSON.stringify(mapJSON),
+                sourceFileName = sourceFileNameFromSourceFilePathAndTargetFilePath(sourceFilePath, targetFilePath),
+                source = sourceFileName,  ///
+                sources = [
+                  source
+                ];
+
+          Object.assign(mapJSON, {
+            sources
+          });
+
+          const mapJSONString = JSON.stringify(mapJSON),
                 base64EncodedMapJSONString = Buffer.from(mapJSONString).toString("base64"),
                 targetFileContent = `${code}
 ${SOURCE_MAP_PREAMBLE}${base64EncodedMapJSONString}`; ///
