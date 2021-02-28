@@ -15,15 +15,17 @@ const { pathFromOption } = pathUtilities,
         PROCESSES_DEFAULT,
         TRANSPILER_DEFAULT } = defaults,
       { NO_ENTRY_FILE_SPECIFIED_MESSAGE,
+        NO_BUNDLE_FILE_SPECIFIED_MESSAGE,
         NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE,
+        ENTRY_FILE_BUT_NO_BUNDLE_FILE_SPECIFIED_MESSAGE,
+        BUNDLE_FILE_BUT_NO_ENTRY_FILE_SPECIFIED_MESSAGE,
         BOTH_LIB_AND_TEMP_DIRECTORIES_SPECIFIED_MESSAGE,
         NEITHER_LIB_NOR_TEMP_DIRECTORY_SPECIFIED_MESSAGE,
         ENTRY_FILE_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE,
         BUNDLE_FILE_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE,
         LIB_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE,
         TEMP_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE,
-        SOURCE_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE,
-        ENTRY_FILE_BUT_NEITHER_LIB_NOR_TEMP_DIRECTORY_SPECIFIED_MESSAGE } = messages;
+        SOURCE_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE } = messages;
 
 function initialiseCallback(proceed, abort, context) {
   const { options } = context,
@@ -34,12 +36,17 @@ function initialiseCallback(proceed, abort, context) {
           metrics = METRICS_DEFAULT,
           processes = PROCESSES_DEFAULT,
           transpiler = TRANSPILER_DEFAULT,
-          entryFile,
-          bundleFile,
-          libDirectory,
-          tempDirectory,
+          entryFile = null,
+          bundleFile = null,
+          libDirectory = null,
+          tempDirectory = null,
           sourceDirectory } = options,
           processesLength = Number(processes);  ///
+
+  let entryFilePath = null,
+      bundleFilePath = null,
+      sourceDirectoryPath = null,
+      targetDirectoryPath = null;
 
   if (!sourceDirectory) {
     console.log(NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE);
@@ -73,19 +80,36 @@ function initialiseCallback(proceed, abort, context) {
 
       return;
     }
-  }
 
-  if (entryFile) {
-    if (!tempDirectory && !libDirectory) {
-      console.log(ENTRY_FILE_BUT_NEITHER_LIB_NOR_TEMP_DIRECTORY_SPECIFIED_MESSAGE);
+    if (!bundleFile) {
+      console.log(NO_BUNDLE_FILE_SPECIFIED_MESSAGE);
 
       abort();
 
       return;
     }
+  }
 
-    const entryFileOption = entryFile,  ///
-          entryFilePath = pathFromOption(entryFileOption);
+  if (entryFile && !bundleFile) {
+    console.log(ENTRY_FILE_BUT_NO_BUNDLE_FILE_SPECIFIED_MESSAGE);
+
+    abort();
+
+    return;
+  }
+
+  if (bundleFile && !entryFile) {
+    console.log(BUNDLE_FILE_BUT_NO_ENTRY_FILE_SPECIFIED_MESSAGE);
+
+    abort();
+
+    return;
+  }
+
+  if (entryFile) {
+    const entryFileOption = entryFile;  ///
+
+    entryFilePath = pathFromOption(entryFileOption);
 
     if (!entryFilePath) {
       console.log(ENTRY_FILE_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE);
@@ -94,21 +118,12 @@ function initialiseCallback(proceed, abort, context) {
 
       return;
     }
-
-    Object.assign(context, {
-      entryFilePath
-    });
-  } else {
-    const entryFilePath = null;
-
-    Object.assign(context, {
-      entryFilePath
-    });
   }
 
   if (bundleFile) {
-    const bundleFileOption = bundleFile,  ///
-          bundleFilePath = pathFromOption(bundleFile, bundleFileOption);
+    const bundleFileOption = bundleFile;  ///
+
+    bundleFilePath = pathFromOption(bundleFile, bundleFileOption);
 
     if (!bundleFilePath) {
       console.log(BUNDLE_FILE_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE);
@@ -117,10 +132,6 @@ function initialiseCallback(proceed, abort, context) {
 
       return;
     }
-
-    Object.assign(context, {
-      bundleFilePath
-    });
   }
 
   if (libDirectory) {
@@ -135,11 +146,7 @@ function initialiseCallback(proceed, abort, context) {
       return;
     }
 
-    const targetDirectoryPath = libDirectoryPath; ///
-
-    Object.assign(context, {
-      targetDirectoryPath
-    });
+    targetDirectoryPath = libDirectoryPath; ///
   }
 
   if (tempDirectory) {
@@ -154,16 +161,13 @@ function initialiseCallback(proceed, abort, context) {
       return;
     }
 
-    const targetDirectoryPath = tempDirectoryPath; ///
-
-    Object.assign(context, {
-      targetDirectoryPath
-    });
+    targetDirectoryPath = tempDirectoryPath; ///
   }
 
   if (sourceDirectory) {
-    const sourceDirectoryOption = sourceDirectory,  ///
-          sourceDirectoryPath = pathFromOption(sourceDirectory, sourceDirectoryOption);
+    const sourceDirectoryOption = sourceDirectory;  ///
+
+    sourceDirectoryPath = pathFromOption(sourceDirectory, sourceDirectoryOption);
 
     if (!sourceDirectoryPath) {
       console.log(SOURCE_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE);
@@ -172,10 +176,6 @@ function initialiseCallback(proceed, abort, context) {
 
       return;
     }
-
-    Object.assign(context, {
-      sourceDirectoryPath
-    });
   }
 
   Object.assign(context, {
@@ -185,7 +185,11 @@ function initialiseCallback(proceed, abort, context) {
     quietly,
     metrics,
     transpiler,
-    processesLength
+    entryFilePath,
+    bundleFilePath,
+    processesLength,
+    sourceDirectoryPath,
+    targetDirectoryPath
   });
 
   delete context.options;

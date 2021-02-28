@@ -1,17 +1,15 @@
 "use strict";
 
 const Task = require("../task"),
-      bundleUtilities = require("../utilities/bundle");
-
-const { bundleFiles } = bundleUtilities;
+      bundleFiles = require("../bundleFiles");
 
 class BundleFilesTask extends Task {
   static fromContext(context) {
     let bundleFilesTask = null;
 
-    const { entryFilePath } = context;
+    const { bundleFilePath } = context;
 
-    if (entryFilePath) {
+    if (bundleFilePath) {
       bundleFilesTask = new BundleFilesTask(bundleFiles, context, () => {
         ///
       });

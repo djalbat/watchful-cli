@@ -5,9 +5,9 @@ const bundleUtilities = require("../utilities/bundle");
 const { createBundleFilesFunction } = bundleUtilities;
 
 function createBundleFilesFunctionCallback(proceed, abort, context) {
-  const { entryFilePath } = context;
+  const { bundleFilePath } = context;
 
-  if (entryFilePath === null) {
+  if (bundleFilePath === null) {
     proceed();
 
     return;

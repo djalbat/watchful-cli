@@ -44,8 +44,8 @@ function createEsbuildBundleFilesFunction(debug) {
             entryPoints = [
               entryPoint
             ],
-            sourcemap = debug,
-            outfile = bundleFilePath,
+            sourcemap = debug,  ///
+            outfile = bundleFilePath, ///
             bundle = true,
             options = {
               entryPoints,
@@ -88,7 +88,7 @@ function createBrowserifyBundleFilesFunction(debug) {
       const options = {
               debug
             },
-            bundler = browserify(options), ///
+            bundler = browserify(options),
             targetEntryFilePath = combinePaths(targetDirectoryPath, entryFilePath);
 
       bundler.add(targetEntryFilePath);
