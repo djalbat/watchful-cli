@@ -2,9 +2,11 @@
 
 const Task = require("../task"),
       transpileFile = require('../transpileFile'),
-      pathUtilities = require("../utilities/path");
+      pathUtilities = require("../utilities/path"),
+      metricsUtilities = require("../utilities/metrics");
 
-const { pathWithoutDirectoryPathFromPathAndDirectoryPath } = pathUtilities;
+const { updateCountMetric } = metricsUtilities,
+      { pathWithoutDirectoryPathFromPathAndDirectoryPath } = pathUtilities;
 
 class TranspileFileTask extends Task {
   static fromPath(path, context) {
@@ -15,7 +17,13 @@ class TranspileFileTask extends Task {
           filePath = pathWithoutDirectoryPathFromPathAndDirectoryPath(sourceFilePath, sourceDirectoryPath); ///
 
     transpileFileTask = new TranspileFileTask(transpileFile, filePath, context, (success) => {
-      ///
+      if (success) {
+        const { metrics } = context;
+
+        if (metrics) {
+          updateCountMetric(context);
+        }
+      }
     });
 
     return transpileFileTask;

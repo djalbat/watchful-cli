@@ -57,7 +57,7 @@ function endSecondsMetric(context) {
 
   now = Date.now();
 
-  const seconds = Math.floor((now - then) / 10) / 100;
+  const seconds = Math.floor(now - then) / 1000;
 
   delete metrics.now;
 

@@ -1,14 +1,36 @@
 "use strict";
 
 const events = require("../events"),
+      pathUtilities = require("../utilities/path"),
       DeleteFileTask = require("../task/deleteFile"),
       BundleFilesTask = require("../task/bundleFiles"),
+      metricsUtilities = require("../utilities/metrics"),
       TranspileFileTask = require("../task/transpileFile"),
       DeleteDirectoryTask = require("../task/deleteDirectory");
 
-const { ADD_EVENT, CHANGE_EVENT, UNLINK_EVENT, UNLINK_DIR_EVENT } = events;
+const { isPathFullQualifiedPath, pathFromFullyQualifiedPath } = pathUtilities,
+      { ADD_EVENT, CHANGE_EVENT, UNLINK_EVENT, UNLINK_DIR_EVENT } = events,
+      { startCountMetric, startSecondsMetric, endCountMetric, endSecondsMetric } = metricsUtilities;
 
 function eventHandler(queue, event, path, context) {
+  const { metrics } = context,
+        pathFullyQualifiedPath = isPathFullQualifiedPath(path);
+
+  if (pathFullyQualifiedPath) {
+    const fullyQualifiedPath = path;  ///
+
+    path = pathFromFullyQualifiedPath(fullyQualifiedPath);
+  }
+
+  if (metrics) {
+    const empty = queue.isEmpty();
+
+    if (empty) {
+      startCountMetric(context);
+      startSecondsMetric(context);
+    }
+  }
+
   switch (event) {
     case ADD_EVENT :
     case CHANGE_EVENT :
@@ -28,8 +50,20 @@ function eventHandler(queue, event, path, context) {
   }
 }
 
-function queueEmptyHandler(queue, context) {
-  const { wait } = context;
+function queueEmptyHandler(queue, previousTask, context) {
+  if (previousTask instanceof BundleFilesTask) {
+    return;
+  }
+
+  const { wait, metrics } = context;
+
+  if (metrics) {
+    const count = endCountMetric(context),
+          seconds = endSecondsMetric(context),
+          sOrEmpty = (count === 1) ? "" : "s";
+
+    console.log(`Transpiled ${count} file${sOrEmpty} in ${seconds} seconds.`);
+  }
 
   setTimeout(() => {
     const empty = queue.isEmpty();

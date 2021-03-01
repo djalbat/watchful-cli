@@ -5,61 +5,24 @@ const chokidar = require("chokidar");
 const Queue = require("./queue"),
       events = require("./events"),
       constants = require("./constants"),
-      pathUtilities = require("./utilities/path"),
-      BundleFilesTask = require("./task/bundleFiles"),
-      handlerUtilities = require("./utilities/handler"),
-      metricsUtilities = require("./utilities/metrics");
+      watchUtilities = require("./utilities/watch");
 
 const { ALL_EVENT, READY_EVENT } = events,
       { SOURCE_DIRECTORY_WATCH_PATTERN } = constants,
-      { eventHandler, queueEmptyHandler } = handlerUtilities,
-      { isPathFullQualifiedPath, pathFromFullyQualifiedPath } = pathUtilities,
-      { startCountMetric, startSecondsMetric, endCountMetric, endSecondsMetric } = metricsUtilities;
+      { eventHandler, queueEmptyHandler } = watchUtilities;
 
 function watch(context) {
-  const { quietly, metrics, sourceDirectoryPath } = context,
+  const { quietly, sourceDirectoryPath } = context,
         watchPattern = `${sourceDirectoryPath}${SOURCE_DIRECTORY_WATCH_PATTERN}`,
         watcher = chokidar.watch(watchPattern),
-        queue = Queue.fromEmptyHandler((previousTask) => {
-          if (previousTask instanceof BundleFilesTask) {
-            return;
-          }
-
-          if (metrics) {
-            const count = endCountMetric(context),
-                  seconds = endSecondsMetric(context);
-
-            console.log(`Transpiled ${count} files in ${seconds} seconds.`);
-          }
-
-          queueEmptyHandler(queue, context);
-        });
+        queue = Queue.fromEmptyHandler((previousTask) => queueEmptyHandler(queue, previousTask, context));
 
   watcher.on(READY_EVENT, () => {
     if (!quietly) {
       console.log(`Watching '${watchPattern}'.`);
     }
 
-    watcher.on(ALL_EVENT, (event, path) => {
-      const pathFullyQualifiedPath = isPathFullQualifiedPath(path);
-
-      if (pathFullyQualifiedPath) {
-        const fullyQualifiedPath = path;  ///
-
-        path = pathFromFullyQualifiedPath(fullyQualifiedPath);
-      }
-
-      if (metrics) {
-        const empty = queue.isEmpty();
-
-        if (empty) {
-          startCountMetric(context);
-          startSecondsMetric(context);
-        }
-      }
-
-      eventHandler(queue, event, path, context);
-    });
+    watcher.on(ALL_EVENT, (event, path) => eventHandler(queue, event, path, context));
   });
 }
 

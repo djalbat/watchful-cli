@@ -21,9 +21,10 @@ function transpileFilesCallback(proceed, abort, context) {
   function done() {
     if (metrics) {
       const count = endCountMetric(context),
-            seconds = endSecondsMetric(context);
+            seconds = endSecondsMetric(context),
+            sOrEmpty = (count === 1) ? "" : "s";
 
-      console.log(`Transpiled ${count} files in ${seconds} seconds.`);
+      console.log(`Transpiled ${count} file${sOrEmpty} in ${seconds} seconds.`);
     }
 
     proceed();
