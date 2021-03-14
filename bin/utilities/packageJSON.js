@@ -1,14 +1,11 @@
 "use strict";
 
-const necessary = require("necessary");
+const { arrayUtilities } = require("necessary");
 
-const constants = require("../constants"),
-      fileSystemUtilities = require("../utilities/fileSystem");
+const { readFile } = require("../utilities/fileSystem"),
+      { PACKAGE_JSON_FILE_NAME } = require("../constants");
 
-const { arrayUtilities } = necessary,
-      { second } = arrayUtilities,
-      { readFile } = fileSystemUtilities,
-      { PACKAGE_JSON_FILE_NAME } = constants;
+const { second } = arrayUtilities;
 
 const utilitiesDirectoryName = __dirname, ///
       matches = utilitiesDirectoryName.match(/^(.+)\/bin\/utilities$/),

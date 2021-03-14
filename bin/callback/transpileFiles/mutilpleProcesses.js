@@ -1,9 +1,8 @@
 "use strict";
 
-const metricsUtilities = require("../../utilities/metrics"),
-      TranspileFileWrapper = require("../../wrapper/transpileFile");
+const TranspileFileWrapper = require("../../wrapper/transpileFile");
 
-const { updateCountMetric } = metricsUtilities;
+const { updateCountMetric } = require("../../utilities/metrics");
 
 function multipleProcessesTranspileFilesCallback(done, context) {
   const { filePaths, processesLength } = context,

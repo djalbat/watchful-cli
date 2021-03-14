@@ -1,9 +1,8 @@
 "use strict";
 
-const necessary = require("necessary");
+const { arrayUtilities } = require("necessary");
 
-const { arrayUtilities } = necessary,
-      { first } = arrayUtilities;
+const { first } = arrayUtilities;
 
 class Queue {
   constructor(tasks, emptyHandler) {

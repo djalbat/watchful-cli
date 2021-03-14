@@ -1,19 +1,14 @@
 "use strict";
 
-const messages = require("../messages"),
-      defaults = require("../defaults"),
-      pathUtilities = require("../utilities/path"),
-      metricsUtilities = require("../utilities/metrics");
-
-const { pathFromOption } = pathUtilities,
-      { initialiseMetrics } = metricsUtilities,
+const { pathFromOption } = require("../utilities/path"),
+      { initialiseMetrics } = require("../utilities/metrics"),
       { WAIT_DEFAULT,
         DEBUG_DEFAULT,
         BUNDLER_DEFAULT,
         QUIETLY_DEFAULT,
         METRICS_DEFAULT,
         PROCESSES_DEFAULT,
-        TRANSPILER_DEFAULT } = defaults,
+        TRANSPILER_DEFAULT } = require("../defaults"),
       { NO_ENTRY_FILE_SPECIFIED_MESSAGE,
         NO_BUNDLE_FILE_SPECIFIED_MESSAGE,
         NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE,
@@ -25,7 +20,7 @@ const { pathFromOption } = pathUtilities,
         BUNDLE_FILE_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE,
         LIB_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE,
         TEMP_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE,
-        SOURCE_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE } = messages;
+        SOURCE_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE } = require("../messages");
 
 function initialiseCallback(proceed, abort, context) {
   const { options } = context,

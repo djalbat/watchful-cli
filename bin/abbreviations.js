@@ -1,7 +1,5 @@
 "use strict";
 
-const options = require("./options");
-
 const { HELP_OPTION,
         WAIT_OPTION,
         DEBUG_OPTION,
@@ -15,7 +13,7 @@ const { HELP_OPTION,
         BUNDLE_FILE_OPTION,
         LIB_DIRECTORY_OPTION,
         TEMP_DIRECTORY_OPTION,
-        SOURCE_DIRECTORY_OPTION } = options;
+        SOURCE_DIRECTORY_OPTION } = require("./options");
 
 const h = HELP_OPTION,
       w = WAIT_OPTION,

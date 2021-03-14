@@ -1,8 +1,6 @@
 "use strict";
 
-const constants = require("./constants");
-
-const { BABEL, BROWSERIFY } = constants;
+const { BABEL, BROWSERIFY } = require("./constants");
 
 const WAIT_DEFAULT = 0,
       DEBUG_DEFAULT = false,

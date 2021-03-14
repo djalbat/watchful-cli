@@ -1,9 +1,8 @@
 "use strict";
 
-const necessary = require("necessary");
+const { asynchronousUtilities } = require("necessary");
 
-const { asynchronousUtilities } = necessary,
-      { whilst } = asynchronousUtilities;
+const { whilst } = asynchronousUtilities;
 
 function executeCallbacks(callbacks, callback, context) {
   const completed = true;

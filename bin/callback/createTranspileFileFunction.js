@@ -1,8 +1,6 @@
 "use strict";
 
-const transpileUtilities = require("../utilities/transpile");
-
-const { createTranspileFileFunction } = transpileUtilities;
+const { createTranspileFileFunction } = require("../utilities/transpile");
 
 function createTranspileFileFunctionCallback(proceed, abort, context) {
   const transpileFileFunction = createTranspileFileFunction(context);

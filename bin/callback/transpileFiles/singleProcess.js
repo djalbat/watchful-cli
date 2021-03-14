@@ -1,13 +1,12 @@
 "use strict";
 
-const necessary = require("necessary");
+const { asynchronousUtilities } = require("necessary");
 
-const transpileFile = require("../../transpileFile"),
-      metricsUtilities = require("../../utilities/metrics");
+const transpileFile = require("../../transpileFile");
 
-const { asynchronousUtilities } = necessary,
-      { forEach } = asynchronousUtilities,
-      { updateCountMetric } = metricsUtilities;
+const { updateCountMetric } = require("../../utilities/metrics");
+
+const { forEach } = asynchronousUtilities;
 
 function singleProcessTranspileFilesCallback(done, context) {
   const { filePaths } = context;

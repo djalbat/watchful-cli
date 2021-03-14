@@ -1,7 +1,6 @@
 "use strict";
 
 const action = require("../action"),
-      messages = require("../messages"),
       initialiseCallback = require("../callback/initialise"),
       bundleFilesCallback = require("../callback/bundleFiles"),
       transpileFilesCallback = require("../callback/transpileFiles"),
@@ -9,7 +8,7 @@ const action = require("../action"),
       createBundleFilesFunctionCallback = require("../callback/createBundleFilesFunction"),
       createTranspileFileFunctionCallback = require("../callback/createTranspileFileFunction");
 
-const { BATCH_BUILD_FAILED_MESSAGE } = messages;
+const { BATCH_BUILD_FAILED_MESSAGE } = require("../messages");
 
 function batch(options) {
   const callbacks = [

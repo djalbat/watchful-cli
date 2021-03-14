@@ -1,15 +1,13 @@
 "use strict";
 
-const necessary = require("necessary");
+const { arrayUtilities } = require("necessary");
 
-const constants = require("../constants"),
-      transpileFile = require("../transpileFile"),
-      transpileUtilities = require("../utilities/transpile");
+const transpileFile = require("../transpileFile");
 
-const { arrayUtilities } = necessary,
-      { third } = arrayUtilities,
-      { MESSAGE } = constants,
-      { createTranspileFileFunction } = transpileUtilities;
+const { MESSAGE } = require("../constants"),
+      { createTranspileFileFunction } = require("../utilities/transpile");
+
+const { third } = arrayUtilities;
 
 const args = process.argv,  ///
       thirdArg = third(args),

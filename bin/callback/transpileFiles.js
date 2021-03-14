@@ -1,10 +1,9 @@
 "use strict";
 
-const metricsUtilities = require("../utilities/metrics"),
-      singleProcessTranspileFilesCallback = require("../callback/transpileFiles/singleProcess"),
+const singleProcessTranspileFilesCallback = require("../callback/transpileFiles/singleProcess"),
       multipleProcessesTranspileFilesCallback = require("../callback/transpileFiles/mutilpleProcesses");
 
-const { startCountMetric, endCountMetric, startSecondsMetric, endSecondsMetric } = metricsUtilities;
+const { startCountMetric, endCountMetric, startSecondsMetric, endSecondsMetric } = require("../utilities/metrics");
 
 function transpileFilesCallback(proceed, abort, context) {
   const { metrics, processesLength } = context;

@@ -1,8 +1,6 @@
 "use strict";
 
-const pathUtilities = require("./utilities/path");
-
-const { combinePaths } = pathUtilities;
+const { combinePaths } = require("./utilities/path");
 
 function transpileFile(filePath, context, callback) {
   const { transpileFileFunction, sourceDirectoryPath, targetDirectoryPath } = context,

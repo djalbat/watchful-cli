@@ -1,11 +1,9 @@
 "use strict";
 
-const Task = require("../task"),
-      pathUtilities = require("../utilities/path"),
-      fileSystemUtilities = require("../utilities/fileSystem");
+const Task = require("../task");
 
-const { deleteFile, checkFileExists } = fileSystemUtilities,
-      { combinePaths, pathWithoutDirectoryPathFromPathAndDirectoryPath } = pathUtilities;
+const { deleteFile, checkFileExists } = require("../utilities/fileSystem"),
+      { combinePaths, pathWithoutDirectoryPathFromPathAndDirectoryPath } = require("../utilities/path");
 
 class DeleteFileTask extends Task {
   static fromPath(path, context) {

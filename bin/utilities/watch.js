@@ -1,16 +1,13 @@
 "use strict";
 
-const events = require("../events"),
-      pathUtilities = require("../utilities/path"),
-      DeleteFileTask = require("../task/deleteFile"),
+const DeleteFileTask = require("../task/deleteFile"),
       BundleFilesTask = require("../task/bundleFiles"),
-      metricsUtilities = require("../utilities/metrics"),
       TranspileFileTask = require("../task/transpileFile"),
       DeleteDirectoryTask = require("../task/deleteDirectory");
 
-const { isPathFullQualifiedPath, pathFromFullyQualifiedPath } = pathUtilities,
-      { ADD_EVENT, CHANGE_EVENT, UNLINK_EVENT, UNLINK_DIR_EVENT } = events,
-      { startCountMetric, startSecondsMetric, endCountMetric, endSecondsMetric } = metricsUtilities;
+const { isPathFullQualifiedPath, pathFromFullyQualifiedPath } = require("../utilities/path"),
+      { ADD_EVENT, CHANGE_EVENT, UNLINK_EVENT, UNLINK_DIR_EVENT } = require("../events"),
+      { startCountMetric, startSecondsMetric, endCountMetric, endSecondsMetric } = require("../utilities/metrics");
 
 function eventHandler(queue, event, path, context) {
   const { metrics } = context,

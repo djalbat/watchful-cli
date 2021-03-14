@@ -2,20 +2,14 @@
 
 const path = require("path");
 
-const paths = require("../paths"),
-      messages = require("../messages"),
-      constants = require("../constants"),
-      pathUtilities = require("../utilities/path"),
-      fileSystemUtilities = require("../utilities/fileSystem");
-
-const { combinePaths } = pathUtilities,
-      { BROWSERIFY } = constants,
-      { ESBUILD_PATH, BROWSERIFY_PATH } = paths,
-      { writeFileEx, createParentDirectory } = fileSystemUtilities,
+const { BROWSERIFY } = require("../constants"),
+      { combinePaths } = require("../utilities/path"),
+      { ESBUILD_PATH, BROWSERIFY_PATH } = require("../paths"),
+      { writeFileEx, createParentDirectory } = require("../utilities/fileSystem"),
       { ESBUILD_FAILED_MESSAGE,
         BROWSERIFY_FAILED_MESSAGE,
         ESBUILD_NOT_INSTALLED_MESSAGE,
-        BROWSERIFY_NOT_INSTALLED_MESSAGE } = messages;
+        BROWSERIFY_NOT_INSTALLED_MESSAGE } = require("../messages");
 
 function createBundleFilesFunction(context) {
   const { debug, bundler } = context,

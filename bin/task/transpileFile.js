@@ -1,12 +1,10 @@
 "use strict";
 
 const Task = require("../task"),
-      transpileFile = require('../transpileFile'),
-      pathUtilities = require("../utilities/path"),
-      metricsUtilities = require("../utilities/metrics");
+      transpileFile = require('../transpileFile');
 
-const { updateCountMetric } = metricsUtilities,
-      { pathWithoutDirectoryPathFromPathAndDirectoryPath } = pathUtilities;
+const { updateCountMetric } = require("../utilities/metrics"),
+      { pathWithoutDirectoryPathFromPathAndDirectoryPath } = require("../utilities/path");
 
 class TranspileFileTask extends Task {
   static fromPath(path, context) {

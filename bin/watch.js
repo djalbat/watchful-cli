@@ -2,14 +2,11 @@
 
 const chokidar = require("chokidar");
 
-const Queue = require("./queue"),
-      events = require("./events"),
-      constants = require("./constants"),
-      watchUtilities = require("./utilities/watch");
+const Queue = require("./queue");
 
-const { ALL_EVENT, READY_EVENT } = events,
-      { SOURCE_DIRECTORY_WATCH_PATTERN } = constants,
-      { eventHandler, queueEmptyHandler } = watchUtilities;
+const { ALL_EVENT, READY_EVENT } = require("./events"),
+      { SOURCE_DIRECTORY_WATCH_PATTERN } = require("./constants"),
+      { eventHandler, queueEmptyHandler } = require("./utilities/watch");
 
 function watch(context) {
   const { quietly, sourceDirectoryPath } = context,

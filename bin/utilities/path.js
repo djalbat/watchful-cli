@@ -1,12 +1,10 @@
 "use strict";
 
-const necessary = require("necessary");
+const { pathUtilities } = require("necessary");
 
-const constants = require("../constants");
+const { DELIMITER } = require("../constants");
 
-const { DELIMITER } = constants,
-      { pathUtilities } = necessary,
-      { isPathName, bottommostNameFromPath } = pathUtilities;
+const { isPathName, bottommostNameFromPath } = pathUtilities;
 
 const currentWorkingDirectoryPath = process.cwd(),
       currentWorkingDirectoryPathLength = currentWorkingDirectoryPath.length;

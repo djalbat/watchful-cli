@@ -1,13 +1,12 @@
 "use strict";
 
-const fs = require("fs"),
-      necessary = require("necessary");
+const fs = require("fs");
 
-const pathUtilities = require("../utilities/path");
+const { fileSystemUtilities } = require("necessary");
 
-const { fileSystemUtilities } = necessary,
-      { pathWithoutBottommostNameFromPath } = pathUtilities,
-      { openSync, writeSync, rmdirSync, unlinkSync } = fs,
+const { pathWithoutBottommostNameFromPath } = require("../utilities/path");
+
+const { openSync, writeSync, rmdirSync, unlinkSync } = fs,
       { readDirectory, isEntryDirectory, createDirectory, checkDirectoryExists } = fileSystemUtilities;
 
 function deleteFile(filePath, done) {

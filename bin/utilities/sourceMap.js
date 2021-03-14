@@ -2,9 +2,7 @@
 
 const path = require("path");
 
-const pathUtilities = require("../utilities/path");
-
-const { pathWithoutBottommostNameFromPath } = pathUtilities;
+const { pathWithoutBottommostNameFromPath } = require("../utilities/path");
 
 function sourceFileNameFromSourceFilePathAndTargetFilePath(sourceFilePath, targetFilePath) {
   const targetFilePathWithoutBottommostName = pathWithoutBottommostNameFromPath(targetFilePath),

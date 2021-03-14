@@ -2,13 +2,9 @@
 
 const chokidar = require("chokidar");
 
-const events = require("../events"),
-      messages = require("../messages"),
-      pathUtilities = require("../utilities/path");
-
-const { ADD_EVENT, READY_EVENT } = events,
-      { ENTRY_FILE_NOT_INCLUDED_IN_BUNDLED_FILES_MESSAGE } = messages,
-      { pathWithoutDirectoryPathFromPathAndDirectoryPath } = pathUtilities;
+const { ADD_EVENT, READY_EVENT } = require("../events"),
+      { ENTRY_FILE_NOT_INCLUDED_IN_BUNDLED_FILES_MESSAGE } = require("../messages"),
+      { pathWithoutDirectoryPathFromPathAndDirectoryPath } = require("../utilities/path");
 
 function retrieveFilePathsCallback(proceed, abort, context) {
   const { sourceDirectoryPath } = context,

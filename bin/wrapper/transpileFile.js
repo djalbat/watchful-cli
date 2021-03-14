@@ -2,10 +2,7 @@
 
 const child_process = require("child_process");
 
-const paths = require("../paths"),
-      constants = require("../constants");
-
-const { MESSAGE } = constants;
+const { MESSAGE } = require("../constants");
 
 class TranspileFileWrapper {
   constructor(process, callback, parameters) {

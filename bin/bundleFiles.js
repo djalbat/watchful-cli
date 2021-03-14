@@ -1,8 +1,6 @@
 "use strict";
 
-const metricsUtilities = require("./utilities/metrics");
-
-const { startSecondsMetric, endSecondsMetric } = metricsUtilities;
+const { startSecondsMetric, endSecondsMetric } = require("./utilities/metrics");
 
 function bundleFiles(context, done) {
   const { metrics, entryFilePath, bundleFilePath, targetDirectoryPath, bundleFilesFunction } = context;
