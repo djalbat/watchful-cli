@@ -37,7 +37,12 @@ function createParentDirectory(filePath) {
           parentDirectoryExists = checkDirectoryExists(parentDirectoryPath);
 
     if (!parentDirectoryExists) {
-      createDirectory(parentDirectoryPath);
+      try {
+        createDirectory(parentDirectoryPath);
+      }
+      catch (error) {
+        ///
+      }
     }
   }
 }
