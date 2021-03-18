@@ -156,4 +156,3 @@ There are several points worth noting:
 ## Contact
 
 - james.smith@djalbat.com
-- http://djalbat.com
