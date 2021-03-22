@@ -7,7 +7,7 @@ const { fileSystemUtilities } = require("necessary");
 const { pathWithoutBottommostNameFromPath } = require("../utilities/path");
 
 const { openSync, writeSync, rmdirSync, unlinkSync } = fs,
-      { readDirectory, isEntryDirectory, createDirectory, checkDirectoryExists } = fileSystemUtilities;
+      { readDirectory, isEntryDirectory, createDirectory } = fileSystemUtilities;
 
 function deleteFile(filePath, done) {
   unlinkSync(filePath);
@@ -33,17 +33,9 @@ function createParentDirectory(filePath) {
   const filePathWithoutBottommostName = pathWithoutBottommostNameFromPath(filePath);
 
   if ((filePathWithoutBottommostName !== ".") && (filePathWithoutBottommostName !== null)) {
-    const parentDirectoryPath = filePathWithoutBottommostName,  ///
-          parentDirectoryExists = checkDirectoryExists(parentDirectoryPath);
+    const parentDirectoryPath = filePathWithoutBottommostName;  ///
 
-    if (!parentDirectoryExists) {
-      try {
-        createDirectory(parentDirectoryPath);
-      }
-      catch (error) {
-        ///
-      }
-    }
+    createDirectory(parentDirectoryPath);
   }
 }
 

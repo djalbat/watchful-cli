@@ -57,9 +57,8 @@ function createEsbuildBundleFilesFunction(debug) {
         .catch((error) => {
           const success = false;
 
-          console.log(ESBUILD_FAILED_MESSAGE);
-
-          console.log(error);
+          console.log(`${ESBUILD_FAILED_MESSAGE}
+${error}`);
 
           callback(success);
         });
@@ -94,9 +93,8 @@ function createBrowserifyBundleFilesFunction(debug) {
 
           error = message;  ///
 
-          console.log(BROWSERIFY_FAILED_MESSAGE);
-
-          console.log(error);
+          console.log(`${BROWSERIFY_FAILED_MESSAGE}
+${error}`);
 
           callback(success);
 

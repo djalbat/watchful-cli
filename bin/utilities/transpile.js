@@ -56,9 +56,8 @@ function createBabelTranspileFileFunction(debug) {
 
           error = message;  ///
 
-          console.log(BABEL_FAILED_MESSAGE);
-
-          console.log(error);
+          console.log(`${BABEL_FAILED_MESSAGE}
+${error}`);
 
           callback(success);
 
@@ -138,9 +137,8 @@ ${SOURCE_MAP_PREAMBLE}${base64EncodedMapJSONString}`; ///
         .catch((error) => {
           const success = false;
 
-          console.log(SWC_FAILED_MESSAGE);
-
-          console.log(error);
+          console.log(`${SWC_FAILED_MESSAGE}
+${error}`);
 
           callback(success);
         });
