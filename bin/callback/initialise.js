@@ -3,6 +3,7 @@
 const { pathFromOption } = require("../utilities/path"),
       { initialiseMetrics } = require("../utilities/metrics"),
       { WAIT_DEFAULT,
+        NODE_DEFAULT,
         DEBUG_DEFAULT,
         BUNDLER_DEFAULT,
         QUIETLY_DEFAULT,
@@ -25,6 +26,7 @@ const { pathFromOption } = require("../utilities/path"),
 function initialiseCallback(proceed, abort, context) {
   const { options } = context,
         { wait = WAIT_DEFAULT,
+          node = NODE_DEFAULT,
           debug = DEBUG_DEFAULT,
           bundler = BUNDLER_DEFAULT,
           quietly = QUIETLY_DEFAULT,
@@ -175,6 +177,7 @@ function initialiseCallback(proceed, abort, context) {
 
   Object.assign(context, {
     wait,
+    node,
     debug,
     bundler,
     quietly,

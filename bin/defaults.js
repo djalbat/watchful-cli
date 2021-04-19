@@ -3,6 +3,7 @@
 const { BABEL, BROWSERIFY } = require("./constants");
 
 const WAIT_DEFAULT = 0,
+      NODE_DEFAULT = false,
       DEBUG_DEFAULT = false,
       BUNDLER_DEFAULT = BROWSERIFY,
       QUIETLY_DEFAULT = false,
@@ -12,6 +13,7 @@ const WAIT_DEFAULT = 0,
 
 module.exports = {
   WAIT_DEFAULT,
+  NODE_DEFAULT,
   DEBUG_DEFAULT,
   BUNDLER_DEFAULT,
   QUIETLY_DEFAULT,

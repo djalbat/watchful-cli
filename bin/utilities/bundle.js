@@ -2,8 +2,8 @@
 
 const path = require("path");
 
-const { BROWSERIFY } = require("../constants"),
-      { combinePaths } = require("../utilities/path"),
+const { combinePaths } = require("../utilities/path"),
+      { NODE, BROWSERIFY } = require("../constants"),
       { ESBUILD_PATH, BROWSERIFY_PATH } = require("../paths"),
       { writeFileEx, createParentDirectory } = require("../utilities/fileSystem"),
       { ESBUILD_FAILED_MESSAGE,
@@ -12,10 +12,10 @@ const { BROWSERIFY } = require("../constants"),
         BROWSERIFY_NOT_INSTALLED_MESSAGE } = require("../messages");
 
 function createBundleFilesFunction(context) {
-  const { debug, bundler } = context,
+  const { bundler } = context,
         bundleFilesFunction = (bundler === BROWSERIFY) ?
-                                createBrowserifyBundleFilesFunction(debug) :
-                                  createEsbuildBundleFilesFunction(debug);
+                                createBrowserifyBundleFilesFunction(context) :
+                                  createEsbuildBundleFilesFunction(context);
 
   return bundleFilesFunction;
 }
@@ -24,7 +24,7 @@ module.exports = {
   createBundleFilesFunction
 };
 
-function createEsbuildBundleFilesFunction(debug) {
+function createEsbuildBundleFilesFunction(context) {
   let esBuildBundleFilesFunction = null;
 
   try {
@@ -32,7 +32,8 @@ function createEsbuildBundleFilesFunction(debug) {
           esbuild = require(esbuildPath);
 
     esBuildBundleFilesFunction = (entryFilePath, bundleFilePath, targetDirectoryPath, callback) => {
-      const bundler = esbuild,  ///
+      const { node, debug } = context,
+            bundler = esbuild,  ///
             targetEntryFilePath = combinePaths(targetDirectoryPath, entryFilePath),
             entryPoint = targetEntryFilePath, ///
             entryPoints = [
@@ -47,6 +48,14 @@ function createEsbuildBundleFilesFunction(debug) {
               outfile,
               bundle
             };
+
+      if (node) {
+        const platform = NODE;
+
+        Object.assign(options, {
+          platform
+        });
+      }
 
       bundler.build(options)
         .then(() => {
@@ -70,7 +79,7 @@ ${error}`);
   return esBuildBundleFilesFunction;
 }
 
-function createBrowserifyBundleFilesFunction(debug) {
+function createBrowserifyBundleFilesFunction(context) {
   let browserifyBundleFilesFunction = null;
 
   try {
@@ -78,10 +87,22 @@ function createBrowserifyBundleFilesFunction(debug) {
           browserify = require(browserifyPath);
 
     browserifyBundleFilesFunction = (entryFilePath, bundleFilePath, targetDirectoryPath, callback) => {
-      const options = {
+      const { node, debug } = context,
+            options = {
               debug
-            },
-            bundler = browserify(options),
+            };
+
+      if (node) {
+        const bare = true,
+              browserField = false;
+
+        Object.assign(options, {
+          bare,
+          browserField
+        });
+      }
+
+      const bundler = browserify(options),
             targetEntryFilePath = combinePaths(targetDirectoryPath, entryFilePath);
 
       bundler.add(targetEntryFilePath);

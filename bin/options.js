@@ -2,6 +2,7 @@
 
 const HELP_OPTION = "help",
       WAIT_OPTION = "wait",
+      NODE_OPTION = "node",
       DEBUG_OPTION = "debug",
       BUNDLER_OPTION = "bundler",
       QUIETLY_OPTION = "quietly",
@@ -18,6 +19,7 @@ const HELP_OPTION = "help",
 module.exports = {
   HELP_OPTION,
   WAIT_OPTION,
+  NODE_OPTION,
   DEBUG_OPTION,
   BUNDLER_OPTION,
   QUIETLY_OPTION,

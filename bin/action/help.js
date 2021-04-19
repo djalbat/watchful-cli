@@ -23,6 +23,8 @@ Options:
   
   --wait|-w                                      Wait before building incrementally
 
+  --node|-n                                      Bundle for Node rather than the browser
+
   --debug|-d                                     Debug, that is enable source maps
   
   --metrics|-m                                   Show metrics, that is file counts and times

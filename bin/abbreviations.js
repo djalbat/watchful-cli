@@ -1,6 +1,7 @@
 "use strict";
 
 const { HELP_OPTION,
+        NODE_OPTION,
         WAIT_OPTION,
         DEBUG_OPTION,
         BUNDLER_OPTION,
@@ -16,6 +17,7 @@ const { HELP_OPTION,
         SOURCE_DIRECTORY_OPTION } = require("./options");
 
 const h = HELP_OPTION,
+      n = NODE_OPTION,
       w = WAIT_OPTION,
       d = DEBUG_OPTION,
       u = BUNDLER_OPTION,
@@ -32,6 +34,7 @@ const h = HELP_OPTION,
 
 module.exports = {
   h,
+  n,
   w,
   d,
   u,

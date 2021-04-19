@@ -1,6 +1,7 @@
 "use strict";
 
 const SWC = "swc",
+      NODE = "node",
       BABEL = "babel",
       INLINE = "inline",
       MESSAGE = "message",
@@ -14,6 +15,7 @@ const SWC = "swc",
 
 module.exports = {
   SWC,
+  NODE,
   BABEL,
   INLINE,
   MESSAGE,
