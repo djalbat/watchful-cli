@@ -15,16 +15,18 @@ Watchful works best hand in hand with [Lively](https://github.com/djalbat/lively
 
 ### Comparisons
 
-Using SWC and ESBuild in combination together with utilising child processes can speed up a batch build by around a factor of fifteen. The following metrics were gathered on a modern albeit mid-level MacBook for a project with just under four hundred files:
+Using SWC and ESBuild in combination together with multiple processes can speed up a batch build more than fifteen times. The following metrics were gathered on a modern albeit mid-level MacBook for a project with just under four hundred files:
 
-|                              | Transpile time | Bundle time  | Total time   |
-| ---------------------------- | -------------- | ------------ | ------------ |
-| Babel + Browserify           | 8.5 seconds    | 2.2 seconds  | 10.7 seconds |
-| SWC + ESBuild + 4 processes  | 0.42 seconds   | 0.24 seconds | 0.66 seconds |
+|                             | Transpile time | Bundle time  | Total time   |
+| --------------------------- | -------------- | ------------ | ------------ |
+| Babel + Browserify          | 8.5 seconds    | 2.2 seconds  | 10.7 seconds |
+| SWC + ESBuild (4 processes) | 0.42 seconds   | 0.24 seconds | 0.66 seconds |
 
 ### Why aren't these tools included as dependencies?
 
-Babel presets and plugins require [@babel/core](https://babeljs.io/docs/en/babel-core) as a peer dependency, so you would have to include it in your project anyway. Additionally, it is a large project with many dependencies itself and since it is optional, it did not seem like a good idea to include. Similarly, since bundling is optional, there seemed little point in including either bundler as a dependency. Watchful is designed to run in your project directory and will load the bundlers and transpilers it finds there. This gives you complete control over their versions and configuration. Aside from a `debug` and `node` options, Watchful is agnostic to both.  
+Babel presets and plugins require [@babel/core](https://babeljs.io/docs/en/babel-core) as a peer dependency, so you would have to include it in your project anyway. Additionally, it is a large project with many dependencies itself and since it is optional, it did not seem like a good idea to include it. Similarly, since bundling is optional, there seemed little point in including either bundler as a dependency. 
+
+Watchful is designed to run in your project directory and will load the bundlers and transpilers it finds there. This gives you complete control over their versions and configuration. Aside from a `debug` and `node` options, Watchful is agnostic to both.  
 
 ## Installation
 
@@ -112,7 +114,7 @@ As already mentioned, it is recommended that you install Watchful as a project d
 
 ### Examples
 
-* In this example we build a bundle for an ES6 and [JSX](https://reactjs.org/docs/introducing-jsx.html) application using the default Babel and browserify.
+* In this example we build a bundle for an ES6 and [JSX](https://reactjs.org/docs/introducing-jsx.html) application using the default Babel and Browserify tools.
 
 The developer dependencies in the `package.json` file would like something like this:
 
@@ -144,7 +146,7 @@ The `babel.config.json` file in the project directory would look something like 
 }
 ```
 
-* In this example we again build a bundle for an ES6 and [JSX](https://reactjs.org/docs/introducing-jsx.html) application but using the SWC and ESBuild.
+* In this example we again build a bundle for an ES6 and [JSX](https://reactjs.org/docs/introducing-jsx.html) application but using the SWC and ESBuild tools.
 
 The developer dependencies in the `package.json` file would like something like this:
 
@@ -200,7 +202,7 @@ There are several points worth noting:
   "watchful": "watchful -mp=4 -r=swc -u=esbuld -s=./es6 -t=./tmp -e=main.js -b=./public/lib/client.js",
 ```
 
-The number of child processes has also been set to `4` here, but remember this only improves things for large projects with hundreds of files.
+The number of child processes has also been set to 4 here, but remember that this only improves things for large projects with hundreds of files, otherwise it may actually have a detrimental effect.
 
 * The `clean` script has nothing to do with Watchful. It deletes the `tmp` directory and is used in the build scripts. Note that since the watch scripts have to be killed by the user, there is no opportunity to clean up after watching and consequently the `tmp` directory will remain. It is recommended that you add it to your `.gitignore` file, therefore, or make sure to always build before deployment.
 
