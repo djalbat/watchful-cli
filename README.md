@@ -2,13 +2,29 @@
 
 Incremental transpilation with bundling.
 
-Watchful leverages [Babel](https://babeljs.io/) and [Browserify](http://browserify.org/) to provide a straightforward build tool that supports incremental transpilation together with bundling. It has a batch mode and a default watch mode. In the latter mode it will only transpile files that have been added or changed, which can improve build times considerably.
+Watchful leverages existing bundlers and transpilers in order to provide a straightforward build tool that supports incremental transpilation together with bundling. It has a batch mode and a watch mode. In the latter mode it will only transpile files that have been added or changed, improving build times considerably.
 
-### Why aren't Babel and Browserify included as dependencies?
+Watchful works best hand in hand with [Lively](https://github.com/djalbat/lively-cli).
 
-Babel presets and plugins require [@babel/core](https://babeljs.io/docs/en/babel-core) as a peer dependency, so you would have to include it in your project anyway. And since bundling is optional, there also seemed little point in including Browserify as a dependency. Watchful is designed to run in your project directory and will load the versions of Babel and Browserify it finds in there. This gives you complete control over versions and configuration. Aside from a `debug` option, Watchful is agnostic to both.  
+### Supported bundlers transpilers
 
-Watchful works best hand in hand with [Lively](https://github.com/djalbat/lively-cli). 
+* [Browserify](http://browserify.org/)
+* [ESBuild](https://esbuild.github.io/)  
+* [Babel](https://babeljs.io/)
+* [SWC](https://swc.rs/)
+
+### Comparisons
+
+Using SWC and ESBuild in combination together with utilising child processes can speed up a batch build by around a factor of fifteen. The following metrics were gathered on a modern albeit mid-level MacBook for a project with just under four hundred files:
+
+|                              | Transpile time | Bundle time  | Total time   |
+| ---------------------------- | -------------- | ------------ | ------------ |
+| Babel + Browserify           | 8.5 seconds    | 2.2 seconds  | 10.7 seconds |
+| SWC + ESBuild + 4 processes  | 0.42 seconds   | 0.24 seconds | 0.66 seconds |
+
+### Why aren't these tools included as dependencies?
+
+Babel presets and plugins require [@babel/core](https://babeljs.io/docs/en/babel-core) as a peer dependency, so you would have to include it in your project anyway. Additionally, it is a large project with many dependencies itself and since it is optional, it did not seem like a good idea to include. Similarly, since bundling is optional, there seemed little point in including either bundler as a dependency. Watchful is designed to run in your project directory and will load the bundlers and transpilers it finds there. This gives you complete control over their versions and configuration. Aside from a `debug` and `node` options, Watchful is agnostic to both.  
 
 ## Installation
 
@@ -90,11 +106,13 @@ In order to build a bundle, you must supply the source directory and target dire
 
 The path to the entry file is taken to be relative to the target directory, not the project directory. You can also optionally supply a path to the bundle file by way of the `--bundle-file` option, otherwise the output is piped to `stdout`. Either the temp or the lib directory can be given as the target directory, by the way, because there may be times when you want to both build a bundle and build a package.
 
-Multiple processes are supported in batch mode, set the `--processes` option to a number greater than 1 to enable them. Be careful not to set this too high. On a modern Mac laptop the optimal number is only 4 processes. Any more and performance actually deteriorates. Remember that multiple processes are only supported in batch mode where the gains are likely to be significant. In incremental mode, the gains are likely to be in the region of a tenth of a second or even less, and therefore not worth the implementation effort. Also bear in mind that there is an overhead associated with creating more than one process and therefore you will only see gains if transpiling dozens of files rather than just a few.
+Multiple processes are supported in batch mode, set the `--processes` option to a number greater than 1 to enable them. Be careful not to set this too high. On a modern MacBook the optimal number is only 4 processes. Any more and performance actually deteriorates. Remember that multiple processes are only supported in batch mode where the gains are likely to be significant. In incremental mode, the gains are likely to be in the region of a tenth of a second or even less, and therefore not worth the implementation effort. Also bear in mind that there is an overhead associated with creating more than one process and therefore you will only see gains if transpiling dozens of files rather than just a few.
 
-### Running by way of npm scripts
+As already mentioned, it is recommended that you install Watchful as a project dependency rather than globally, then run it with npm scripts.
 
-As already mentioned, it is recommended that you install Watchful as a project dependency rather than globally, then run it with npm scripts. In this example we build a bundle for an application using ES6 and [JSX](https://reactjs.org/docs/introducing-jsx.html).
+### Examples
+
+* In this example we build a bundle for an ES6 and [JSX](https://reactjs.org/docs/introducing-jsx.html) application using the default Babel and browserify.
 
 The developer dependencies in the `package.json` file would like something like this:
 
@@ -107,7 +125,7 @@ The developer dependencies in the `package.json` file would like something like 
   
   ...
 
-  "watchful-cli": "^1.0.3"
+  "watchful-cli": "^1.7.0"
 }
 ```
 
@@ -126,12 +144,43 @@ The `babel.config.json` file in the project directory would look something like 
 }
 ```
 
+* In this example we again build a bundle for an ES6 and [JSX](https://reactjs.org/docs/introducing-jsx.html) application but using the SWC and ESBuild.
+
+The developer dependencies in the `package.json` file would like something like this:
+
+```
+"devDependencies": {
+  "@swc/core": "^1.2.47",
+  "esbuild": "^0.11.14",
+  
+  ...
+
+  "watchful-cli": "^1.7.0"
+}
+```
+
+The `.swcrc` file in the project directory would look something like this:
+
+```
+{
+    "jsc": {
+        "parser": {
+            "syntax": "ecmascript",
+            "jsx": true
+        }
+    },
+    "module": {
+        "type": "commonjs"
+    }
+}
+```
+
 Now for the npm scripts:
 
 ```
 "scripts": {
   "clean": "rm -rf ./tmp",
-  "watchful": "watchful -s=./es6 -t=./tmp -e=main.js -b=./public/lib/client.js",
+  "watchful": "watchful -m -s=./es6 -t=./tmp -e=main.js -b=./public/lib/client.js",
   "batch": "npm run watchful batch --",
   "batch-debug": "npm run watchful batch -- --debug",
   "incremental": "npm run watchful incremental -- -qm --wait=100",
@@ -144,6 +193,14 @@ Now for the npm scripts:
 ```
 
 There are several points worth noting:
+
+* Babel and browserify are the defaults. To make use of SWC and ESBuild, change the `watchful` script as follows:
+
+```
+  "watchful": "watchful -mp=4 -r=swc -u=esbuld -s=./es6 -t=./tmp -e=main.js -b=./public/lib/client.js",
+```
+
+The number of child processes has also been set to `4` here, but remember this only improves things for large projects with hundreds of files.
 
 * The `clean` script has nothing to do with Watchful. It deletes the `tmp` directory and is used in the build scripts. Note that since the watch scripts have to be killed by the user, there is no opportunity to clean up after watching and consequently the `tmp` directory will remain. It is recommended that you add it to your `.gitignore` file, therefore, or make sure to always build before deployment.
 
