@@ -28,7 +28,7 @@ This is also a package but has a bundled example. To see the latter in action, r
 
 * [Muon](https://github.com/petros-ioannou1/muon)
 
-Muon is a work in progress but nonetheless is a good example of a project that leverages both Watchful and Lively.
+Muon is a work in progress but nonetheless is a good example of a project that leverages both Watchful and Lively. The setup instructions are the same as for With Style.
 
 ### Comparisons
 
