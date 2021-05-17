@@ -15,12 +15,20 @@ Watchful works best hand in hand with [Lively](https://github.com/djalbat/lively
 
 ### Projects to get you started
 
-All of these projects use Watchful and can be used a templates for your project. To see Watchful in action, clone a project, run the usual `npm install` and then `npm run watch-debug`.
+All of the projects below utilise Watchful and can be readily adapted to make a template for your project. To see Watchful in action, clone a project, run the usual `npm install` and then `npm run watch-debug`.
 
 * [Necessary](https://github.com/djalbat/necessary)
 * [Sufficient](https://github.com/djalbat/necessary)
 
 Both of these packages work in the browser and on Node. Necessary accomplishes this by making use of the [`browser`](https://github.com/defunctzombie/package-browser-field-spec) field alongside the usual `main` field in the `package.json` file. Sufficient accomplishes this by making use of the [`globalThis`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis) property and otherwise only consisting of code that runs on both platforms.
+
+* [With Style](https://github.com/djalbat/with-style)
+
+This is also a package but has a bundled example. To see the latter in action, run `npm watch-debug` as before along with `npm start` to kick off a small development server that utilities Lively. The example can be viewed at http://localhost:8888 and will live reload if you make changes to the source.
+
+* [Muon](https://github.com/petros-ioannou1/muon)
+
+Muon is a work in progress but nonetheless is a good example of a project that leverages both Watchful and Lively.
 
 ### Comparisons
 
