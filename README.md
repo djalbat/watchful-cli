@@ -6,12 +6,21 @@ Watchful leverages existing bundlers and transpilers in order to provide a strai
 
 Watchful works best hand in hand with [Lively](https://github.com/djalbat/lively-cli).
 
-### Supported bundlers transpilers
+### Supported bundlers and transpilers
 
 * [Browserify](http://browserify.org/)
 * [ESBuild](https://esbuild.github.io/)  
 * [Babel](https://babeljs.io/)
 * [SWC](https://swc.rs/)
+
+### Projects to get you started
+
+All of these projects use Watchful and can be used a templates for your project. To see Watchful in action, clone a project, run the usual `npm install` and then `npm run watch-debug`.
+
+* [Necessary](https://github.com/djalbat/necessary)
+* [Sufficient](https://github.com/djalbat/necessary)
+
+Both of these packages work in the browser and on Node. Necessary accomplishes this by making use of the [`browser`](https://github.com/defunctzombie/package-browser-field-spec) field alongside the usual `main` field in the `package.json` file. Sufficient accomplishes this by making use of the [`globalThis`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis) property and otherwise only consisting of code that runs on both platforms.
 
 ### Comparisons
 
