@@ -24,7 +24,7 @@ Both of these packages work in the browser and on Node. Necessary accomplishes t
 
 * [With Style](https://github.com/djalbat/with-style)
 
-This is also a package but has a bundled example. To see the latter in action, run `npm watch-debug` as before along with `npm start` to kick off a small development server that utilities Lively. The example can be viewed at http://localhost:8888 and will live reload if you make changes to the source.
+This is also a package but has a bundled example. To see the latter in action, run `npm install` and `npm watch-debug` as before along with `npm start` to kick off a small development server. The example can be viewed at http://localhost:8888 and, since the development server utilises Lively, will live reload if you make changes to the source.
 
 * [Muon](https://github.com/petros-ioannou1/muon)
 
