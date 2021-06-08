@@ -3,7 +3,7 @@
 const path = require("path");
 
 const { combinePaths } = require("../utilities/path"),
-      { NODE, BROWSERIFY } = require("../constants"),
+      { NODE, INLINE, BROWSERIFY } = require("../constants"),
       { ESBUILD_PATH, BROWSERIFY_PATH } = require("../paths"),
       { writeFileEx, createParentDirectory } = require("../utilities/fileSystem"),
       { ESBUILD_FAILED_MESSAGE,
@@ -39,15 +39,21 @@ function createEsbuildBundleFilesFunction(context) {
             entryPoints = [
               entryPoint
             ],
-            sourcemap = debug,  ///
             outfile = bundleFilePath, ///
             bundle = true,
             options = {
               entryPoints,
-              sourcemap,
               outfile,
               bundle
             };
+
+      if (debug) {
+        const sourcemap = INLINE;  ///
+
+        Object.assign(options, {
+          sourcemap
+        });
+      }
 
       if (node) {
         const platform = NODE;
