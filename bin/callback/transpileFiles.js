@@ -3,7 +3,8 @@
 const singleProcessTranspileFilesCallback = require("../callback/transpileFiles/singleProcess"),
       multipleProcessesTranspileFilesCallback = require("../callback/transpileFiles/mutilpleProcesses");
 
-const { startCountMetric, endCountMetric, startSecondsMetric, endSecondsMetric } = require("../utilities/metrics");
+const { S, EMPTY_STRING } = require("../constants"),
+      { startCountMetric, endCountMetric, startSecondsMetric, endSecondsMetric } = require("../utilities/metrics");
 
 function transpileFilesCallback(proceed, abort, context) {
   const { metrics, processesLength } = context;
@@ -21,7 +22,9 @@ function transpileFilesCallback(proceed, abort, context) {
     if (metrics) {
       const count = endCountMetric(context),
             seconds = endSecondsMetric(context),
-            sOrEmpty = (count === 1) ? "" : "s";
+            sOrEmpty = (count === 1) ?
+                         EMPTY_STRING :
+                           S;
 
       console.log(`Transpiled ${count} file${sOrEmpty} in ${seconds} seconds.`);
     }

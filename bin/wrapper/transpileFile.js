@@ -2,7 +2,7 @@
 
 const child_process = require("child_process");
 
-const { MESSAGE } = require("../constants");
+const { MESSAGE, PROCESS_TRANSPILE_FILE } = require("../constants");
 
 class TranspileFileWrapper {
   constructor(process, callback, parameters) {
@@ -52,7 +52,7 @@ class TranspileFileWrapper {
           args = [
             contextString
           ],
-          process = child_process.fork(require.resolve("../process/transpileFile"), args),
+          process = child_process.fork(require.resolve(PROCESS_TRANSPILE_FILE), args),
           parameters = null,
           transpileFileWrapper = new TranspileFileWrapper(process, callback, parameters);
 

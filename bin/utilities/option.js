@@ -1,5 +1,7 @@
 "use strict";
 
+import { EMPTY_STRING } from "../constants";
+
 function pathFromOption(option) {
   let path = null;
 
@@ -12,7 +14,7 @@ function pathFromOption(option) {
   } else if (optionAbsolutePath) {
     ///
   } else if (optionAllowedRelativePath) {
-    path = option.replace(/^\.\//, "").replace(/\/$/, "");
+    path = option.replace(/^\.\//, EMPTY_STRING).replace(/\/$/, EMPTY_STRING);
   } else if (optionForbiddenRelativePath) {
     path = null;
   } else {

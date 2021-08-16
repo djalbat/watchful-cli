@@ -2,7 +2,7 @@
 
 const { pathUtilities } = require("necessary");
 
-const { DELIMITER } = require("../constants");
+const { EMPTY_STRING, DELIMITER } = require("../constants");
 
 const { isPathName, bottommostNameFromPath } = pathUtilities;
 
@@ -21,7 +21,7 @@ function pathFromOption(option) {
   } else if (optionAbsolutePath) {
     ///
   } else if (optionAllowedRelativePath) {
-    path = option.replace(/^\.\//, "").replace(/\/$/, "");
+    path = option.replace(/^\.\//, EMPTY_STRING).replace(/\/$/, EMPTY_STRING);
   } else if (optionForbiddenRelativePath) {
     path = null;
   } else {

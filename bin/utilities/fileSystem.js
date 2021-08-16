@@ -4,7 +4,8 @@ const fs = require("fs");
 
 const { fileSystemUtilities } = require("necessary");
 
-const { pathWithoutBottommostNameFromPath } = require("../utilities/path");
+const { W_PLUS, FULL_STOP } = require("../constants"),
+      { pathWithoutBottommostNameFromPath } = require("../utilities/path");
 
 const { openSync, writeSync, rmdirSync, unlinkSync } = fs,
       { readDirectory, isEntryDirectory, createDirectory } = fileSystemUtilities;
@@ -16,7 +17,7 @@ function deleteFile(filePath, done) {
 }
 
 function writeFileEx(filePath, buffer) {
-  const file = openSync(filePath, "w+");
+  const file = openSync(filePath, W_PLUS);
 
   writeSync(file, buffer);
 }
@@ -32,7 +33,7 @@ function deleteDirectory(directoryPath, done) {
 function createParentDirectory(filePath) {
   const filePathWithoutBottommostName = pathWithoutBottommostNameFromPath(filePath);
 
-  if ((filePathWithoutBottommostName !== ".") && (filePathWithoutBottommostName !== null)) {
+  if ((filePathWithoutBottommostName !== FULL_STOP) && (filePathWithoutBottommostName !== null)) {
     const parentDirectoryPath = filePathWithoutBottommostName;  ///
 
     createDirectory(parentDirectoryPath);

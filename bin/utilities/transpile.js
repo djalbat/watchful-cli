@@ -4,7 +4,7 @@ const path = require("path");
 
 const { SWC_CORE_PATH, BABEL_CORE_PATH } = require("../paths"),
       { writeFile, createParentDirectory } = require("../utilities/fileSystem"),
-      { BABEL, INLINE, SOURCE_MAP_PREAMBLE } = require("../constants"),
+      { BABEL, INLINE, BASE_64, SOURCE_MAP_PREAMBLE } = require("../constants"),
       { sourceFileNameFromSourceFilePathAndTargetFilePath } = require("../utilities/sourceMap"),
       { SWC_FAILED_MESSAGE,
         BABEL_FAILED_MESSAGE,
@@ -118,7 +118,7 @@ function createSWCTranspileFileFunction(debug) {
             });
 
             const mapJSONString = JSON.stringify(mapJSON),
-                  base64EncodedMapJSONString = Buffer.from(mapJSONString).toString("base64");
+                  base64EncodedMapJSONString = Buffer.from(mapJSONString).toString(BASE_64);
 
             targetFileContent = `${code}
 ${SOURCE_MAP_PREAMBLE}${base64EncodedMapJSONString}`; ///
