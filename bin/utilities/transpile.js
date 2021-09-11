@@ -37,14 +37,12 @@ function createBabelTranspileFileFunction(debug) {
 
       if (debug) {
         const sourceMaps = INLINE,  ///
-              sourceFileName = sourceFileNameFromSourceFilePathAndTargetFilePath(sourceFilePath, targetFilePath),
-              options = {
-                sourceFileName
-              };
+              sourceFileName = sourceFileNameFromSourceFilePathAndTargetFilePath(sourceFilePath, targetFilePath);
 
-        Object.assign(options, {
-          sourceMaps
-        });
+        options = {
+          sourceMaps,
+          sourceFileName
+        };
       } else {
         options = {};
       }
