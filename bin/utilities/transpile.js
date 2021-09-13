@@ -111,7 +111,10 @@ function createSWCTranspileFileFunction(debug) {
                   sources = [
                     source
                   ],
-                  sourcesContent = sourceFileContent;  ///
+                  sourceContent = sourceFileContent,  ///
+                  sourcesContent = [
+                    sourceContent
+                  ];
 
             Object.assign(mapJSON, {
               sources,
