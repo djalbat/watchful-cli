@@ -3,7 +3,7 @@
 const path = require("path");
 
 const { SWC_CORE_PATH, BABEL_CORE_PATH } = require("../paths"),
-      { writeFile, createParentDirectory } = require("../utilities/fileSystem"),
+      { readFile, writeFile, createParentDirectory } = require("../utilities/fileSystem"),
       { BABEL, INLINE, BASE_64, SOURCE_MAP_PREAMBLE } = require("../constants"),
       { sourceFileNameFromSourceFilePathAndTargetFilePath } = require("../utilities/sourceMap"),
       { SWC_FAILED_MESSAGE,
@@ -94,9 +94,10 @@ function createSWCTranspileFileFunction(debug) {
             options = {
               filename,
               sourceMaps
-            }
+            },
+            sourceFileContent = readFile(sourceFilePath);
 
-      transpiler.transformFile(sourceFilePath, options)
+      transpiler.transform(sourceFileContent, options)
         .then((output) => {
           const success = true;
 
@@ -109,10 +110,12 @@ function createSWCTranspileFileFunction(debug) {
                   source = sourceFileName,  ///
                   sources = [
                     source
-                  ];
+                  ],
+                  sourcesContent = sourceFileContent;  ///
 
             Object.assign(mapJSON, {
-              sources
+              sources,
+              sourcesContent
             });
 
             const mapJSONString = JSON.stringify(mapJSON),
