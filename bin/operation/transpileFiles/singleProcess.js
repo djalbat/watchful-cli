@@ -8,15 +8,15 @@ const { updateCountMetric } = require("../../utilities/metrics");
 
 const { forEach } = asynchronousUtilities;
 
-function singleProcessTranspileFilesCallback(done, context) {
+function singleProcessTranspileFilesOperation(done, context) {
   const { filePaths } = context;
 
-  forEach(filePaths, transpileFileCallback, done, context);
+  forEach(filePaths, transpileFileOperation, done, context);
 }
 
-module.exports = singleProcessTranspileFilesCallback;
+module.exports = singleProcessTranspileFilesOperation;
 
-function transpileFileCallback(filePath, next, done, context) {
+function transpileFileOperation(filePath, next, done, context) {
   transpileFile(filePath, context, (success) => {
     if (success) {
       updateCountMetric(context);

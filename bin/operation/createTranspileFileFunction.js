@@ -2,7 +2,7 @@
 
 const { createTranspileFileFunction } = require("../utilities/transpile");
 
-function createTranspileFileFunctionCallback(proceed, abort, context) {
+function createTranspileFileFunctionOperation(proceed, abort, context) {
   const transpileFileFunction = createTranspileFileFunction(context);
 
   if (transpileFileFunction === null) {
@@ -18,4 +18,4 @@ function createTranspileFileFunctionCallback(proceed, abort, context) {
   proceed();
 }
 
-module.exports = createTranspileFileFunctionCallback;
+module.exports = createTranspileFileFunctionOperation;

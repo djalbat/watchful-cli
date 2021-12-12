@@ -1,9 +1,9 @@
 "use strict";
 
-const { executeCallbacks } = require("./utilities/callback");
+const { executeOperations } = require("./utilities/callback");
 
-function action(callbacks, callback, context) {
-  executeCallbacks(callbacks, (completed) => {
+function action(operations, callback, context) {
+  executeOperations(operations, (completed) => {
     const success = completed;  ///
 
     callback(success);

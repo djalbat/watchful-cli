@@ -23,7 +23,7 @@ const { pathFromOption } = require("../utilities/path"),
         TEMP_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE,
         SOURCE_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE } = require("../messages");
 
-function initialiseCallback(proceed, abort, context) {
+function initialiseOperation(proceed, abort, context) {
   const { options } = context,
         { wait = DEFAULT_WAIT,
           node = DEFAULT_NODE,
@@ -199,4 +199,4 @@ function initialiseCallback(proceed, abort, context) {
   proceed();
 }
 
-module.exports = initialiseCallback;
+module.exports = initialiseOperation;

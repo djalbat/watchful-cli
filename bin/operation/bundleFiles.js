@@ -2,7 +2,7 @@
 
 const bundleFiles = require("../bundleFiles");
 
-function bundleFilesCallback(proceed, abort, context) {
+function bundleFilesOperation(proceed, abort, context) {
   const { entryFilePath } = context;
 
   if (!entryFilePath) {
@@ -16,4 +16,4 @@ function bundleFilesCallback(proceed, abort, context) {
   });
 }
 
-module.exports = bundleFilesCallback;
+module.exports = bundleFilesOperation;

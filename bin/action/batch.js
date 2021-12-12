@@ -1,29 +1,29 @@
 "use strict";
 
 const action = require("../action"),
-      initialiseCallback = require("../callback/initialise"),
-      bundleFilesCallback = require("../callback/bundleFiles"),
-      transpileFilesCallback = require("../callback/transpileFiles"),
-      retrieveFilePathsCallback = require("../callback/retrieveFilePaths"),
-      createBundleFilesFunctionCallback = require("../callback/createBundleFilesFunction"),
-      createTranspileFileFunctionCallback = require("../callback/createTranspileFileFunction");
+      initialiseOperation = require("../operation/initialise"),
+      bundleFilesOperation = require("../operation/bundleFiles"),
+      transpileFilesOperation = require("../operation/transpileFiles"),
+      retrieveFilePathsOperation = require("../operation/retrieveFilePaths"),
+      createBundleFilesFunctionOperation = require("../operation/createBundleFilesFunction"),
+      createTranspileFileFunctionOperation = require("../operation/createTranspileFileFunction");
 
 const { BATCH_BUILD_FAILED_MESSAGE } = require("../messages");
 
 function batch(options) {
-  const callbacks = [
-          initialiseCallback,
-          createTranspileFileFunctionCallback,
-          createBundleFilesFunctionCallback,
-          retrieveFilePathsCallback,
-          transpileFilesCallback,
-          bundleFilesCallback
+  const operations = [
+          initialiseOperation,
+          createTranspileFileFunctionOperation,
+          createBundleFilesFunctionOperation,
+          retrieveFilePathsOperation,
+          transpileFilesOperation,
+          bundleFilesOperation
         ],
         context = {
           options
         };
 
-  action(callbacks, (success) => {
+  action(operations, (success) => {
     if (!success) {
       console.log(BATCH_BUILD_FAILED_MESSAGE);
 

@@ -4,7 +4,7 @@ const TranspileFileWrapper = require("../../wrapper/transpileFile");
 
 const { updateCountMetric } = require("../../utilities/metrics");
 
-function multipleProcessesTranspileFilesCallback(done, context) {
+function multipleProcessesTranspileFilesOperation(done, context) {
   const { filePaths, processesLength } = context,
         filePathsLength = filePaths.length,
         transpileFileWrappers = [],
@@ -54,4 +54,4 @@ function multipleProcessesTranspileFilesCallback(done, context) {
   }
 }
 
-module.exports = multipleProcessesTranspileFilesCallback;
+module.exports = multipleProcessesTranspileFilesOperation;

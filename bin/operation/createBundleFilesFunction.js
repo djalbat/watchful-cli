@@ -2,7 +2,7 @@
 
 const { createBundleFilesFunction } = require("../utilities/bundle");
 
-function createBundleFilesFunctionCallback(proceed, abort, context) {
+function createBundleFilesFunctionOperation(proceed, abort, context) {
   const { bundleFilePath } = context;
 
   if (bundleFilePath === null) {
@@ -26,4 +26,4 @@ function createBundleFilesFunctionCallback(proceed, abort, context) {
   proceed();
 }
 
-module.exports = createBundleFilesFunctionCallback;
+module.exports = createBundleFilesFunctionOperation;

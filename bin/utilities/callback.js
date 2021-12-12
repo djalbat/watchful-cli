@@ -4,18 +4,18 @@ const { asynchronousUtilities } = require("necessary");
 
 const { whilst } = asynchronousUtilities;
 
-function executeCallbacks(callbacks, callback, context) {
+function executeOperations(operations, callback, context) {
   const completed = true;
 
   Object.assign(context, {
-    callbacks,
+    operations,
     completed
   });
 
-  whilst(executeCallback, () => {
+  whilst(executeOperation, () => {
     const { completed } = context;
 
-    delete context.callbacks;
+    delete context.operations;
 
     delete context.completed;
 
@@ -24,13 +24,13 @@ function executeCallbacks(callbacks, callback, context) {
 }
 
 module.exports = {
-  executeCallbacks
+  executeOperations
 };
 
-function executeCallback(next, done, context, index) {
-  const { callbacks } = context,
-        callbacksLength = callbacks.length,
-        lastIndex = callbacksLength - 1;
+function executeOperation(next, done, context, index) {
+  const { operations } = context,
+        operationsLength = operations.length,
+        lastIndex = operationsLength - 1;
 
   if (index > lastIndex) {
     done();
@@ -38,9 +38,9 @@ function executeCallback(next, done, context, index) {
     return;
   }
 
-  const callback = callbacks[index];
+  const operation = operations[index];
 
-  callback(proceed, abort, context);
+  operation(proceed, abort, context);
 
   function proceed() {
     next();

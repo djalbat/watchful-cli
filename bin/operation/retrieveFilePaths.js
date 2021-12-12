@@ -6,7 +6,7 @@ const { ADD_EVENT, READY_EVENT } = require("../events"),
       { ENTRY_FILE_NOT_INCLUDED_IN_BUNDLED_FILES_MESSAGE } = require("../messages"),
       { pathWithoutDirectoryPathFromPathAndDirectoryPath } = require("../utilities/path");
 
-function retrieveFilePathsCallback(proceed, abort, context) {
+function retrieveFilePathsOperation(proceed, abort, context) {
   const { sourceDirectoryPath } = context,
         globPattern = `${sourceDirectoryPath}/**/*.js`,
         filePaths = [],
@@ -44,4 +44,4 @@ function retrieveFilePathsCallback(proceed, abort, context) {
   });
 }
 
-module.exports = retrieveFilePathsCallback;
+module.exports = retrieveFilePathsOperation;
