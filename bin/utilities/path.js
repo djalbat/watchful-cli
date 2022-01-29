@@ -1,10 +1,11 @@
 "use strict";
 
-const { pathUtilities } = require("necessary");
+const { characters, pathUtilities } = require("necessary");
 
-const { EMPTY_STRING, DELIMITER } = require("../constants");
+const { EMPTY_STRING } = require("../constants");
 
-const { isPathName, bottommostNameFromPath } = pathUtilities;
+  const { FORWARD_SLASH_CHARACTER } = characters,
+      { isPathName, bottommostNameFromPath } = pathUtilities;
 
 const currentWorkingDirectoryPath = process.cwd(),
       currentWorkingDirectoryPathLength = currentWorkingDirectoryPath.length;
@@ -61,9 +62,9 @@ function pathFromFullyQualifiedPath(fullyQualifiedPath) {
 }
 
 function pathWithoutDirectoryPathFromPathAndDirectoryPath(path, directoryPath) {
-  const delimiterLength = DELIMITER.length,
-        directoryPathLength = directoryPath.length,
-        pathWithoutDirectoryPath = path.substring(directoryPathLength + delimiterLength);
+    const directoryPathLength = directoryPath.length,
+          forwardSlashCharacterLength = FORWARD_SLASH_CHARACTER.length,
+          pathWithoutDirectoryPath = path.substring(directoryPathLength + forwardSlashCharacterLength);
 
   return pathWithoutDirectoryPath;
 }

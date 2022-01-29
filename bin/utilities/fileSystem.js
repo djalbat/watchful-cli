@@ -2,13 +2,15 @@
 
 const fs = require("fs");
 
-const { fileSystemUtilities } = require("necessary");
+const { characters, fileSystemUtilities } = require("necessary");
 
-const { W_PLUS, FULL_STOP } = require("../constants"),
+const { W_PLUS } = require("../constants"),
       { pathWithoutBottommostNameFromPath } = require("../utilities/path");
 
 const { openSync, writeSync, rmdirSync, unlinkSync } = fs,
       { readDirectory, isEntryDirectory, createDirectory } = fileSystemUtilities;
+
+const { PERIOD_CHARACTER } = characters;
 
 function deleteFile(filePath, done) {
   unlinkSync(filePath);
@@ -33,7 +35,7 @@ function deleteDirectory(directoryPath, done) {
 function createParentDirectory(filePath) {
   const filePathWithoutBottommostName = pathWithoutBottommostNameFromPath(filePath);
 
-  if ((filePathWithoutBottommostName !== FULL_STOP) && (filePathWithoutBottommostName !== null)) {
+  if ((filePathWithoutBottommostName !== PERIOD_CHARACTER) && (filePathWithoutBottommostName !== null)) {
     const parentDirectoryPath = filePathWithoutBottommostName;  ///
 
     createDirectory(parentDirectoryPath);
