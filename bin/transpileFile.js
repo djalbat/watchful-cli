@@ -3,14 +3,14 @@
 const { combinePaths } = require("./utilities/path");
 
 function transpileFile(filePath, context, callback) {
-  const { transpileFileFunction, sourceDirectoryPath, targetDirectoryPath } = context,
-        sourceFilePath = combinePaths(sourceDirectoryPath, filePath),  ///
-        targetFilePath = combinePaths(targetDirectoryPath, filePath);  ///
+  const { transpileFileFunction, sourceDirectoryPath, targetDirectoryPath } = context;
 
-  transpileFileFunction(sourceFilePath, targetFilePath, (success) => {
+  transpileFileFunction(filePath, sourceDirectoryPath, targetDirectoryPath, (success) => {
     const { quietly } = context;
 
     if (!quietly) {
+      const sourceFilePath = combinePaths(sourceDirectoryPath, filePath);
+
       console.log(`Transpiled '${sourceFilePath}'.`);
     }
 

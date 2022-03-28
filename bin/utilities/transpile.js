@@ -7,11 +7,11 @@ const { encodings } = require("necessary");
 const { SWC_CORE_PATH, BABEL_CORE_PATH } = require("../paths"),
       { readFile, writeFile, createParentDirectory } = require("../utilities/fileSystem"),
       { BABEL, INLINE, SOURCE_MAP_PREAMBLE } = require("../constants"),
-      { sourceFileNameFromSourceFilePathAndTargetFilePath } = require("../utilities/sourceMap"),
-      { SWC_FAILED_MESSAGE,
-        BABEL_FAILED_MESSAGE,
-        SWC_NOT_INSTALLED_MESSAGE,
-        BABEL_NOT_INSTALLED_MESSAGE } = require("../messages");
+      { SWC_FAILED_MESSAGE, BABEL_FAILED_MESSAGE, SWC_NOT_INSTALLED_MESSAGE, BABEL_NOT_INSTALLED_MESSAGE } = require("../messages"),
+      { sourceFilePathFromFilePathAndSourceDirectoryPath,
+        targetFilePathFromFilePathAndTargetDirectoryPath,
+        sourceFileNameFromSourceFilePathAndTargetFilePath,
+        sourcesFromSourcesSourceDirectoryPathAndTargetDirectoryPath } = require("../utilities/path");
 
 const { BASE64_ENCODING } = encodings;
 
@@ -36,8 +36,11 @@ function createBabelTranspileFileFunction(debug) {
           babel = require(babelCorePath),
           transpiler = babel; ///
 
-    babelTranspileFileFunction = (sourceFilePath, targetFilePath, callback) => {
+    babelTranspileFileFunction = (filePath, sourceDirectoryPath, targetDirectoryPath, callback) => {
       let options;
+
+      const sourceFilePath = sourceFilePathFromFilePathAndSourceDirectoryPath(filePath, sourceDirectoryPath),
+            targetFilePath = targetFilePathFromFilePathAndTargetDirectoryPath(filePath, targetDirectoryPath);
 
       if (debug) {
         const sourceMaps = INLINE,  ///
@@ -92,14 +95,16 @@ function createSWCTranspileFileFunction(debug) {
           swc = require(swcCorePath),
           transpiler = swc; ///
 
-    swcTranspileFileFunction = (sourceFilePath, targetFilePath, callback) => {
-      const sourceMaps = debug, ///
+    swcTranspileFileFunction = (filePath, sourceDirectoryPath, targetDirectoryPath, callback) => {
+      const sourceFilePath = sourceFilePathFromFilePathAndSourceDirectoryPath(filePath, sourceDirectoryPath),
+            targetFilePath = targetFilePathFromFilePathAndTargetDirectoryPath(filePath, targetDirectoryPath),
             filename = targetFilePath,  ///
+            sourceMaps = debug, ///
+            sourceFileContent = readFile(sourceFilePath),
             options = {
               filename,
               sourceMaps
-            },
-            sourceFileContent = readFile(sourceFilePath);
+            };
 
       transpiler.transform(sourceFileContent, options)
         .then((output) => {
@@ -109,20 +114,14 @@ function createSWCTranspileFileFunction(debug) {
 
           if (debug) {
             const { code, map } = output,
-                  mapJSON = JSON.parse(map),
-                  sourceFileName = sourceFileNameFromSourceFilePathAndTargetFilePath(sourceFilePath, targetFilePath),
-                  source = sourceFileName,  ///
-                  sources = [
-                    source
-                  ],
-                  sourceContent = sourceFileContent,  ///
-                  sourcesContent = [
-                    sourceContent
-                  ];
+                  mapJSON = JSON.parse(map);
+
+            let { sources } = mapJSON;
+
+            sources = sourcesFromSourcesSourceDirectoryPathAndTargetDirectoryPath(sources, sourceDirectoryPath, targetDirectoryPath);
 
             Object.assign(mapJSON, {
-              sources,
-              sourcesContent
+              sources
             });
 
             const mapJSONString = JSON.stringify(mapJSON),
@@ -157,3 +156,4 @@ ${error}`);
 
   return swcTranspileFileFunction;
 }
+

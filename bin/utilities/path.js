@@ -1,11 +1,13 @@
 "use strict";
 
+const path = require("path");
+
 const { characters, pathUtilities } = require("necessary");
 
 const { EMPTY_STRING } = require("../constants");
 
-  const { FORWARD_SLASH_CHARACTER } = characters,
-      { isPathName, bottommostNameFromPath } = pathUtilities;
+const { FORWARD_SLASH_CHARACTER } = characters,
+      { combinePaths, pathWithoutBottommostNameFromPath } = pathUtilities;
 
 const currentWorkingDirectoryPath = process.cwd(),
       currentWorkingDirectoryPathLength = currentWorkingDirectoryPath.length;
@@ -32,22 +34,6 @@ function pathFromOption(option) {
   return path;
 }
 
-function fileNameFromFilePath(filePath) {
-  let fileName;
-
-  const filePathFileName = isPathName(filePath);
-
-  if (filePathFileName) {
-    fileName = filePath;  ///
-  } else {
-    const bottommostFileName = bottommostNameFromPath(filePath);
-
-    fileName = bottommostFileName;  ///
-  }
-
-  return fileName;
-}
-
 function isPathFullQualifiedPath(path) {
   const pathStartsWithCurrentWorkingDirectoryPath = path.startsWith(currentWorkingDirectoryPath),
         pathFullyQualifiedPath = pathStartsWithCurrentWorkingDirectoryPath; ///
@@ -69,10 +55,61 @@ function pathWithoutDirectoryPathFromPathAndDirectoryPath(path, directoryPath) {
   return pathWithoutDirectoryPath;
 }
 
+function sourceFilePathFromFilePathAndSourceDirectoryPath(filePath, sourceDirectoryPath) {
+  const sourceFilePath = combinePaths(sourceDirectoryPath, filePath);
+
+  return sourceFilePath;
+}
+
+function targetFilePathFromFilePathAndTargetDirectoryPath(filePath, targetDirectoryPath) {
+  const targetFilePath = combinePaths(targetDirectoryPath, filePath);
+
+  return targetFilePath;
+}
+
+function sourceFileNameFromSourceFilePathAndTargetFilePath(sourceFilePath, targetFilePath) {
+  const relativeSourceFilepath = relativeSourceFilePathFromSourceFilePathAndTargetFilePath(sourceFilePath, targetFilePath),
+      sourceFileName = relativeSourceFilepath;  ///
+
+  return sourceFileName;
+}
+
+function sourcesFromSourcesSourceDirectoryPathAndTargetDirectoryPath(sources, sourceDirectoryPath, targetDirectoryPath) {
+  sources = sources.map((source) => { ///
+    const sourceStartsWithTargetDirectoryPath = source.startsWith(targetDirectoryPath);
+
+    if (sourceStartsWithTargetDirectoryPath) {
+      const targetDirectoryPathLength = targetDirectoryPath.length,
+            start = targetDirectoryPathLength + 1,
+            filePath = source.substring(start),
+            targetFilePath = source,  ///
+            sourceFilePath = sourceFilePathFromFilePathAndSourceDirectoryPath(filePath, sourceDirectoryPath),
+            relativeSourceFilePath = relativeSourceFilePathFromSourceFilePathAndTargetFilePath(sourceFilePath, targetFilePath);
+
+      source = relativeSourceFilePath;  ///
+    }
+
+    return source;
+  });
+
+  return sources;
+}
+
 module.exports = Object.assign({}, pathUtilities, {
   pathFromOption,
-  fileNameFromFilePath,
   isPathFullQualifiedPath,
   pathFromFullyQualifiedPath,
-  pathWithoutDirectoryPathFromPathAndDirectoryPath
+  pathWithoutDirectoryPathFromPathAndDirectoryPath,
+  sourceFilePathFromFilePathAndSourceDirectoryPath,
+  targetFilePathFromFilePathAndTargetDirectoryPath,
+  sourceFileNameFromSourceFilePathAndTargetFilePath,
+  sourcesFromSourcesSourceDirectoryPathAndTargetDirectoryPath
 });
+
+function relativeSourceFilePathFromSourceFilePathAndTargetFilePath(sourceFilePath, targetFilePath) {
+  const targetFilePathWithoutBottommostName = pathWithoutBottommostNameFromPath(targetFilePath),
+        relativeSourceFilePath = path.relative(targetFilePathWithoutBottommostName, sourceFilePath);
+
+  return relativeSourceFilePath;
+}
+
