@@ -33,7 +33,7 @@ class Queue {
 
         next();
       });
-    }, 0);
+    }, 1);
   }
 
   next() {
