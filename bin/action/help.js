@@ -1,6 +1,6 @@
 "use strict";
 
-function help() {
+function helpAction() {
   console.log(`Usage: 
   
   watchful [<command>] [<options>]
@@ -55,4 +55,4 @@ Please see the readme file on GitHub:
 `);
 }
 
-module.exports = help;
+module.exports = helpAction;

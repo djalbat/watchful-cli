@@ -2,14 +2,6 @@
 
 const { pathFromOption } = require("../utilities/path"),
       { initialiseMetrics } = require("../utilities/metrics"),
-      { DEFAULT_WAIT,
-        DEFAULT_NODE,
-        DEFAULT_DEBUG,
-        DEFAULT_BUNDLER,
-        DEFAULT_QUIETLY,
-        DEFAULT_METRICS,
-        DEFAULT_PROCESSES,
-        DEFAULT_TRANSPILER } = require("../defaults"),
       { NO_ENTRY_FILE_SPECIFIED_MESSAGE,
         NO_BUNDLE_FILE_SPECIFIED_MESSAGE,
         NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE,
@@ -24,20 +16,19 @@ const { pathFromOption } = require("../utilities/path"),
         SOURCE_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE } = require("../messages");
 
 function initialiseOperation(proceed, abort, context) {
-  const { options } = context,
-        { wait = DEFAULT_WAIT,
-          node = DEFAULT_NODE,
-          debug = DEFAULT_DEBUG,
-          bundler = DEFAULT_BUNDLER,
-          quietly = DEFAULT_QUIETLY,
-          metrics = DEFAULT_METRICS,
-          processes = DEFAULT_PROCESSES,
-          transpiler = DEFAULT_TRANSPILER,
-          entryFile = null,
-          bundleFile = null,
-          libDirectory = null,
-          tempDirectory = null,
-          sourceDirectory } = options,
+  const { wait,
+          node,
+          debug,
+          bundler,
+          quietly,
+          metrics,
+          entryFile,
+          processes,
+          transpiler,
+          bundleFile,
+          libDirectory,
+          tempDirectory,
+          sourceDirectory } = context,
           processesLength = Number(processes);  ///
 
   let entryFilePath = null,
@@ -45,7 +36,7 @@ function initialiseOperation(proceed, abort, context) {
       sourceDirectoryPath = null,
       targetDirectoryPath = null;
 
-  if (!sourceDirectory) {
+  if (sourceDirectory === null) {
     console.log(NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE);
 
     abort();
@@ -53,7 +44,7 @@ function initialiseOperation(proceed, abort, context) {
     return;
   }
 
-  if (!libDirectory && !tempDirectory) {
+  if ((libDirectory === null) && (tempDirectory === null)) {
     console.log(NEITHER_LIB_NOR_TEMP_DIRECTORY_SPECIFIED_MESSAGE);
 
     abort();
@@ -61,7 +52,7 @@ function initialiseOperation(proceed, abort, context) {
     return;
   }
 
-  if (libDirectory && tempDirectory) {
+  if ((libDirectory !== null) && (tempDirectory !== null)) {
     console.log(BOTH_LIB_AND_TEMP_DIRECTORIES_SPECIFIED_MESSAGE);
 
     abort();
@@ -69,8 +60,8 @@ function initialiseOperation(proceed, abort, context) {
     return;
   }
 
-  if (tempDirectory) {
-    if (!entryFile) {
+  if (tempDirectory !== null) {
+    if (entryFile === null) {
       console.log(NO_ENTRY_FILE_SPECIFIED_MESSAGE);
 
       abort();
@@ -78,7 +69,7 @@ function initialiseOperation(proceed, abort, context) {
       return;
     }
 
-    if (!bundleFile) {
+    if (bundleFile === null) {
       console.log(NO_BUNDLE_FILE_SPECIFIED_MESSAGE);
 
       abort();
@@ -87,7 +78,7 @@ function initialiseOperation(proceed, abort, context) {
     }
   }
 
-  if (entryFile && !bundleFile) {
+  if ((entryFile !== null) && (bundleFile === null)) {
     console.log(ENTRY_FILE_BUT_NO_BUNDLE_FILE_SPECIFIED_MESSAGE);
 
     abort();
@@ -95,7 +86,7 @@ function initialiseOperation(proceed, abort, context) {
     return;
   }
 
-  if (bundleFile && !entryFile) {
+  if ((bundleFile !== null) && (entryFile === null)) {
     console.log(BUNDLE_FILE_BUT_NO_ENTRY_FILE_SPECIFIED_MESSAGE);
 
     abort();
@@ -103,12 +94,12 @@ function initialiseOperation(proceed, abort, context) {
     return;
   }
 
-  if (entryFile) {
+  if (entryFile !== null) {
     const entryFileOption = entryFile;  ///
 
     entryFilePath = pathFromOption(entryFileOption);
 
-    if (!entryFilePath) {
+    if (entryFilePath === null) {
       console.log(ENTRY_FILE_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE);
 
       abort();
@@ -117,12 +108,12 @@ function initialiseOperation(proceed, abort, context) {
     }
   }
 
-  if (bundleFile) {
+  if (bundleFile !== null) {
     const bundleFileOption = bundleFile;  ///
 
     bundleFilePath = pathFromOption(bundleFile, bundleFileOption);
 
-    if (!bundleFilePath) {
+    if (bundleFilePath === null) {
       console.log(BUNDLE_FILE_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE);
 
       abort();
@@ -131,11 +122,11 @@ function initialiseOperation(proceed, abort, context) {
     }
   }
 
-  if (libDirectory) {
+  if (libDirectory !== null) {
     const libDirectoryOption = libDirectory,  ///
           libDirectoryPath = pathFromOption(libDirectory, libDirectoryOption);
 
-    if (!libDirectoryPath) {
+    if (libDirectoryPath === null) {
       console.log(LIB_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE);
 
       abort();
@@ -146,11 +137,11 @@ function initialiseOperation(proceed, abort, context) {
     targetDirectoryPath = libDirectoryPath; ///
   }
 
-  if (tempDirectory) {
+  if (tempDirectory !== null) {
     const tempDirectoryOption = tempDirectory,  ///
           tempDirectoryPath = pathFromOption(tempDirectory, tempDirectoryOption);
 
-    if (!tempDirectoryPath) {
+    if (tempDirectoryPath === null) {
       console.log(TEMP_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE);
 
       abort();
@@ -161,12 +152,12 @@ function initialiseOperation(proceed, abort, context) {
     targetDirectoryPath = tempDirectoryPath; ///
   }
 
-  if (sourceDirectory) {
+  if (sourceDirectory !== null) {
     const sourceDirectoryOption = sourceDirectory;  ///
 
     sourceDirectoryPath = pathFromOption(sourceDirectory, sourceDirectoryOption);
 
-    if (!sourceDirectoryPath) {
+    if (sourceDirectoryPath === null) {
       console.log(SOURCE_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE);
 
       abort();

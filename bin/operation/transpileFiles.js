@@ -1,7 +1,7 @@
 "use strict";
 
-const singleProcessTranspileFilesCallback = require(".//transpileFiles/singleProcess"),
-      multipleProcessesTranspileFilesCallback = require(".//transpileFiles/mutilpleProcesses");
+const singleProcessTranspileFilesCallback = require(".//transpileFiles/singleProcess"), ///
+      multipleProcessesTranspileFilesCallback = require(".//transpileFiles/mutilpleProcesses"); ///
 
 const { S, EMPTY_STRING } = require("../constants"),
       { startCountMetric, endCountMetric, startSecondsMetric, endSecondsMetric } = require("../utilities/metrics");
@@ -11,6 +11,7 @@ function transpileFilesOperation(proceed, abort, context) {
 
   if (metrics) {
     startCountMetric(context);
+
     startSecondsMetric(context);
   }
 
