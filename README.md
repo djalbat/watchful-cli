@@ -70,20 +70,20 @@ Watchful has the following commands and options:
 
 Commands:
 
-  version                                        Show theh version
-
   help                                           Show this help
   
+  version                                        Show theh version
+
   batch                                          Batch build
 
   [incremental]                                  Watch and build incrementally
   
 Options:
 
-  --version|-v                                   Show the version
-
   --help|-h                                      Show this help
   
+  --version|-v                                   Show the version
+
   --wait|-w                                      Wait before building incrementally
 
   --node|-n                                      Bundle for Node rather than the browser
