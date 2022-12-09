@@ -2,12 +2,13 @@
 
 const fs = require("fs");
 
-const { characters, fileSystemUtilities } = require("necessary");
+const { characters, pathUtilities, fileSystemUtilities } = require("necessary");
 
 const { W_PLUS } = require("../constants"),
       { pathWithoutBottommostNameFromPath } = require("../utilities/path");
 
-const { openSync, writeSync, rmdirSync, unlinkSync } = fs,
+const { concatenatePaths } = pathUtilities,
+      { openSync, writeSync, rmdirSync, unlinkSync } = fs,
       { readDirectory, isEntryDirectory, createDirectory } = fileSystemUtilities;
 
 const { PERIOD_CHARACTER } = characters;
@@ -53,7 +54,7 @@ function cleanDirectory(directoryPath) {
   const entryPaths = readDirectory(directoryPath);
 
   entryPaths.forEach((entryPath) => {
-    entryPath = `${directoryPath}/${entryPath}`;  ///
+    entryPath = concatenatePaths(directoryPath, entryPath);  ///
 
     const entryDirectory = isEntryDirectory(entryPath);
 
