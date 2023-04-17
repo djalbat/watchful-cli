@@ -4,7 +4,7 @@ Incremental transpilation with bundling.
 
 Watchful leverages existing bundlers and transpilers in order to provide a straightforward build tool that supports incremental transpilation together with bundling. It has a batch mode and a watch mode. In the latter mode it will only transpile files that have been added or changed, improving build times considerably.
 
-Watchful works best hand in hand with [Lively](https://github.com/djalbat/lively-cli).
+Watchful works best hand in hand with [Lively-CLI](https://github.com/djalbat/lively-cli).
 
 ### Supported bundlers and transpilers
 
