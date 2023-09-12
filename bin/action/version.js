@@ -1,11 +1,13 @@
 "use strict";
 
-const { WATCHFUL_CLI } = require("../constants"),
-      { getPackageVersion } = require("../utilities/packageJSON");
+const { packageUtilities } = require("necessary");
+
+const { WATCHFUL_CLI } = require("../constants");
+
+const { getVersion } = packageUtilities;
 
 function versionAction() {
-  const packageVersion = getPackageVersion(),
-        version = packageVersion; ///
+  const version = getVersion(); ///
 
   console.log(`${WATCHFUL_CLI} version ${version}`);
 }
