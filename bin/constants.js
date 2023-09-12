@@ -11,7 +11,6 @@ const S = "s",
       BROWSERIFY = "browserify",
       EMPTY_STRING = "",
       WATCHFUL_CLI = "Watchful-CLI",
-      PACKAGE_JSON = "package.json",
       SOURCE_MAP_PREAMBLE = "//# sourceMappingURL=data:application/json;base64,",
       PROCESS_TRANSPILE_FILE = "../process/transpileFile",
       SOURCE_DIRECTORY_WATCH_PATTERN = "/**/*.js";
@@ -28,7 +27,6 @@ module.exports = {
   BROWSERIFY,
   EMPTY_STRING,
   WATCHFUL_CLI,
-  PACKAGE_JSON,
   SOURCE_MAP_PREAMBLE,
   PROCESS_TRANSPILE_FILE,
   SOURCE_DIRECTORY_WATCH_PATTERN
