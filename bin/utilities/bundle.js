@@ -32,7 +32,7 @@ function createEsbuildBundleFilesFunction(context) {
           esbuild = require(esbuildPath);
 
     esBuildBundleFilesFunction = (entryFilePath, bundleFilePath, targetDirectoryPath, callback) => {
-      const { node, debug } = context,
+      const { node, debug, minify } = context,
             bundler = esbuild,  ///
             targetEntryFilePath = combinePaths(targetDirectoryPath, entryFilePath),
             entryPoint = targetEntryFilePath, ///
@@ -44,7 +44,8 @@ function createEsbuildBundleFilesFunction(context) {
             options = {
               entryPoints,
               outfile,
-              bundle
+              bundle,
+              minify
             };
 
       if (debug) {

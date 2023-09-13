@@ -10,7 +10,7 @@ const action = require("../action"),
 
 const { BATCH_BUILD_FAILED_MESSAGE } = require("../messages");
 
-function batchAction(wait, node, debug, bundler, quietly, metrics, entryFile, processes, transpiler, bundleFile, libDirectory, tempDirectory, sourceDirectory) {
+function batchAction(wait, node, debug, minify, bundler, quietly, metrics, entryFile, processes, transpiler, bundleFile, libDirectory, tempDirectory, sourceDirectory) {
   const operations = [
           initialiseOperation,
           createTranspileFileFunctionOperation,
@@ -23,6 +23,7 @@ function batchAction(wait, node, debug, bundler, quietly, metrics, entryFile, pr
           wait,
           node,
           debug,
+          minify,
           bundler,
           quietly,
           metrics,

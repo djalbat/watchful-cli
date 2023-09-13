@@ -9,7 +9,7 @@ const watch = require("../watch"),
 
 const { INCREMENTAL_BUILD_FAILED_MESSAGE } = require("../messages");
 
-function incrementalAction(wait, node, debug, bundler, quietly, metrics, entryFile, processes, transpiler, bundleFile, libDirectory, tempDirectory, sourceDirectory) {
+function incrementalAction(wait, node, debug, minify, bundler, quietly, metrics, entryFile, processes, transpiler, bundleFile, libDirectory, tempDirectory, sourceDirectory) {
   const operations = [
           initialiseOperation,
           createTranspileFileFunctionOperation,
@@ -20,6 +20,7 @@ function incrementalAction(wait, node, debug, bundler, quietly, metrics, entryFi
           wait,
           node,
           debug,
+          minify,
           bundler,
           quietly,
           metrics,

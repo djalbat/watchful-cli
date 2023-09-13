@@ -10,8 +10,9 @@ const { HELP_COMMAND, BATCH_COMMAND, VERSION_COMMAND, INCREMENTAL_COMMAND } = re
         DEFAULT_WAIT,
         DEFAULT_NODE,
         DEFAULT_DEBUG,
-        DEFAULT_VERSION,
+        DEFAULT_MINIFY,
         DEFAULT_BUNDLER,
+        DEFAULT_VERSION,
         DEFAULT_QUIETLY,
         DEFAULT_METRICS,
         DEFAULT_ENTRY_FILE,
@@ -28,8 +29,9 @@ function actions(command, argument, options) {
           wait = DEFAULT_WAIT,
           node = DEFAULT_NODE,
           debug = DEFAULT_DEBUG,
-          version = DEFAULT_VERSION,
+          minify = DEFAULT_MINIFY,
           bundler = DEFAULT_BUNDLER,
+          version = DEFAULT_VERSION,
           quietly = DEFAULT_QUIETLY,
           metrics = DEFAULT_METRICS,
           entryFile = DEFAULT_ENTRY_FILE,
@@ -52,9 +54,9 @@ function actions(command, argument, options) {
 
   switch (command) {
     case HELP_COMMAND: helpAction(); break;
-    case BATCH_COMMAND: batchAction(wait, node, debug, bundler, quietly, metrics, entryFile, processes, transpiler, bundleFile, libDirectory, tempDirectory, sourceDirectory); break;
+    case BATCH_COMMAND: batchAction(wait, node, debug, minify, bundler, quietly, metrics, entryFile, processes, transpiler, bundleFile, libDirectory, tempDirectory, sourceDirectory); break;
     case VERSION_COMMAND: versionAction(); break;
-    case INCREMENTAL_COMMAND: incrementalAction(wait, node, debug, bundler, quietly, metrics, entryFile, processes, transpiler, bundleFile, libDirectory, tempDirectory, sourceDirectory); break;
+    case INCREMENTAL_COMMAND: incrementalAction(wait, node, debug, minify, bundler, quietly, metrics, entryFile, processes, transpiler, bundleFile, libDirectory, tempDirectory, sourceDirectory); break;
   }
 }
 
