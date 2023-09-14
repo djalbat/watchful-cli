@@ -43,7 +43,7 @@ Using SWC and ESBuild in combination together with multiple processes can speed 
 
 Babel presets and plugins require [@babel/core](https://babeljs.io/docs/en/babel-core) as a peer dependency, so you would have to include it in your project anyway. Additionally, it is a large project with many dependencies itself and since it is optional, it did not seem like a good idea to include it. Similarly, since bundling is optional, there seemed little point in including either bundler as a dependency. 
 
-Watchful is designed to run in your project directory and will load the bundlers and transpilers it finds there. This gives you complete control over their versions and configuration. Aside from a `debug` and `node` options, Watchful is agnostic to both.  
+Watchful is designed to run in your project directory and will load the bundlers and transpilers it finds there. This gives you complete control over their versions and configuration. Aside from the `debug`, `release` and `node` options, Watchful is agnostic to both.  
 
 ## Installation
 
@@ -80,22 +80,24 @@ Commands:
   
 Options:
 
-  --help|-h                                      Show this help
-  
   --version|-v                                   Show the version
 
+  --help|-h                                      Show this help
+  
   --wait|-w                                      Wait before building incrementally
 
   --node|-n                                      Bundle for Node rather than the browser
 
   --debug|-d                                     Debug, that is enable source maps
   
+  --release|-r                                   Release, that is enable minification
+  
   --metrics|-m                                   Show metrics, that is file counts and times
 
   --quietly|-q                                   Run with almost no console logging
 
   --processes|-p                                 The number of processes
-
+  
   --bundler|-u                                   The bundler, either `browserify` or `esbuild`
 
   --transpiler|-r                                The transpiler, either `babel` or `swc`
@@ -104,9 +106,9 @@ Options:
   
   --bundle-file|-b                               Bundle file path
   
-  --lib-directory|-l                             Lib directory path
+  --lib-directory|-l                             Library directory path
 
-  --temp-directory|-t                            Temp directory path
+  --temp-directory|-x                            Temporary directory path
 
   --source-directory|-s                          Source directory path
 ```
@@ -199,11 +201,11 @@ Now for the npm scripts:
 ```
 "scripts": {
   "clean": "rm -rf ./tmp",
-  "watchful": "watchful -m -s=./es6 -t=./tmp -e=main.js -b=./public/lib/client.js",
-  "batch": "npm run watchful batch --",
+  "watchful": "watchful -m -s=./es6 -x=./tmp -e=main.js -b=./public/lib/client.js"--wait=100,
+  "batch": "npm run watchful batch -- --release",
   "batch-debug": "npm run watchful batch -- --debug",
-  "incremental": "npm run watchful incremental -- -qm --wait=100",
-  "incremental-debug": "npm run watchful incremental -- --debug -qm --wait=100",
+  "incremental": "npm run watchful incremental -- --release",
+  "incremental-debug": "npm run watchful incremental -- --debug",
   "build": "npm run clean && npm run batch && npm run clean",
   "build-debug": "npm run clean && npm run batch-debug && npm run clean",
   "watch": "npm run clean && npm run batch && npm run incremental",
@@ -229,7 +231,7 @@ The number of child processes has also been set to 4 here, but remember that thi
 
 * For a package rather than a bundle, you could remove the call to the final `clean` script from the build scripts; remove the entry and bundle file options from the `watchful` script; and change the temp directory to a lib directory.
 
-* For incremental builds, the `wait` option has been set to 100 milliseconds. Usually this can be left at the default, which is 0 milliseconds. However, if you find that not all of the transformations are being completed before bundling starts, you may want to experiment with this option.
+* The `wait` option has been set to 100 milliseconds. Usually this can be left at the default, which is 0 milliseconds. However, if you find that not all of the transformations are being completed before bundling starts, you may want to experiment with this option.
  
 ## Contact
 

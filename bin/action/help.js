@@ -27,6 +27,8 @@ Options:
 
   --debug|-d                                     Debug, that is enable source maps
   
+  --release|-r                                   Release, that is enable minification
+  
   --metrics|-m                                   Show metrics, that is file counts and times
 
   --quietly|-q                                   Run with almost no console logging
@@ -41,9 +43,9 @@ Options:
   
   --bundle-file|-b                               Bundle file path
   
-  --lib-directory|-l                             Lib directory path
+  --lib-directory|-l                             Library directory path
 
-  --temp-directory|-t                            Temp directory path
+  --temp-directory|-x                            Temporary directory path
 
   --source-directory|-s                          Source directory path
 

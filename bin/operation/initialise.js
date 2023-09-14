@@ -4,6 +4,7 @@ const { pathFromOption } = require("../utilities/path"),
       { initialiseMetrics } = require("../utilities/metrics"),
       { NO_ENTRY_FILE_SPECIFIED_MESSAGE,
         NO_BUNDLE_FILE_SPECIFIED_MESSAGE,
+        DEBUG_AND_RELEAES_BOTH_SET_MESSAGE,
         NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE,
         ENTRY_FILE_BUT_NO_BUNDLE_FILE_SPECIFIED_MESSAGE,
         BUNDLE_FILE_BUT_NO_ENTRY_FILE_SPECIFIED_MESSAGE,
@@ -19,6 +20,7 @@ function initialiseOperation(proceed, abort, context) {
   const { wait,
           node,
           debug,
+          release,
           bundler,
           quietly,
           metrics,
@@ -35,6 +37,14 @@ function initialiseOperation(proceed, abort, context) {
       bundleFilePath = null,
       sourceDirectoryPath = null,
       targetDirectoryPath = null;
+
+  if (debug && release) {
+    console.log(DEBUG_AND_RELEAES_BOTH_SET_MESSAGE);
+
+    abort();
+
+    return;
+  }
 
   if (sourceDirectory === null) {
     console.log(NO_SOURCE_DIRECTORY_SPECFIFIED_MESSAGE);
