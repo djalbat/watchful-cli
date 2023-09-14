@@ -191,7 +191,7 @@ Now for the npm scripts:
 ```
 "scripts": {
   "clean": "rm -rf ./tmp",
-  "watchful": "watchful -m -s=./es6 -x=./tmp -e=main.js -b=./public/lib/client.js"--wait=100,
+  "watchful": "watchful -m -s=./es6 -x=./tmp -e=main.js -b=./public/lib/client.js--wait=100 ",
   "batch": "npm run watchful batch -- --release",
   "batch-debug": "npm run watchful batch -- --debug",
   "incremental": "npm run watchful incremental -- --release",
