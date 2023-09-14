@@ -2,7 +2,7 @@
 
 Incremental transpilation with bundling.
 
-Watchful leverages existing bundlers and transpilers in order to provide a straightforward build tool that supports incremental transpilation together with bundling. It has a batch mode and a watch mode. In the latter mode it will only transpile files that have been added or changed, improving build times considerably.
+Watchful leverages existing bundlers and transpilers in order to provide a straightforward build tool that supports incremental  transpilation with bundling. It has a batch mode and a watch mode. In the latter mode it will only transpile files that have been added or changed, improving build times considerably.
 
 Watchful works best hand in hand with [Lively-CLI](https://github.com/djalbat/lively-cli).
 
@@ -26,10 +26,6 @@ Both of these packages work in the browser and on Node. Necessary accomplishes t
 
 This is also a package but has a bundled example. To see the latter in action, run `npm install` and `npm watch-debug` as before along with `npm start` to kick off a small development server. The example can be viewed at http://localhost:8888 and, since the development server utilises Lively, will live reload if you make changes to the source.
 
-* [Muon](https://github.com/petros-ioannou1/muon)
-
-Muon is a work in progress but nonetheless is a good example of a project that leverages both Watchful and Lively. The setup instructions are the same as for With Style.
-
 ### Comparisons
 
 Using SWC and ESBuild in combination together with multiple processes can speed up a batch build more than fifteen times. The following metrics were gathered on a modern albeit mid-level MacBook for a project with just under four hundred files:
@@ -38,12 +34,6 @@ Using SWC and ESBuild in combination together with multiple processes can speed 
 | --------------------------- | -------------- | ------------ | ------------ |
 | Babel + Browserify          | 8.5 seconds    | 2.2 seconds  | 10.7 seconds |
 | SWC + ESBuild (4 processes) | 0.42 seconds   | 0.24 seconds | 0.66 seconds |
-
-### Why aren't these tools included as dependencies?
-
-Babel presets and plugins require [@babel/core](https://babeljs.io/docs/en/babel-core) as a peer dependency, so you would have to include it in your project anyway. Additionally, it is a large project with many dependencies itself and since it is optional, it did not seem like a good idea to include it. Similarly, since bundling is optional, there seemed little point in including either bundler as a dependency. 
-
-Watchful is designed to run in your project directory and will load the bundlers and transpilers it finds there. This gives you complete control over their versions and configuration. Aside from the `debug`, `release` and `node` options, Watchful is agnostic to both.  
 
 ## Installation
 
