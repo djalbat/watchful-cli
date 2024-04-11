@@ -23,7 +23,7 @@ const { HELP_COMMAND, BATCH_COMMAND, VERSION_COMMAND, INCREMENTAL_COMMAND } = re
         DEFAULT_TEMP_DIRECTORY,
         DEFAULT_SOURCE_DIRECTORY } = require("./defaults");
 
-function actions(command, argument, options) {
+function main(command, argument, options) {
   const commandMissing = (command === null),
         { help = DEFAULT_HELP,
           wait = DEFAULT_WAIT,
@@ -60,4 +60,4 @@ function actions(command, argument, options) {
   }
 }
 
-module.exports = actions;
+module.exports = main;
