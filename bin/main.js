@@ -34,8 +34,8 @@ function main(command, argument, options) {
           version = DEFAULT_VERSION,
           quietly = DEFAULT_QUIETLY,
           metrics = DEFAULT_METRICS,
-          entryFile = DEFAULT_ENTRY_FILE,
           processes = DEFAULT_PROCESSES,
+          entryFile = DEFAULT_ENTRY_FILE,
           transpiler = DEFAULT_TRANSPILER,
           bundleFile = DEFAULT_BUNDLE_FILE,
           libDirectory = DEFAULT_LIB_DIRECTORY,
@@ -60,7 +60,7 @@ function main(command, argument, options) {
     }
 
     case BATCH_COMMAND: {
-      batchAction(wait, node, debug, release, bundler, quietly, metrics, entryFile, processes, transpiler, bundleFile, libDirectory, tempDirectory, sourceDirectory);
+      batchAction(wait, node, debug, release, bundler, quietly, metrics, processes, entryFile, transpiler, bundleFile, libDirectory, tempDirectory, sourceDirectory);
 
       break;
     }
@@ -72,7 +72,7 @@ function main(command, argument, options) {
     }
 
     case INCREMENTAL_COMMAND: {
-      incrementalAction(wait, node, debug, release, bundler, quietly, metrics, entryFile, processes, transpiler, bundleFile, libDirectory, tempDirectory, sourceDirectory);
+      incrementalAction(wait, node, debug, release, bundler, quietly, metrics, processes, entryFile, transpiler, bundleFile, libDirectory, tempDirectory, sourceDirectory);
 
       break;
     }
