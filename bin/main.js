@@ -53,10 +53,30 @@ function main(command, argument, options) {
   }
 
   switch (command) {
-    case HELP_COMMAND: helpAction(); break;
-    case BATCH_COMMAND: batchAction(wait, node, debug, release, bundler, quietly, metrics, entryFile, processes, transpiler, bundleFile, libDirectory, tempDirectory, sourceDirectory); break;
-    case VERSION_COMMAND: versionAction(); break;
-    case INCREMENTAL_COMMAND: incrementalAction(wait, node, debug, release, bundler, quietly, metrics, entryFile, processes, transpiler, bundleFile, libDirectory, tempDirectory, sourceDirectory); break;
+    case HELP_COMMAND: {
+      helpAction();
+
+      break;
+    }
+
+    case BATCH_COMMAND: {
+      batchAction(wait, node, debug, release, bundler, quietly, metrics, entryFile, processes, transpiler, bundleFile, libDirectory, tempDirectory, sourceDirectory);
+
+      break;
+    }
+
+    case VERSION_COMMAND: {
+      versionAction();
+
+      break;
+    }
+
+    case INCREMENTAL_COMMAND: {
+      incrementalAction(wait, node, debug, release, bundler, quietly, metrics, entryFile, processes, transpiler, bundleFile, libDirectory, tempDirectory, sourceDirectory);
+
+      break;
+    }
+
   }
 }
 
