@@ -56,14 +56,14 @@ If you would like to contribute or would simply like to have a look at the code,
 Watchful has the following commands and options:
 
 ```
-  watchful [<command>] [<options>]
+  watchful [<options>] [<command>] [<argument>] 
 
 Commands:
 
   help                                           Show this help
-  
-  version                                        Show theh version
 
+  version                                        Show the version
+  
   batch                                          Batch build
 
   [incremental]                                  Watch and build incrementally

@@ -3,13 +3,13 @@
 function helpAction() {
   console.log(`Usage: 
   
-  watchful [<command>] [<options>]
+  watchful [<options>] [<command>] [<argument>] 
 
 Commands:
 
-  version                                        Show theh version
-
   help                                           Show this help
+
+  version                                        Show the version
   
   batch                                          Batch build
 

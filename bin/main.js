@@ -5,14 +5,13 @@ const helpAction = require("./action/help"),
       versionAction = require("./action/version"),
       incrementalAction = require("./action/incremental");
 
-const { HELP_COMMAND, BATCH_COMMAND, VERSION_COMMAND, INCREMENTAL_COMMAND } = require("./commands"),
-      { DEFAULT_HELP,
-        DEFAULT_WAIT,
+const { NO_COMMAND_GIVEN_MESSAGE, COMMAND_NOT_RECOGNISED_MESSAGE } = require("./messages"),
+      { HELP_COMMAND, BATCH_COMMAND, VERSION_COMMAND, INCREMENTAL_COMMAND } = require("./commands"),
+      { DEFAULT_WAIT,
         DEFAULT_NODE,
         DEFAULT_DEBUG,
         DEFAULT_RELEASE,
         DEFAULT_BUNDLER,
-        DEFAULT_VERSION,
         DEFAULT_QUIETLY,
         DEFAULT_METRICS,
         DEFAULT_ENTRY_FILE,
@@ -24,14 +23,11 @@ const { HELP_COMMAND, BATCH_COMMAND, VERSION_COMMAND, INCREMENTAL_COMMAND } = re
         DEFAULT_SOURCE_DIRECTORY } = require("./defaults");
 
 function main(command, argument, options) {
-  const commandMissing = (command === null),
-        { help = DEFAULT_HELP,
-          wait = DEFAULT_WAIT,
+  const { wait = DEFAULT_WAIT,
           node = DEFAULT_NODE,
           debug = DEFAULT_DEBUG,
           release = DEFAULT_RELEASE,
           bundler = DEFAULT_BUNDLER,
-          version = DEFAULT_VERSION,
           quietly = DEFAULT_QUIETLY,
           metrics = DEFAULT_METRICS,
           processes = DEFAULT_PROCESSES,
@@ -42,17 +38,15 @@ function main(command, argument, options) {
           tempDirectory = DEFAULT_TEMP_DIRECTORY,
           sourceDirectory = DEFAULT_SOURCE_DIRECTORY } = options;
 
-  if (false) {
-    ///
-  } else if (help) {
-    command = HELP_COMMAND;
-  } else if (version) {
-    command = VERSION_COMMAND;
-  } else if (commandMissing) {
-    command = INCREMENTAL_COMMAND;
-  }
-
   switch (command) {
+    case null: {
+      console.log(NO_COMMAND_GIVEN_MESSAGE);
+
+      process.exit(1);
+
+      break;
+    }
+
     case HELP_COMMAND: {
       helpAction();
 
@@ -77,6 +71,13 @@ function main(command, argument, options) {
       break;
     }
 
+    default: {
+      console.log(COMMAND_NOT_RECOGNISED_MESSAGE);
+
+      process.exit(1);
+
+      break;
+    }
   }
 }
 
