@@ -225,4 +225,4 @@ The number of child processes has also been set to 4 here, but remember that thi
  
 ## Contact
 
-- james.smith@djalbat.com
+* james.smith@djalbat.com
