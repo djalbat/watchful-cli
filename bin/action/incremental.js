@@ -37,7 +37,7 @@ function incrementalAction(wait, node, debug, release, bundler, quietly, metrics
     if (!success) {
       console.log(INCREMENTAL_BUILD_FAILED_MESSAGE);
 
-      process.exit(1);
+      return;
     }
 
     watch(context);
