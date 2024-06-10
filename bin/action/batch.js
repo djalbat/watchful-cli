@@ -40,6 +40,8 @@ function batchAction(wait, node, debug, release, bundler, quietly, metrics, proc
     if (!success) {
       console.log(BATCH_BUILD_FAILED_MESSAGE);
     }
+
+    process.exit(); ///
   }, context);
 }
 
