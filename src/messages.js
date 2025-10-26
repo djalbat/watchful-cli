@@ -1,0 +1,28 @@
+"use strict";
+
+export const SWC_FAILED_MESSAGE = "swc failed:";
+export const BABEL_FAILED_MESSAGE = "Babel failed:";
+export const ESBUILD_FAILED_MESSAGE = "esbuild failed.";
+export const BROWSERIFY_FAILED_MESSAGE = "Browserify failed:";
+export const BATCH_BUILD_FAILED_MESSAGE = "The batch build failed.";
+export const INCREMENTAL_BUILD_FAILED_MESSAGE = "The incremental build failed.";
+export const SWC_NOT_INSTALLED_MESSAGE = "The '@swc/core' package is not installed.";
+export const BABEL_NOT_INSTALLED_MESSAGE = "The '@babel/core' package is not installed.";
+export const ESBUILD_NOT_INSTALLED_MESSAGE = "esbuild is not installed.";
+export const BROWSERIFY_NOT_INSTALLED_MESSAGE = "Browserify is not installed.";
+export const NO_COMMAND_GIVEN_MESSAGE = "No command has been given.";
+export const COMMAND_NOT_RECOGNISED_MESSAGE = "The command is not recognised.";
+export const NO_ENTRY_FILE_SPECIFIED_MESSAGE = "If a temp directory is specified then an entry file must also be given.";
+export const NO_BUNDLE_FILE_SPECIFIED_MESSAGE = "If a temp directory is specified then a bundle file must also be given.";
+export const DEBUG_AND_RELEAES_BOTH_SET_MESSAGE = "The debug and release flags cannot both be set at the same time.";
+export const NO_SOURCE_DIRECTORY_SPECIFIED_MESSAGE = "The source directory has not been specified.";
+export const ENTRY_FILE_BUT_NO_BUNDLE_FILE_SPECIFIED_MESSAGE = "If an entry file is specified then a bundle file must also be given.";
+export const BUNDLE_FILE_BUT_NO_ENTRY_FILE_SPECIFIED_MESSAGE = "If a bundle file is specified then an entry file must also be given.";
+export const BOTH_LIB_AND_TEMP_DIRECTORIES_SPECIFIED_MESSAGE = "There is no need to specify both a lib and a temp directory.";
+export const NEITHER_LIB_NOR_TEMP_DIRECTORY_SPECIFIED_MESSAGE = "Neither a lib directory nor a temp directory has been specified";
+export const ENTRY_FILE_NOT_INCLUDED_IN_BUNDLED_FILES_MESSAGE = "The entry file is not included in the files to be bundled.";
+export const ENTRY_FILE_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE = "The entry file path is not relative to the current directory.";
+export const BUNDLE_FILE_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE = "The bundle file path is not relative to the current directory.";
+export const LIB_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE = "The lib directory path is not relative to the current directory.";
+export const TEMP_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE = "The temp directory path is not relative to the current directory.";
+export const SOURCE_DIRECTORY_PATH_NOT_RELATIVE_TO_CURRENT_DIRECTORY_MESSAGE = "The source directory path is not relative to the current directory.";
