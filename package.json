@@ -1,7 +1,7 @@
 {
   "name": "watchful-cli",
   "author": "James Smith",
-  "version": "1.7.59",
+  "version": "1.7.60",
   "license": "MIT, Anti-996",
   "homepage": "https://github.com/djalbat/watchful-cli",
   "description": "Incremental transpilation with bundling.",
@@ -12,7 +12,7 @@
   "dependencies": {
     "argumentative": "^2.0.32",
     "chokidar": "^3.3.1",
-    "necessary": "^15.0.2"
+    "necessary": "^15.0.4"
   },
   "devDependencies": {
     "@swc/core": "1.13.20",
