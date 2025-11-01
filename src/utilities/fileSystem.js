@@ -7,7 +7,7 @@ import { characters, pathUtilities, fileSystemUtilities } from "necessary";
 import { W_PLUS } from "../constants";
 import { pathWithoutBottommostNameFromPath } from "../utilities/path";
 
-export const { readFile, writeFile, readDirectory, isEntryDirectory, createDirectory } = fileSystemUtilities;
+export const { readFile, writeFile, checkFileExists, readDirectory, isEntryDirectory, createDirectory } = fileSystemUtilities;
 
 const { concatenatePaths } = pathUtilities,
       { openSync, writeSync, rmdirSync, unlinkSync } = fs;
