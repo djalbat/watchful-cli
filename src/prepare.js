@@ -3,7 +3,7 @@
 import { DEFAULT_HELP, DEFAULT_VERSION } from "./defaults";
 import { HELP_COMMAND, VERSION_COMMAND } from "./commands";
 
-export default function configure(command, argument, options, main) {
+export default function prepare(command, argument, options, main) {
   const { help = DEFAULT_HELP, version = DEFAULT_VERSION } = options;
 
   if (false) {
