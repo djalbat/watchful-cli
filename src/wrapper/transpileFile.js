@@ -56,7 +56,9 @@ export default class TranspileFileWrapper {
           parameters = null,
           transpileFileWrapper = new TranspileFileWrapper(process, callback, parameters);
 
-    process.on(MESSAGE, (message) => transpileFileWrapper.messageHandler(message));
+    process.on(MESSAGE, (message) => {
+      transpileFileWrapper.messageHandler(message);
+    });
 
     return transpileFileWrapper;
   }

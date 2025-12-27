@@ -36,7 +36,7 @@ export function eventHandler(queue, event, path, context) {
       break;
 
     case UNLINK_DIR_EVENT :
-      unlinkDirEventHandler(queue, context);
+      unlinkDirEventHandler(queue, path, context);
 
       break;
 
