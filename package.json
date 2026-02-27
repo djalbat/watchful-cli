@@ -1,7 +1,7 @@
 {
   "name": "watchful-cli",
   "author": "James Smith",
-  "version": "1.7.82",
+  "version": "1.7.83",
   "license": "MIT, Anti-996",
   "homepage": "https://github.com/djalbat/watchful-cli",
   "description": "Incremental transpilation with bundling.",
@@ -30,6 +30,11 @@
     "watch": "npm run clean && npm run batch && npm run incremental",
     "watch-debug": "npm run clean && npm run batch-debug && npm run incremental-debug"
   },
+  "files": [
+    "src",
+    "lib",
+    "watchful.js"
+  ],
   "bin": {
     "watchful": "./watchful.js"
   }
