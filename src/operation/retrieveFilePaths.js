@@ -1,16 +1,14 @@
 "use strict";
 
-import chokidar from "chokidar";
-
 import { ADD_EVENT, READY_EVENT } from "../events";
+import { watcherFromSourceDirectoryPath } from "../utilities/watcher";
 import { ENTRY_FILE_NOT_INCLUDED_IN_BUNDLED_FILES_MESSAGE } from "../messages";
 import { pathWithoutDirectoryPathFromPathAndDirectoryPath } from "../utilities/path";
 
 export default function retrieveFilePathsOperation(proceed, abort, context) {
   const { sourceDirectoryPath } = context,
-        globPattern = `${sourceDirectoryPath}/**/*.js`,
-        filePaths = [],
-        watcher = chokidar.watch(globPattern);
+        watcher = watcherFromSourceDirectoryPath(sourceDirectoryPath),
+        filePaths = [];
 
   watcher.on(ADD_EVENT, (path) => {
     const sourceFilePath = path,  ///
