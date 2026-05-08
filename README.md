@@ -2,7 +2,9 @@
 
 Incremental transpilation with bundling.
 
-Watchful leverages existing bundlers and transpilers in order to provide a straightforward build tool that supports incremental  transpilation with bundling. It has a batch mode and a watch mode. In the latter mode it will only transpile files that have been added or changed, improving build times considerably.
+Watchful leverages existing bundlers and transpilers in order to provide a straightforward build tool that supports incremental  transpilation with bundling. 
+It has a batch mode and a watch mode. 
+In the latter mode it will only transpile files that have been added or changed, improving build times considerably.
 
 Watchful works best hand in hand with [Lively-CLI](https://github.com/djalbat/lively-cli).
 
@@ -15,7 +17,8 @@ Watchful works best hand in hand with [Lively-CLI](https://github.com/djalbat/li
 
 ### Projects to get you started
 
-All of the projects below utilise Watchful and can be readily adapted to make a template for your project. To see Watchful in action, clone a project, run the usual `npm install` and then `npm run watch-debug`.
+All of the projects below utilise Watchful and can be readily adapted to make a template for your project. 
+To see Watchful in action, clone a project, run the usual `npm install` and then `npm run watch-debug`.
 
 * [Necessary](https://github.com/djalbat/necessary)
 * [Sufficient](https://github.com/djalbat/necessary)
@@ -109,15 +112,25 @@ In order to build a package, you must supply source and target directories, the 
 
     watchful batch --source-directory=es6/ --lib-directory=./lib
     
-This will transpile all the JavaScript files in the `es6` directory and place them in the `lib` directory while honouring sub-directories. Note that Watchful is tolerant of leading and trailing delimiters. Nonetheless, it expects paths to be relative ones pointing to folders in the project directory. Relative paths outside of the project directory or any absolute paths will result in errors.
+This will transpile all the JavaScript files in the `es6` directory and place them in the `lib` directory while honouring sub-directories. 
+Note that Watchful is tolerant of leading and trailing delimiters. 
+Nonetheless, it expects paths to be relative ones pointing to folders in the project directory. 
+Relative paths outside of the project directory or any absolute paths will result in errors.
 
-In order to build a bundle, you must supply the source directory and target directories together with an entry file for the bundler. The target directory can be either a temp directory or a lib directory:
+In order to build a bundle, you must supply the source directory and target directories together with an entry file for the bundler. 
+The target directory can be either a temp directory or a lib directory:
 
     watchful batch --source-directory=es6/ --temp-directory=./tmp --enty-file=main.js
 
-The path to the entry file is taken to be relative to the target directory, not the project directory. You can also optionally supply a path to the bundle file by way of the `--bundle-file` option, otherwise the output is piped to `stdout`. Either the temp or the lib directory can be given as the target directory, by the way, because there may be times when you want to both build a bundle and build a package.
+The path to the entry file is taken to be relative to the target directory, not the project directory. 
+You can also optionally supply a path to the bundle file by way of the `--bundle-file` option, otherwise the output is piped to `stdout`. 
+Either the temp or the lib directory can be given as the target directory, by the way, because there may be times when you want to both build a bundle and build a package.
 
-Multiple processes are supported in batch mode, set the `--processes` option to a number greater than 1 to enable them. Be careful not to set this too high. On a modern MacBook the optimal number is only 4 processes. Any more and performance actually deteriorates. Remember that multiple processes are only supported in batch mode where the gains are likely to be significant. In incremental mode, the gains are likely to be in the region of a tenth of a second or even less, and therefore not worth the implementation effort. Also bear in mind that there is an overhead associated with creating more than one process and therefore you will only see gains if transpiling dozens of files rather than just a few.
+Multiple processes are supported in batch mode, set the `--processes` option to a number greater than 1 to enable them. Be careful not to set this too high. 
+On a modern MacBook the optimal number is only 4 processes. 
+Any more and performance actually deteriorates. Remember that multiple processes are only supported in batch mode where the gains are likely to be significant. 
+In incremental mode, the gains are likely to be in the region of a tenth of a second or even less, and therefore not worth the implementation effort. 
+Also bear in mind that there is an overhead associated with creating more than one process and therefore you will only see gains if transpiling dozens of files rather than just a few.
 
 As already mentioned, it is recommended that you install Watchful as a project dependency rather than globally, then run it with npm scripts.
 
@@ -213,11 +226,16 @@ There are several points worth noting:
 
 The number of child processes has also been set to 4 here, but remember that this only improves things for large projects with hundreds of files, otherwise it may actually have a detrimental effect.
 
-* The `clean` script has nothing to do with Watchful. It deletes the `tmp` directory and is used in the build scripts. Note that since the watch scripts have to be killed by the user, there is no opportunity to clean up after watching and consequently the `tmp` directory will remain. It is recommended that you add it to your `.gitignore` file, therefore, or make sure to always build before deployment.
+* The `clean` script has nothing to do with Watchful. 
+It deletes the `tmp` directory and is used in the build scripts. 
+Note that since the watch scripts have to be killed by the user, there is no opportunity to clean up after watching and consequently the `tmp` directory will remain. 
+* It is recommended that you add it to your `.gitignore` file, therefore, or make sure to always build before deployment.
 
-* The `watchful` script invokes Watchful with the requisite paths for the source and temp directories together with the entry and bundle files. The options have been abbreviated. Using a dedicated `watchful` script means that these options only have to be specified once.
+* The `watchful` script invokes Watchful with the requisite paths for the source and temp directories together with the entry and bundle files. 
+The options have been abbreviated. Using a dedicated `watchful` script means that these options only have to be specified once.
 
-* The `batch`, `batch-debug`, `incremental` and `incremental-debug` scripts all make use of the aforementioned `watchful` script, passing it the requisite command plus additional options. The special `--` command tells npm to pass these options verbatim. The `incremental` command is optional and can be left out.
+* The `batch`, `batch-debug`, `incremental` and `incremental-debug` scripts all make use of the aforementioned `watchful` script, passing it the requisite command plus additional options. 
+The special `--` command tells npm to pass these options verbatim. The `incremental` command is optional and can be left out.
 
 * For a package rather than a bundle, you could remove the call to the final `clean` script from the build scripts; remove the entry and bundle file options from the `watchful` script; and change the temp directory to a lib directory.
 
