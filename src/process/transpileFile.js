@@ -12,7 +12,9 @@ const { third } = arrayUtilities;
 const args = process.argv,  ///
       thirdArg = third(args),
       contextString = thirdArg, ///
-      context = JSON.parse(contextString),
+      jsonString = contextString, ///
+      json = JSON.parse(jsonString),
+      context = json, ///
       transpileFileFunction = createTranspileFileFunction(context);
 
 Object.assign(context, {

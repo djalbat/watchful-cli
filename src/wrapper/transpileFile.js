@@ -48,7 +48,9 @@ export default class TranspileFileWrapper {
       targetDirectoryPath
     }
 
-    const contextString = JSON.stringify(context),
+    const json = context, ///
+          jsonString = JSON.stringify(json),
+          contextString = jsonString, ///
           args = [
             contextString
           ],

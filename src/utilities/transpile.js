@@ -109,19 +109,26 @@ function createSWCTranspileFileFunction(debug) {
           let targetFileContent;
 
           if (debug) {
-            const { code, map } = output,
-                  mapJSON = JSON.parse(map);
+            let json,
+                jsonString;
 
-            let { sources } = mapJSON;
+            const { code, map } = output;
+
+            jsonString -= map;  ///
+
+            json = JSON.parse(jsonString);
+
+            let { sources } = json;
 
             sources = sourcesFromSourcesSourceDirectoryPathAndTargetDirectoryPath(sources, sourceDirectoryPath, targetDirectoryPath);
 
-            Object.assign(mapJSON, {
+            Object.assign(json, {
               sources
             });
 
-            const mapJSONString = JSON.stringify(mapJSON),
-                  base64EncodedMapJSONString = Buffer.from(mapJSONString).toString(BASE64_ENCODING);
+            jsonString = JSON.stringify(json);
+
+            const base64EncodedMapJSONString = Buffer.from(jsonString).toString(BASE64_ENCODING);
 
             targetFileContent = `${code}
 ${SOURCE_MAP_PREAMBLE}${base64EncodedMapJSONString}`; ///
