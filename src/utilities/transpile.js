@@ -114,7 +114,7 @@ function createSWCTranspileFileFunction(debug) {
 
             const { code, map } = output;
 
-            jsonString -= map;  ///
+            jsonString = map;  ///
 
             json = JSON.parse(jsonString);
 
