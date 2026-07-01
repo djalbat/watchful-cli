@@ -48,7 +48,9 @@ export function eventHandler(queue, event, path, context) {
 }
 
 export function queueEmptyHandler(queue, previousTask, context) {
-  if (previousTask instanceof BundleFilesTask) {
+  const previousTaskBundleFilesTask = BundleFilesTask.prototype.isPrototypeOf(previousTask);
+
+  if (previousTaskBundleFilesTask) {
     return;
   }
 
